@@ -1,0 +1,698 @@
+{
+  "arcs": {
+    "0": {
+      "name": "1 | 2",
+      "source": 1,
+      "sink": 7,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "1": {
+      "name": "2 | 3",
+      "source": 7,
+      "sink": 9,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "2": {
+      "name": "3 | 4",
+      "source": 9,
+      "sink": 8,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "3": {
+      "name": "4 | 5",
+      "source": 8,
+      "sink": 2,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "4": {
+      "name": "6 | 7",
+      "source": 3,
+      "sink": 10,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "5": {
+      "name": "7 | 8",
+      "source": 10,
+      "sink": 12,
+      "token": "mass",
+      "typed_tokens": ["A","B","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "6": {
+      "name": "8 | 9",
+      "source": 12,
+      "sink": 11,
+      "token": "mass",
+      "typed_tokens": ["A","C","B"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "7": {
+      "name": "9 | 10",
+      "source": 11,
+      "sink": 4,
+      "token": "mass",
+      "typed_tokens": ["C","B","A"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "volumetric",
+      "nature": "lumped"
+    },
+    "8": {
+      "name": "2 | 9",
+      "source": 7,
+      "sink": 11,
+      "token": "energy",
+      "typed_tokens": ["B","A","C"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "conductive",
+      "nature": "lumped"
+    },
+    "9": {
+      "name": "3 | 8",
+      "source": 9,
+      "sink": 12,
+      "token": "energy",
+      "typed_tokens": ["A","C","B"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "conductive",
+      "nature": "lumped"
+    },
+    "10": {
+      "name": "4 | 7",
+      "source": 8,
+      "sink": 10,
+      "token": "energy",
+      "typed_tokens": ["A","C","B"],
+      "network": "gas",
+      "named_network": "gas",
+      "mechanism": "conductive",
+      "nature": "lumped"
+    }
+  },
+  "scenes": {
+    "0": {
+      "nodes": {
+        "1": {
+          "position_x": -363.0,
+          "position_y": -196.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "2": {
+          "position_x": 266.0,
+          "position_y": -203.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "3": {
+          "position_x": 254.0,
+          "position_y": -22.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "4": {
+          "position_x": -367.0,
+          "position_y": -19.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "5": {
+          "position_x": -22.0,
+          "position_y": -183.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "6": {
+          "position_x": -140.0,
+          "position_y": -29.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        }
+      },
+      "arcs": {
+        "0": [],
+        "3": [],
+        "4": [],
+        "7": [],
+        "8": [],
+        "9": [],
+        "10": []
+      }
+    },
+    "1": {
+      "nodes": {},
+      "arcs": {
+        "0": []
+      }
+    },
+    "7": {
+      "nodes": {},
+      "arcs": {
+        "0": [],
+        "1": [],
+        "8": []
+      }
+    },
+    "9": {
+      "nodes": {},
+      "arcs": {
+        "1": [],
+        "2": [],
+        "9": []
+      }
+    },
+    "8": {
+      "nodes": {},
+      "arcs": {
+        "2": [],
+        "3": [],
+        "10": []
+      }
+    },
+    "2": {
+      "nodes": {},
+      "arcs": {
+        "3": []
+      }
+    },
+    "3": {
+      "nodes": {},
+      "arcs": {
+        "4": []
+      }
+    },
+    "10": {
+      "nodes": {},
+      "arcs": {
+        "4": [],
+        "5": [],
+        "10": []
+      }
+    },
+    "12": {
+      "nodes": {},
+      "arcs": {
+        "5": [],
+        "6": [],
+        "9": []
+      }
+    },
+    "11": {
+      "nodes": {},
+      "arcs": {
+        "6": [],
+        "7": [],
+        "8": []
+      }
+    },
+    "4": {
+      "nodes": {},
+      "arcs": {
+        "7": []
+      }
+    },
+    "5": {
+      "nodes": {
+        "7": {
+          "position_x": -136.0,
+          "position_y": -148.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "8": {
+          "position_x": 173.0,
+          "position_y": -157.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "9": {
+          "position_x": 21.0,
+          "position_y": -160.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        }
+      },
+      "arcs": {
+        "1": [],
+        "2": [],
+        "0": [],
+        "3": [],
+        "8": [],
+        "9": [],
+        "10": []
+      }
+    },
+    "6": {
+      "nodes": {
+        "10": {
+          "position_x": 105.0,
+          "position_y": -3.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "11": {
+          "position_x": -213.0,
+          "position_y": -11.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": 0,
+            "position_y": 50
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        },
+        "12": {
+          "position_x": -44.0,
+          "position_y": 2.0,
+          "root": {
+            "position_x": 0,
+            "position_y": 0
+          },
+          "name": {
+            "position_x": -17.0,
+            "position_y": 49.0
+          },
+          "network": {
+            "position_x": 0,
+            "position_y": 0
+          }
+        }
+      },
+      "arcs": {
+        "5": [],
+        "6": [],
+        "4": [],
+        "7": [],
+        "8": [],
+        "9": [],
+        "10": []
+      }
+    }
+  },
+  "named_networks": {
+    "control": [
+      "control"
+    ],
+    "gas": [
+      "gas",
+      "gas2"
+    ],
+    "liquid": [
+      "liquid"
+    ],
+    "molecular": [
+      "molecular"
+    ],
+    "solid": [
+      "solid"
+    ]
+  },
+  "nodes": {
+    "0": {
+      "name": "0",
+      "network": null,
+      "named_network": null,
+      "type": "node_composite",
+      "type": "node_composite",
+      "tokens": {}
+    },
+    "1": {
+      "name": "Hot start",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "constant",
+      "tokens": {
+        "mass": []
+      },
+      "injected_typed_tokens": {}
+    },
+    "7": {
+      "name": "H1",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": [],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "9": {
+      "name": "H2",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": [],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "8": {
+      "name": "H3",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": [],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "2": {
+      "name": "Hot end",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "constant",
+      "tokens": {
+        "mass": ["A","B","C"]
+      },
+      "injected_typed_tokens": {}
+    },
+    "3": {
+      "name": "Cold start",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "constant",
+      "tokens": {
+        "mass": []
+      },
+      "injected_typed_tokens": {}
+    },
+    "10": {
+      "name": "C1",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": ["A", "B", "C"],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "12": {
+      "name": "C2",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": ["A", "B", "C"],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "11": {
+      "name": "C3",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "dynamic",
+      "tokens": {
+        "mass": ["A", "C", "B"],
+        "energy": []
+      },
+      "conversions": {},
+      "injected_conversions": {}
+    },
+    "4": {
+      "name": "Cold end",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_simple",
+      "type": "constant",
+      "tokens": {
+        "mass": []
+      },
+      "injected_typed_tokens": {}
+    },
+    "5": {
+      "name": "Hot side",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_composite",
+      "type": "node_composite",
+      "tokens": {},
+      "injected_typed_tokens": {}
+    },
+    "6": {
+      "name": "Cold side",
+      "network": "gas",
+      "named_network": "gas",
+      "type": "node_composite",
+      "type": "node_composite",
+      "tokens": {},
+      "injected_typed_tokens": {}
+    }
+  },
+  "domains": {},
+  "ID_tree": {
+    "0": {
+      "ancestors": [],
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "1": {
+      "ancestors": [
+        0
+      ],
+      "children": []
+    },
+    "2": {
+      "ancestors": [
+        0
+      ],
+      "children": []
+    },
+    "3": {
+      "ancestors": [
+        0
+      ],
+      "children": []
+    },
+    "4": {
+      "ancestors": [
+        0
+      ],
+      "children": []
+    },
+    "5": {
+      "ancestors": [
+        0
+      ],
+      "children": [
+        7,
+        8,
+        9
+      ]
+    },
+    "6": {
+      "ancestors": [
+        0
+      ],
+      "children": [
+        10,
+        11,
+        12
+      ]
+    },
+    "7": {
+      "ancestors": [
+        5,
+        0
+      ],
+      "children": []
+    },
+    "8": {
+      "ancestors": [
+        5,
+        0
+      ],
+      "children": []
+    },
+    "9": {
+      "ancestors": [
+        5,
+        0
+      ],
+      "children": []
+    },
+    "10": {
+      "ancestors": [
+        6,
+        0
+      ],
+      "children": []
+    },
+    "11": {
+      "ancestors": [
+        6,
+        0
+      ],
+      "children": []
+    },
+    "12": {
+      "ancestors": [
+        6,
+        0
+      ],
+      "children": []
+    }
+  }
+}

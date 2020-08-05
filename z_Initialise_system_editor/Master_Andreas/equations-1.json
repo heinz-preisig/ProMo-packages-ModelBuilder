@@ -1,0 +1,684 @@
+{
+  "0": {
+    "lhs": "Pnsas",
+    "rhs": "Psns | species | Psas",
+    "incidence_list": [
+      "Psas",
+      "Psns"
+    ],
+    "layer": "physical"
+  },
+  "1": {
+    "lhs": "Nnsr",
+    "rhs": "Nsr | species | Psns",
+    "incidence_list": [
+      "Nsr",
+      "Psns"
+    ],
+    "layer": "physical"
+  },
+  "2": {
+    "lhs": "Fn",
+    "rhs": "Fm : Pnsas",
+    "incidence_list": [
+      "Fm",
+      "Pnsas"
+    ],
+    "layer": "physical"
+  },
+  "3": {
+    "lhs": "mMn",
+    "rhs": "mM | species | Psns",
+    "incidence_list": [
+      "Psns",
+      "mM"
+    ],
+    "layer": "physical"
+  },
+  "4": {
+    "lhs": "dt_h_ns",
+    "rhs": "dt_h_s | species | Psns",
+    "incidence_list": [
+      "Psns",
+      "dt_h_s"
+    ],
+    "layer": "physical"
+  },
+  "5": {
+    "lhs": "cp_n",
+    "rhs": "cp | species | Psns",
+    "incidence_list": [
+      "Psns",
+      "cp"
+    ],
+    "layer": "physical"
+  },
+  "6": {
+    "lhs": "m",
+    "rhs": "mMn | species in node & species | n",
+    "incidence_list": [
+      "mMn",
+      "n"
+    ],
+    "layer": "physical"
+  },
+  "7": {
+    "lhs": "ntot",
+    "rhs": "n | species in node & species | ens",
+    "incidence_list": [
+      "ens",
+      "n"
+    ],
+    "layer": "physical"
+  },
+  "9": {
+    "lhs": "x",
+    "rhs": "inv(ntot) : n",
+    "incidence_list": [
+      "n",
+      "ntot"
+    ],
+    "layer": "physical"
+  },
+  "10": {
+    "lhs": "Cp",
+    "rhs": "x | species in node & species | cp_n . ntot",
+    "incidence_list": [
+      "cp_n",
+      "ntot",
+      "x"
+    ],
+    "layer": "physical"
+  },
+  "11": {
+    "lhs": "Href",
+    "rhs": "x | species in node & species | dt_h_ns . ntot",
+    "incidence_list": [
+      "dt_h_ns",
+      "ntot",
+      "x"
+    ],
+    "layer": "physical"
+  },
+  "12": {
+    "lhs": "T_ref_n",
+    "rhs": "T_ref . en",
+    "incidence_list": [
+      "T_ref",
+      "en"
+    ],
+    "layer": "physical"
+  },
+  "13": {
+    "lhs": "T",
+    "rhs": "inv(Cp) . (H-Href) + T_ref_n",
+    "incidence_list": [
+      "Cp",
+      "H",
+      "Href",
+      "T_ref_n"
+    ],
+    "layer": "physical"
+  },
+  "15": {
+    "lhs": "p",
+    "rhs": "ParDiff(H, Vg)",
+    "incidence_list": [
+      "H",
+      "Vg"
+    ],
+    "layer": "physical"
+  },
+  "16": {
+    "lhs": "p",
+    "rhs": "inv(Vg) . ntot . Rg . T",
+    "incidence_list": [
+      "Rg",
+      "T",
+      "Vg",
+      "ntot"
+    ],
+    "layer": "physical"
+  },
+  "17": {
+    "lhs": "c",
+    "rhs": "inv(Vg) : n",
+    "incidence_list": [
+      "Vg",
+      "n"
+    ],
+    "layer": "physical"
+  },
+  "18": {
+    "lhs": "dp",
+    "rhs": "Fmv | node | p",
+    "incidence_list": [
+      "Fmv",
+      "p"
+    ],
+    "layer": "physical"
+  },
+  "19": {
+    "lhs": "Fnv",
+    "rhs": "Fmv : Pnsas",
+    "incidence_list": [
+      "Fmv",
+      "Pnsas"
+    ],
+    "layer": "physical"
+  },
+  "20": {
+    "lhs": "Fnic",
+    "rhs": "Fmic : Pnsas",
+    "incidence_list": [
+      "Fmic",
+      "Pnsas"
+    ],
+    "layer": "physical"
+  },
+  "21": {
+    "lhs": "dir",
+    "rhs": "sign(dp)",
+    "incidence_list": [
+      "dp"
+    ],
+    "layer": "physical"
+  },
+  "22": {
+    "lhs": "fs",
+    "rhs": "half . (abs(Fmv) + Fmv . dir)",
+    "incidence_list": [
+      "Fmv",
+      "dir",
+      "half"
+    ],
+    "layer": "physical"
+  },
+  "23": {
+    "lhs": "chat",
+    "rhs": "fs : Pnsas | node & species | c",
+    "incidence_list": [
+      "Pnsas",
+      "c",
+      "fs"
+    ],
+    "layer": "physical"
+  },
+  "24": {
+    "lhs": "dp_0",
+    "rhs": "set(dp)",
+    "incidence_list": [
+      "dp"
+    ],
+    "layer": "physical"
+  },
+  "25": {
+    "lhs": "Vhat_v",
+    "rhs": "-kappa . B . u_v . dir . sqrt(abs( inv(dp_0). dp))",
+    "incidence_list": [
+      "B",
+      "dir",
+      "dp",
+      "dp_0",
+      "kappa",
+      "u_v"
+    ],
+    "layer": "physical"
+  },
+  "26": {
+    "lhs": "nhat_v",
+    "rhs": "Vhat_v_uni : chat",
+    "incidence_list": [
+      "Vhat_v_uni",
+      "chat"
+    ],
+    "layer": "physical"
+  },
+  "27": {
+    "lhs": "nhat_ic",
+    "rhs": "kappa_i . ((S_ion . n) | node & species | Fnic)",
+    "incidence_list": [
+      "Fnic",
+      "S_ion",
+      "kappa_i",
+      "n"
+    ],
+    "layer": "physical"
+  },
+  "28": {
+    "lhs": "ndot",
+    "rhs": "Fnv | arc & species | nhat_v + Fnic | arc & species | nhat_ic + ntilde",
+    "incidence_list": [
+      "Fnic",
+      "Fnv",
+      "nhat_ic",
+      "nhat_v",
+      "ntilde"
+    ],
+    "layer": "physical"
+  },
+  "29": {
+    "lhs": "n",
+    "rhs": "integral(ndot :: t in [t0,tend ])",
+    "incidence_list": [
+      "ndot",
+      "t",
+      "t0",
+      "tend"
+    ],
+    "layer": "physical"
+  },
+  "30": {
+    "lhs": "Nnsnr",
+    "rhs": "Nnsr | species_conversion | Prnr",
+    "incidence_list": [
+      "Nnsr",
+      "Prnr"
+    ],
+    "layer": "physical"
+  },
+  "31": {
+    "lhs": "null",
+    "rhs": "zero . Nnsnr",
+    "incidence_list": [
+      "Nnsnr",
+      "zero"
+    ],
+    "layer": "physical"
+  },
+  "32": {
+    "lhs": "Krn",
+    "rhs": "K_r | species_conversion | Prnr",
+    "incidence_list": [
+      "K_r",
+      "Prnr"
+    ],
+    "layer": "physical"
+  },
+  "33": {
+    "lhs": "Pnsnr",
+    "rhs": "(Psr | species_conversion | Prnr ) | species | Psns",
+    "incidence_list": [
+      "Prnr",
+      "Psns",
+      "Psr"
+    ],
+    "layer": "physical"
+  },
+  "34": {
+    "lhs": "p_x",
+    "rhs": "(x . Pnsnr) ^ {abs( min( Nnsnr, null ) )}",
+    "incidence_list": [
+      "Nnsnr",
+      "Pnsnr",
+      "null",
+      "x"
+    ],
+    "layer": "physical"
+  },
+  "35": {
+    "lhs": "g_p_x",
+    "rhs": "en | node | (Snnr . prod(p_x, species in node & species ) )",
+    "incidence_list": [
+      "Snnr",
+      "en",
+      "p_x"
+    ],
+    "layer": "physical"
+  },
+  "36": {
+    "lhs": "xihat",
+    "rhs": "Krn . g_p_x",
+    "incidence_list": [
+      "Krn",
+      "g_p_x"
+    ],
+    "layer": "physical"
+  },
+  "37": {
+    "lhs": "ntilde",
+    "rhs": "ntot : (Nnsnr | node & species_conversion | xihat)",
+    "incidence_list": [
+      "Nnsnr",
+      "ntot",
+      "xihat"
+    ],
+    "layer": "physical"
+  },
+  "41": {
+    "lhs": "qhat_c",
+    "rhs": "-Uq . B . (Fqc | node | T)",
+    "incidence_list": [
+      "B",
+      "Fqc",
+      "T",
+      "Uq"
+    ],
+    "layer": "physical"
+  },
+  "43": {
+    "lhs": "T4",
+    "rhs": "T . T . T . T",
+    "incidence_list": [
+      "T"
+    ],
+    "layer": "physical"
+  },
+  "44": {
+    "lhs": "qhat_r",
+    "rhs": "-B.epsilon.sigma.(Fqr|node|T4)",
+    "incidence_list": [
+      "B",
+      "Fqr",
+      "T4",
+      "epsilon",
+      "sigma"
+    ],
+    "layer": "physical"
+  },
+  "45": {
+    "lhs": "h",
+    "rhs": "dt_h_ns + (T - T_ref_n) : cp_n",
+    "incidence_list": [
+      "T",
+      "T_ref_n",
+      "cp_n",
+      "dt_h_ns"
+    ],
+    "layer": "physical"
+  },
+  "46": {
+    "lhs": "Hhat_v",
+    "rhs": "eas | species in arc & species | (((fs : Pnsas) | node & species | h) . nhat_v)",
+    "incidence_list": [
+      "Pnsas",
+      "eas",
+      "fs",
+      "h",
+      "nhat_v"
+    ],
+    "layer": "physical"
+  },
+  "47": {
+    "lhs": "Hhat_ic",
+    "rhs": "eas | species in arc & species | (((S_ion) | node & species | h) . nhat_v)",
+    "incidence_list": [
+      "S_ion",
+      "eas",
+      "h",
+      "nhat_v"
+    ],
+    "layer": "physical"
+  },
+  "48": {
+    "lhs": "Hdot",
+    "rhs": "Fmv | arc | Hhat_v + Fmic | arc | Hhat_ic + Fqc | arc | qhat_c + Fqr | arc | qhat_r - Feel | arc | Pelhat + Htilde",
+    "incidence_list": [
+      "Feel",
+      "Fmic",
+      "Fmv",
+      "Fqc",
+      "Fqr",
+      "Hhat_ic",
+      "Hhat_v",
+      "Htilde",
+      "Pelhat",
+      "qhat_c",
+      "qhat_r"
+    ],
+    "layer": "physical"
+  },
+  "49": {
+    "lhs": "H",
+    "rhs": "integral(Hdot :: t in [t0,tend ])",
+    "incidence_list": [
+      "Hdot",
+      "t",
+      "t0",
+      "tend"
+    ],
+    "layer": "physical"
+  },
+  "50": {
+    "lhs": "i",
+    "rhs": "inv(V) . P_given",
+    "incidence_list": [
+      "P_given",
+      "V"
+    ],
+    "layer": "physical"
+  },
+  "51": {
+    "lhs": "eta_ohm",
+    "rhs": "i . inv(A_anode) . tM . T . inv(A_SOFC . exp(-(d_G_activation) . inv(Rg) . inv(T)))",
+    "incidence_list": [
+      "A_SOFC",
+      "A_anode",
+      "Rg",
+      "T",
+      "d_G_activation",
+      "i",
+      "tM"
+    ],
+    "layer": "physical"
+  },
+  "52": {
+    "lhs": "b_tafel",
+    "rhs": "Rg . T . inv(alpha . two . F)",
+    "incidence_list": [
+      "F",
+      "Rg",
+      "T",
+      "alpha",
+      "two"
+    ],
+    "layer": "physical"
+  },
+  "53": {
+    "lhs": "eta_active",
+    "rhs": "b_tafel . ln(inv(i0).i)",
+    "incidence_list": [
+      "b_tafel",
+      "i",
+      "i0"
+    ],
+    "layer": "physical"
+  },
+  "54": {
+    "lhs": "pp",
+    "rhs": "p : x",
+    "incidence_list": [
+      "p",
+      "x"
+    ],
+    "layer": "physical"
+  },
+  "56": {
+    "lhs": "dG",
+    "rhs": "d_G_reaction . en",
+    "incidence_list": [
+      "d_G_reaction",
+      "en"
+    ],
+    "layer": "physical"
+  },
+  "58": {
+    "lhs": "p_reac",
+    "rhs": "ens |node & species| ((x.Pnsnr)^{Nnsnr})",
+    "incidence_list": [
+      "Nnsnr",
+      "Pnsnr",
+      "ens",
+      "x"
+    ],
+    "layer": "physical"
+  },
+  "59": {
+    "lhs": "Q_nernst",
+    "rhs": "prod(p_reac, species_conversion in node & species_conversion )",
+    "incidence_list": [
+      "p_reac"
+    ],
+    "layer": "physical"
+  },
+  "60": {
+    "lhs": "V_oc",
+    "rhs": "(-(dG) . inv(two . F)) - (Rg . T . inv(two . F) . ln(Q_nernst))",
+    "incidence_list": [
+      "F",
+      "Q_nernst",
+      "Rg",
+      "T",
+      "dG",
+      "two"
+    ],
+    "layer": "physical"
+  },
+  "61": {
+    "lhs": "V_loss",
+    "rhs": "eta_ohm + eta_active",
+    "incidence_list": [
+      "eta_active",
+      "eta_ohm"
+    ],
+    "layer": "physical"
+  },
+  "62": {
+    "lhs": "V",
+    "rhs": "V_oc - V_loss",
+    "incidence_list": [
+      "V_loss",
+      "V_oc"
+    ],
+    "layer": "physical"
+  },
+  "63": {
+    "lhs": "Pel",
+    "rhs": "V . i",
+    "incidence_list": [
+      "V",
+      "i"
+    ],
+    "layer": "physical"
+  },
+  "64": {
+    "lhs": "Pelhat",
+    "rhs": "-min(Feel, zero.Feel) | node | P_given",
+    "incidence_list": [
+      "Feel",
+      "P_given",
+      "zero"
+    ],
+    "layer": "physical"
+  },
+  "65": {
+    "lhs": "Psr",
+    "rhs": "abs(Nsr)",
+    "incidence_list": [
+      "Nsr"
+    ],
+    "layer": "physical"
+  },
+  "66": {
+    "lhs": "V",
+    "rhs": "manifolds. S_solid . root(power_system, V)",
+    "incidence_list": [
+      "S_solid",
+      "V",
+      "manifolds",
+      "power_system"
+    ],
+    "layer": "physical"
+  },
+  "67": {
+    "lhs": "i",
+    "rhs": "manifolds. S_solid . root(power_system, i)",
+    "incidence_list": [
+      "S_solid",
+      "i",
+      "manifolds",
+      "power_system"
+    ],
+    "layer": "physical"
+  },
+  "69": {
+    "lhs": "ne_nr",
+    "rhs": "ne | species_conversion | Prnr",
+    "incidence_list": [
+      "Prnr",
+      "ne"
+    ],
+    "layer": "physical"
+  },
+  "70": {
+    "lhs": "xihat",
+    "rhs": "i : S_electron_reac . inv(ne_nr . F)",
+    "incidence_list": [
+      "F",
+      "S_electron_reac",
+      "i",
+      "ne_nr"
+    ],
+    "layer": "physical"
+  },
+  "71": {
+    "lhs": "xihat",
+    "rhs": "S_reac : Krn . g_p_x + S_equ : (i : S_electron_reac . inv(ne_reac . F))",
+    "incidence_list": [
+      "F",
+      "Krn",
+      "S_electron_reac",
+      "S_equ",
+      "S_reac",
+      "g_p_x",
+      "i",
+      "ne_reac"
+    ],
+    "layer": "physical"
+  },
+  "72": {
+    "lhs": "Vhat_v_uni",
+    "rhs": "max(zero.Vhat_v, Vhat_v)",
+    "incidence_list": [
+      "Vhat_v",
+      "zero"
+    ],
+    "layer": "physical"
+  },
+  "73": {
+    "lhs": "That",
+    "rhs": "fs | node | T",
+    "incidence_list": [
+      "T",
+      "fs"
+    ],
+    "layer": "physical"
+  },
+  "74": {
+    "lhs": "mMa",
+    "rhs": "mM | species | Psas",
+    "incidence_list": [
+      "Psas",
+      "mM"
+    ],
+    "layer": "physical"
+  },
+  "75": {
+    "lhs": "mhat_v",
+    "rhs": "mMa | species in arc & species | nhat_v",
+    "incidence_list": [
+      "mMa",
+      "nhat_v"
+    ],
+    "layer": "physical"
+  },
+  "76": {
+    "lhs": "Htilde",
+    "rhs": "h | species in node & species | ntilde",
+    "incidence_list": [
+      "h",
+      "ntilde"
+    ],
+    "layer": "physical"
+  }
+}

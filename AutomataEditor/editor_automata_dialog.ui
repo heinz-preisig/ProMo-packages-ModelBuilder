@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>Dialog</class>
+    <widget class="QDialog" name="Dialog">
+        <property name="windowModality">
+            <enum>Qt::NonModal</enum>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1224</width>
+                <height>968</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+            <size>
+                <width>10</width>
+                <height>10</height>
+            </size>
+        </property>
+        <property name="windowTitle">
+            <string>Dialog</string>
+        </property>
+        <widget class="QTabWidget" name="tabWidget">
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>70</y>
+                    <width>1201</width>
+                    <height>881</height>
+                </rect>
+            </property>
+            <property name="currentIndex">
+                <number>0</number>
+            </property>
+            <widget class="QWidget" name="tab_mouse_automat">
+                <attribute name="title">
+                    <string>mouse</string>
+                </attribute>
+                <widget class="QGroupBox" name="groupSelections">
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>1021</width>
+                            <height>281</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Selections</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget">
+                        <property name="geometry">
+                            <rect>
+                                <x>680</x>
+                                <y>30</y>
+                                <width>321</width>
+                                <height>241</height>
+                            </rect>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_4">
+                            <item>
+                                <widget class="QLabel" name="label_3">
+                                    <property name="text">
+                                        <string>cusor</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QListWidget" name="listCursors"/>
+                            </item>
+                        </layout>
+                    </widget>
+                    <widget class="QWidget" name="layoutWidget">
+                        <property name="geometry">
+                            <rect>
+                                <x>16</x>
+                                <y>30</y>
+                                <width>651</width>
+                                <height>241</height>
+                            </rect>
+                        </property>
+                        <layout class="QHBoxLayout" name="horizontalLayout">
+                            <item>
+                                <layout class="QVBoxLayout" name="verticalLayout">
+                                    <item>
+                                        <widget class="QLabel" name="label">
+                                            <property name="text">
+                                                <string>selector</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>Qt::AlignCenter</set>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QListWidget" name="listSelectState"/>
+                                    </item>
+                                </layout>
+                            </item>
+                            <item>
+                                <layout class="QVBoxLayout" name="verticalLayout_3">
+                                    <item>
+                                        <widget class="QLabel" name="label_2">
+                                            <property name="text">
+                                                <string>action</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>Qt::AlignCenter</set>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QListWidget" name="listActions"/>
+                                    </item>
+                                </layout>
+                            </item>
+                            <item>
+                                <layout class="QVBoxLayout" name="verticalLayout_2">
+                                    <item>
+                                        <widget class="QLabel" name="label_4">
+                                            <property name="text">
+                                                <string>state</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>Qt::AlignCenter</set>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QListWidget" name="listStates"/>
+                                    </item>
+                                </layout>
+                            </item>
+                        </layout>
+                    </widget>
+                </widget>
+                <widget class="QTableWidget" name="tableState">
+                    <property name="geometry">
+                        <rect>
+                            <x>30</x>
+                            <y>310</y>
+                            <width>1141</width>
+                            <height>521</height>
+                        </rect>
+                    </property>
+                    <property name="editTriggers">
+                        <set>QAbstractItemView::NoEditTriggers</set>
+                    </property>
+                    <attribute name="horizontalHeaderDefaultSectionSize">
+                        <number>150</number>
+                    </attribute>
+                    <column>
+                        <property name="text">
+                            <string>object</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>mouse left</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>left: next state</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>mouse right</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>right: mouse</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>cursor</string>
+                        </property>
+                    </column>
+                </widget>
+            </widget>
+            <widget class="QWidget" name="tab_key_automat">
+                <attribute name="title">
+                    <string>key</string>
+                </attribute>
+                <widget class="QWidget" name="layoutWidget_2">
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>300</y>
+                            <width>1001</width>
+                            <height>461</height>
+                        </rect>
+                    </property>
+                    <layout class="QGridLayout">
+                        <property name="margin">
+                            <number>5</number>
+                        </property>
+                        <item row="0" column="0" colspan="3">
+                            <widget class="QTableWidget" name="tableKeyAutomaton">
+                                <property name="editTriggers">
+                                    <set>QAbstractItemView::NoEditTriggers</set>
+                                </property>
+                                <attribute name="horizontalHeaderDefaultSectionSize">
+                                    <number>150</number>
+                                </attribute>
+                                <column>
+                                    <property name="text">
+                                        <string>key</string>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>next state</string>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>GUI action</string>
+                                    </property>
+                                </column>
+                            </widget>
+                        </item>
+                        <item row="1" column="0">
+                            <widget class="QPushButton" name="pushAddKey">
+                                <property name="text">
+                                    <string>add key</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="1" column="1">
+                            <widget class="QPushButton" name="pushDeleteKey">
+                                <property name="text">
+                                    <string>delete key</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="1" column="2">
+                            <spacer>
+                                <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                    <size>
+                                        <width>40</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </item>
+                    </layout>
+                </widget>
+                <widget class="QGroupBox" name="groupSelection">
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>1031</width>
+                            <height>281</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Selection</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget">
+                        <property name="geometry">
+                            <rect>
+                                <x>50</x>
+                                <y>20</y>
+                                <width>951</width>
+                                <height>231</height>
+                            </rect>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout">
+                            <item row="0" column="0">
+                                <widget class="QLabel" name="label_21">
+                                    <property name="text">
+                                        <string>key</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="0" column="1">
+                                <widget class="QLabel" name="label_20">
+                                    <property name="text">
+                                        <string>state</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="0" column="2">
+                                <widget class="QLabel" name="label_19">
+                                    <property name="text">
+                                        <string>action</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="1" column="0">
+                                <widget class="QListWidget" name="listKeysForKeyAutomaton"/>
+                            </item>
+                            <item row="1" column="1">
+                                <widget class="QListWidget" name="listStatesForKeyAutomaton"/>
+                            </item>
+                            <item row="1" column="2">
+                                <widget class="QListWidget" name="listActionsForKeyAutomaton"/>
+                            </item>
+                        </layout>
+                    </widget>
+                </widget>
+            </widget>
+        </widget>
+        <widget class="QGroupBox" name="groupBox">
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>271</width>
+                    <height>61</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>select phase</string>
+            </property>
+            <widget class="QComboBox" name="comboPhase">
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>151</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QPushButton" name="pushSaveAutomaton">
+            <property name="geometry">
+                <rect>
+                    <x>500</x>
+                    <y>10</y>
+                    <width>71</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>save</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBoxBackup">
+            <property name="geometry">
+                <rect>
+                    <x>630</x>
+                    <y>10</y>
+                    <width>93</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>backup</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBoxInstall">
+            <property name="geometry">
+                <rect>
+                    <x>630</x>
+                    <y>30</y>
+                    <width>93</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>install</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" name="pushLaTex">
+            <property name="geometry">
+                <rect>
+                    <x>500</x>
+                    <y>50</y>
+                    <width>97</width>
+                    <height>27</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>LaTex</string>
+            </property>
+        </widget>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

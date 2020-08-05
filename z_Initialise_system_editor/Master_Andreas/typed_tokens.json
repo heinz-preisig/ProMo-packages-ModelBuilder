@@ -1,0 +1,69 @@
+{
+  "properties": {
+    "instances": [
+      "A"
+    ],
+    "conversions": []
+  },
+  "secondary_states": {
+    "instances": [],
+    "conversions": []
+  },
+  "signals": {
+    "instances": [
+      "A"
+    ],
+    "conversions": []
+  },
+  "species": {
+    "instances": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "conversions": [
+      {
+        "reactants": [
+          "A",
+          "F"
+        ],
+        "products": [
+          "E"
+        ]
+      },
+      {
+        "reactants": [
+          "C"
+        ],
+        "products": [
+          "F"
+        ]
+      },
+      {
+        "reactants": [
+          "A",
+          "C"
+        ],
+        "products": [
+          "E"
+        ]
+      },
+      {
+        "reactants": [
+          "G"
+        ],
+        "products": [
+          "G"
+        ]
+      }
+    ]
+  },
+  "diff_signals": {
+    "instances": [],
+    "conversions": []
+  }
+}

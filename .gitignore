@@ -1,0 +1,9 @@
+*.dvi
+*.ps
+*.aux
+*.bbl
+*.blg
+*.log
+*.pyc
+__pycache__
+

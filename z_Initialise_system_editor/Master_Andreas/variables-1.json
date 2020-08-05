@@ -1,0 +1,3203 @@
+{
+  "t": {
+    "variable_type": "frame",
+    "layer": "root",
+    "doc": "time",
+    "index_structures": [],
+    "units": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "t",
+      "cpp": "t",
+      "matlab": "t",
+      "latex": "t"
+    }
+  },
+  "r": {
+    "variable_type": "frame",
+    "layer": "physical",
+    "doc": "coordinate",
+    "index_structures": [],
+    "units": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "r",
+      "cpp": "r",
+      "matlab": "r",
+      "latex": "r"
+    }
+  },
+  "Fm": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence mass",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Fm",
+      "cpp": "Fm",
+      "matlab": "Fm",
+      "latex": "F^{m}"
+    }
+  },
+  "Fmv": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence mass volumetric",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Fmv",
+      "cpp": "Fmv",
+      "matlab": "Fmv",
+      "latex": "F^{m,v}"
+    }
+  },
+  "Fmic": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence mass ion conduction",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Fmic",
+      "cpp": "Fmic",
+      "matlab": "Fmic",
+      "latex": "F^{m,ic}"
+    }
+  },
+  "Psns": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection species in nodes",
+    "index_structures": [
+      "species",
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Psns",
+      "cpp": "Psns",
+      "matlab": "Psns",
+      "latex": "P"
+    }
+  },
+  "Psas": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection species in arcs",
+    "index_structures": [
+      "species",
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Psas",
+      "cpp": "Psas",
+      "matlab": "Psas",
+      "latex": "P"
+    }
+  },
+  "Pnsas": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection species in network",
+    "index_structures": [
+      "node & species",
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "0"
+    ],
+    "aliases": {
+      "python": "Pnsas",
+      "cpp": "Pnsas",
+      "matlab": "Pnsas",
+      "latex": "P"
+    }
+  },
+  "Nsr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Stoichiometric matrix",
+    "index_structures": [
+      "species",
+      "species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Nsr",
+      "cpp": "Nsr",
+      "matlab": "Nsr",
+      "latex": "N"
+    }
+  },
+  "Nnsr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Stoich. mat. species in nodes",
+    "index_structures": [
+      "node & species",
+      "species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "1"
+    ],
+    "aliases": {
+      "python": "Nnsr",
+      "cpp": "Nnsr",
+      "matlab": "Nnsr",
+      "latex": "N"
+    }
+  },
+  "Fn": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence amount of component",
+    "index_structures": [
+      "node & species",
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "2"
+    ],
+    "aliases": {
+      "python": "Fn",
+      "cpp": "Fn",
+      "matlab": "Fn",
+      "latex": "F^{n}"
+    }
+  },
+  "g": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Gravity coefficient",
+    "index_structures": [],
+    "units": [
+      -2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "g",
+      "cpp": "g",
+      "matlab": "g",
+      "latex": "g"
+    }
+  },
+  "mM": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar mass",
+    "index_structures": [
+      "species"
+    ],
+    "units": [
+      0,
+      0,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "mM",
+      "cpp": "mM",
+      "matlab": "mM",
+      "latex": "\\lambda"
+    }
+  },
+  "mMn": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar mass constants",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "3"
+    ],
+    "aliases": {
+      "python": "mMn",
+      "cpp": "mMn",
+      "matlab": "mMn",
+      "latex": "\\lambda"
+    }
+  },
+  "half": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "0.5",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "half",
+      "cpp": "half",
+      "matlab": "half",
+      "latex": "\\frac{1}{2}"
+    }
+  },
+  "n": {
+    "variable_type": "state",
+    "layer": "physical",
+    "doc": "Amount of substance",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "29"
+    ],
+    "aliases": {
+      "python": "n",
+      "cpp": "n",
+      "matlab": "n",
+      "latex": "n"
+    }
+  },
+  "H": {
+    "variable_type": "state",
+    "layer": "physical",
+    "doc": "Enthalpy",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -2,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "49"
+    ],
+    "aliases": {
+      "python": "H",
+      "cpp": "H",
+      "matlab": "H",
+      "latex": "H"
+    }
+  },
+  "dt_h_s": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar enthalpy 298 species",
+    "index_structures": [
+      "species"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "dt_h_s",
+      "cpp": "dt_h_s",
+      "matlab": "dt_h_s",
+      "latex": "\\Delta h"
+    }
+  },
+  "dt_h_ns": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar enthalpy in nodes",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "4"
+    ],
+    "aliases": {
+      "python": "dt_h_ns",
+      "cpp": "dt_h_ns",
+      "matlab": "dt_h_ns",
+      "latex": "\\Delta h"
+    }
+  },
+  "cp": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "molar heat capacity",
+    "index_structures": [
+      "species"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      -1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "cp",
+      "cpp": "cp",
+      "matlab": "cp",
+      "latex": "cp"
+    }
+  },
+  "cp_n": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar heat capacity in nodes",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      -1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "5"
+    ],
+    "aliases": {
+      "python": "cp_n",
+      "cpp": "cp_n",
+      "matlab": "cp_n",
+      "latex": "cp"
+    }
+  },
+  "en": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Unit vector",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "en",
+      "cpp": "en",
+      "matlab": "en",
+      "latex": "e"
+    }
+  },
+  "ens": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Unit vector",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "ens",
+      "cpp": "ens",
+      "matlab": "ens",
+      "latex": "e"
+    }
+  },
+  "m": {
+    "variable_type": "state",
+    "layer": "physical",
+    "doc": "Mass",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "6"
+    ],
+    "aliases": {
+      "python": "m",
+      "cpp": "m",
+      "matlab": "m",
+      "latex": "m"
+    }
+  },
+  "ntot": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Total amount of moles",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "7"
+    ],
+    "aliases": {
+      "python": "ntot",
+      "cpp": "ntot",
+      "matlab": "ntot",
+      "latex": "n^{tot}"
+    }
+  },
+  "Vg": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Given volume",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Vg",
+      "cpp": "Vg",
+      "matlab": "Vg",
+      "latex": "V^{given}"
+    }
+  },
+  "x": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Molar fraction",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "9"
+    ],
+    "aliases": {
+      "python": "x",
+      "cpp": "x",
+      "matlab": "x",
+      "latex": "x"
+    }
+  },
+  "Cp": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Heat capacity of mixture",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -2,
+      2,
+      0,
+      1,
+      -1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "10"
+    ],
+    "aliases": {
+      "python": "Cp",
+      "cpp": "Cp",
+      "matlab": "Cp",
+      "latex": "Cp"
+    }
+  },
+  "Href": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Reference enthalpy",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -2,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "11"
+    ],
+    "aliases": {
+      "python": "Href",
+      "cpp": "Href",
+      "matlab": "Href",
+      "latex": "H^{ref}"
+    }
+  },
+  "T_ref": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Reference temperature",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "T_ref",
+      "cpp": "T_ref",
+      "matlab": "T_ref",
+      "latex": "T^{ref}"
+    }
+  },
+  "T_ref_n": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Reference temperature nodes",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "12"
+    ],
+    "aliases": {
+      "python": "T_ref_n",
+      "cpp": "T_ref_n",
+      "matlab": "T_ref_n",
+      "latex": "T^{ref}"
+    }
+  },
+  "T": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Temperature ",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "13"
+    ],
+    "aliases": {
+      "python": "T",
+      "cpp": "T",
+      "matlab": "T",
+      "latex": "T"
+    }
+  },
+  "Rg": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Gas constant",
+    "index_structures": [],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      -1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Rg",
+      "cpp": "Rg",
+      "matlab": "Rg",
+      "latex": "R^{g}"
+    }
+  },
+  "p": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Pressure",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -2,
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "15",
+      "16"
+    ],
+    "aliases": {
+      "python": "p",
+      "cpp": "p",
+      "matlab": "p",
+      "latex": "p"
+    }
+  },
+  "c": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Concentration",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      -3,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "17"
+    ],
+    "aliases": {
+      "python": "c",
+      "cpp": "c",
+      "matlab": "c",
+      "latex": "c"
+    }
+  },
+  "dp": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "pressure difference volumetric flow",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -2,
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "18"
+    ],
+    "aliases": {
+      "python": "dp",
+      "cpp": "dp",
+      "matlab": "dp",
+      "latex": "\\Delta p"
+    }
+  },
+  "Fnv": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence species volumetric",
+    "index_structures": [
+      "node & species",
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "19"
+    ],
+    "aliases": {
+      "python": "Fnv",
+      "cpp": "Fnv",
+      "matlab": "Fnv",
+      "latex": "F^{n,v}"
+    }
+  },
+  "Fnic": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "I mat species ion conduction",
+    "index_structures": [
+      "node & species",
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "20"
+    ],
+    "aliases": {
+      "python": "Fnic",
+      "cpp": "Fnic",
+      "matlab": "Fnic",
+      "latex": "F^{n,ic}"
+    }
+  },
+  "dir": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "direction of flow",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "21"
+    ],
+    "aliases": {
+      "python": "dir",
+      "cpp": "dir",
+      "matlab": "dir",
+      "latex": "d"
+    }
+  },
+  "fs": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Selection node from flow direction",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "22"
+    ],
+    "aliases": {
+      "python": "fs",
+      "cpp": "fs",
+      "matlab": "fs",
+      "latex": "S^{d,f}"
+    }
+  },
+  "chat": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Concentration in volumetric flow",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      0,
+      -3,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "23"
+    ],
+    "aliases": {
+      "python": "chat",
+      "cpp": "chat",
+      "matlab": "chat",
+      "latex": "\\hat{c}"
+    }
+  },
+  "dp_0": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Reference pressure difference",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -2,
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "24"
+    ],
+    "aliases": {
+      "python": "dp_0",
+      "cpp": "dp_0",
+      "matlab": "dp_0",
+      "latex": "\\Delta p^{0}"
+    }
+  },
+  "kappa": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "valve coefficient",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "kappa",
+      "cpp": "kappa",
+      "matlab": "kappa",
+      "latex": "\\kappa"
+    }
+  },
+  "B": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Cross sectional area of flow",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "B",
+      "cpp": "B",
+      "matlab": "B",
+      "latex": "B"
+    }
+  },
+  "u_v": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Valve opening",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "u_v",
+      "cpp": "u_v",
+      "matlab": "u_v",
+      "latex": "u^{v}"
+    }
+  },
+  "Vhat_v": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Volumetric flow ",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -1,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "25"
+    ],
+    "aliases": {
+      "python": "Vhat_v",
+      "cpp": "Vhat_v",
+      "matlab": "Vhat_v",
+      "latex": "\\hat{V}^{v}"
+    }
+  },
+  "nhat_v": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Molar flow volumetric",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "26"
+    ],
+    "aliases": {
+      "python": "nhat_v",
+      "cpp": "nhat_v",
+      "matlab": "nhat_v",
+      "latex": "\\hat{n}^{v}"
+    }
+  },
+  "S_ion": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection ion transport",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_ion",
+      "cpp": "S_ion",
+      "matlab": "S_ion",
+      "latex": "S^{ic}"
+    }
+  },
+  "kappa_i": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "ion conductivity",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "kappa_i",
+      "cpp": "kappa_i",
+      "matlab": "kappa_i",
+      "latex": "\\kappa^{i}"
+    }
+  },
+  "nhat_ic": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "molar flow ion conduction",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "27"
+    ],
+    "aliases": {
+      "python": "nhat_ic",
+      "cpp": "nhat_ic",
+      "matlab": "nhat_ic",
+      "latex": "\\hat{n}^{ic}"
+    }
+  },
+  "ndot": {
+    "variable_type": "balance",
+    "layer": "physical",
+    "doc": "State derivative",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "28"
+    ],
+    "aliases": {
+      "python": "ndot",
+      "cpp": "ndot",
+      "matlab": "ndot",
+      "latex": "\\dot{n}"
+    }
+  },
+  "t0": {
+    "variable_type": "frame",
+    "layer": "physical",
+    "doc": "time start",
+    "index_structures": [],
+    "units": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "t0",
+      "cpp": "t0",
+      "matlab": "t0",
+      "latex": "t^{0}"
+    }
+  },
+  "tend": {
+    "variable_type": "frame",
+    "layer": "physical",
+    "doc": "time end",
+    "index_structures": [],
+    "units": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "tend",
+      "cpp": "tend",
+      "matlab": "tend",
+      "latex": "t^{n}"
+    }
+  },
+  "Prnr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection conversion in nodes",
+    "index_structures": [
+      "species_conversion",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Prnr",
+      "cpp": "Prnr",
+      "matlab": "Prnr",
+      "latex": "P"
+    }
+  },
+  "zero": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "zero, 0",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "zero",
+      "cpp": "zero",
+      "matlab": "zero",
+      "latex": "0"
+    }
+  },
+  "four": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "four, 4",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "four",
+      "cpp": "four",
+      "matlab": "four",
+      "latex": "4"
+    }
+  },
+  "Nnsnr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Stoich. mat. species reaction in nodes",
+    "index_structures": [
+      "node & species",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "30"
+    ],
+    "aliases": {
+      "python": "Nnsnr",
+      "cpp": "Nnsnr",
+      "matlab": "Nnsnr",
+      "latex": "N"
+    }
+  },
+  "null": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "zero alternative",
+    "index_structures": [
+      "node & species",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "31"
+    ],
+    "aliases": {
+      "python": "null",
+      "cpp": "null",
+      "matlab": "null",
+      "latex": "0"
+    }
+  },
+  "K_r": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Reaction rate",
+    "index_structures": [
+      "species_conversion"
+    ],
+    "units": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "K_r",
+      "cpp": "K_r",
+      "matlab": "K_r",
+      "latex": "K"
+    }
+  },
+  "Krn": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Reaction rates in nodes",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "32"
+    ],
+    "aliases": {
+      "python": "Krn",
+      "cpp": "Krn",
+      "matlab": "Krn",
+      "latex": "K"
+    }
+  },
+  "Psr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection species reactions",
+    "index_structures": [
+      "species",
+      "species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "65"
+    ],
+    "aliases": {
+      "python": "Psr",
+      "cpp": "Psr",
+      "matlab": "Psr",
+      "latex": "P"
+    }
+  },
+  "Pnsnr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Projection species reactions in nodes",
+    "index_structures": [
+      "node & species",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "33"
+    ],
+    "aliases": {
+      "python": "Pnsnr",
+      "cpp": "Pnsnr",
+      "matlab": "Pnsnr",
+      "latex": "P"
+    }
+  },
+  "p_x": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Probability of locating single molecule",
+    "index_structures": [
+      "node & species",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "34"
+    ],
+    "aliases": {
+      "python": "p_x",
+      "cpp": "p_x",
+      "matlab": "p_x",
+      "latex": "p^{x}"
+    }
+  },
+  "Snnr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Selectio nodes and reactions",
+    "index_structures": [
+      "node",
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Snnr",
+      "cpp": "Snnr",
+      "matlab": "Snnr",
+      "latex": "S"
+    }
+  },
+  "g_p_x": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Probability of reactants meeting",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "35"
+    ],
+    "aliases": {
+      "python": "g_p_x",
+      "cpp": "g_p_x",
+      "matlab": "g_p_x",
+      "latex": "g^{p,x}"
+    }
+  },
+  "xihat": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Extent of reaction",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "36",
+      "70",
+      "71"
+    ],
+    "aliases": {
+      "python": "xihat",
+      "cpp": "xihat",
+      "matlab": "xihat",
+      "latex": "\\hat{\\xi}"
+    }
+  },
+  "ntilde": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Reaction derivative",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "37"
+    ],
+    "aliases": {
+      "python": "ntilde",
+      "cpp": "ntilde",
+      "matlab": "ntilde",
+      "latex": "\\tilde{n}"
+    }
+  },
+  "ea": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Unit vector arcs",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "ea",
+      "cpp": "ea",
+      "matlab": "ea",
+      "latex": "e"
+    }
+  },
+  "eas": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Unit vector species in arcs",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "eas",
+      "cpp": "eas",
+      "matlab": "eas",
+      "latex": "e"
+    }
+  },
+  "Uq": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Heat transfer coefficient",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      0,
+      0,
+      1,
+      -1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Uq",
+      "cpp": "Uq",
+      "matlab": "Uq",
+      "latex": "U^{q}"
+    }
+  },
+  "Fqc": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence heat conductive",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Fqc",
+      "cpp": "Fqc",
+      "matlab": "Fqc",
+      "latex": "F^{q,c}"
+    }
+  },
+  "Fqr": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence heat radiation",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Fqr",
+      "cpp": "Fqr",
+      "matlab": "Fqr",
+      "latex": "F^{q,r}"
+    }
+  },
+  "qhat_c": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Heat flow conduction",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "41"
+    ],
+    "aliases": {
+      "python": "qhat_c",
+      "cpp": "qhat_c",
+      "matlab": "qhat_c",
+      "latex": "\\hat{q}^{c}"
+    }
+  },
+  "epsilon": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Emissivity",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "epsilon",
+      "cpp": "epsilon",
+      "matlab": "epsilon",
+      "latex": "\\epsilon"
+    }
+  },
+  "sigma": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Stefan-Boltzmann",
+    "index_structures": [],
+    "units": [
+      -3,
+      0,
+      0,
+      1,
+      -4,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "sigma",
+      "cpp": "sigma",
+      "matlab": "sigma",
+      "latex": "\\sigma"
+    }
+  },
+  "T4": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Temperature to the power of 4",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "43"
+    ],
+    "aliases": {
+      "python": "T4",
+      "cpp": "T4",
+      "matlab": "T4",
+      "latex": "T^{4}"
+    }
+  },
+  "qhat_r": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Heat flow radiation",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "44"
+    ],
+    "aliases": {
+      "python": "qhat_r",
+      "cpp": "qhat_r",
+      "matlab": "qhat_r",
+      "latex": "\\hat{q}^{r}"
+    }
+  },
+  "h": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Molar enthaply",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "45"
+    ],
+    "aliases": {
+      "python": "h",
+      "cpp": "h",
+      "matlab": "h",
+      "latex": "h"
+    }
+  },
+  "Hhat_v": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Enthalpy flow volumetric",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "46"
+    ],
+    "aliases": {
+      "python": "Hhat_v",
+      "cpp": "Hhat_v",
+      "matlab": "Hhat_v",
+      "latex": "\\hat{H}^{r}"
+    }
+  },
+  "Hhat_ic": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Enthalpy flow ion conduction",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "47"
+    ],
+    "aliases": {
+      "python": "Hhat_ic",
+      "cpp": "Hhat_ic",
+      "matlab": "Hhat_ic",
+      "latex": "\\hat{H}^{ic}"
+    }
+  },
+  "Hdot": {
+    "variable_type": "balance",
+    "layer": "physical",
+    "doc": "Enthalpy derivative",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "48"
+    ],
+    "aliases": {
+      "python": "Hdot",
+      "cpp": "Hdot",
+      "matlab": "Hdot",
+      "latex": "\\dot{H}"
+    }
+  },
+  "F": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Faraday constant",
+    "index_structures": [],
+    "units": [
+      1,
+      0,
+      -1,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "F",
+      "cpp": "F",
+      "matlab": "F",
+      "latex": "F"
+    }
+  },
+  "S_components": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection of component in nodes",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_components",
+      "cpp": "S_components",
+      "matlab": "S_components",
+      "latex": "S^{com}"
+    }
+  },
+  "A_anode": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Anode surface area",
+    "index_structures": [],
+    "units": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Anode_area",
+      "cpp": "Anode_area",
+      "matlab": "Anode_area",
+      "latex": "A^{ano}"
+    }
+  },
+  "A_cathode": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Cathode surface area",
+    "index_structures": [],
+    "units": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "A_cathode",
+      "cpp": "A_cathode",
+      "matlab": "A_cathode",
+      "latex": "A^{cat}"
+    }
+  },
+  "i": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Current produced",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "50",
+      "67"
+    ],
+    "aliases": {
+      "python": "i",
+      "cpp": "i",
+      "matlab": "i",
+      "latex": "i"
+    }
+  },
+  "d_G_activation": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Electrolyte activation energy ",
+    "index_structures": [],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "d_G_activation",
+      "cpp": "d_G_activation",
+      "matlab": "d_G_activation",
+      "latex": "\\Delta G^{a}"
+    }
+  },
+  "tM": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "thickness electrolyte",
+    "index_structures": [],
+    "units": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "tM",
+      "cpp": "tM",
+      "matlab": "tM",
+      "latex": "t^{M}"
+    }
+  },
+  "A_SOFC": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Electrolyte constant",
+    "index_structures": [],
+    "units": [
+      3,
+      -3,
+      0,
+      -1,
+      1,
+      2,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "A_SOFC",
+      "cpp": "A_SOFC",
+      "matlab": "A_SOFC",
+      "latex": "A^{SOFC}"
+    }
+  },
+  "eta_ohm": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Ohmic voltage loss",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "51"
+    ],
+    "aliases": {
+      "python": "eta_ohm",
+      "cpp": "eta_ohm",
+      "matlab": "eta_ohm",
+      "latex": "\\eta^{ohm}"
+    }
+  },
+  "i0": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Current ref",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "i0",
+      "cpp": "i0",
+      "matlab": "i0",
+      "latex": "i^{0}"
+    }
+  },
+  "alpha": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Tafel alpha",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "alpha",
+      "cpp": "alpha",
+      "matlab": "alpha",
+      "latex": "\\alpha"
+    }
+  },
+  "two": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "two, 2",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "two",
+      "cpp": "two",
+      "matlab": "two",
+      "latex": "2"
+    }
+  },
+  "b_tafel": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Tafel slope",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "52"
+    ],
+    "aliases": {
+      "python": "b_tafel",
+      "cpp": "b_tafel",
+      "matlab": "b_tafel",
+      "latex": "b^{tafel}"
+    }
+  },
+  "eta_active": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Tafel equation",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "53"
+    ],
+    "aliases": {
+      "python": "eta_active",
+      "cpp": "eta_active",
+      "matlab": "eta_active",
+      "latex": "\\eta^{act}"
+    }
+  },
+  "pp": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Partial pressure",
+    "index_structures": [
+      "node & species"
+    ],
+    "units": [
+      -2,
+      -1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "54"
+    ],
+    "aliases": {
+      "python": "pp",
+      "cpp": "pp",
+      "matlab": "pp",
+      "latex": "p^{p}"
+    }
+  },
+  "d_G_reaction": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Energy change reaction",
+    "index_structures": [],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "d_G_reaction",
+      "cpp": "d_G_reaction",
+      "matlab": "d_G_reaction",
+      "latex": "\\Delta G^{r}"
+    }
+  },
+  "dG": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Gibbs reaction",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -2,
+      2,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "56"
+    ],
+    "aliases": {
+      "python": "dG",
+      "cpp": "dG",
+      "matlab": "dG",
+      "latex": "\\Delta G"
+    }
+  },
+  "p_reac": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Reaction probability",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "58"
+    ],
+    "aliases": {
+      "python": "p_reac",
+      "cpp": "p_reac",
+      "matlab": "p_reac",
+      "latex": "p^{reac}"
+    }
+  },
+  "Q_nernst": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Nernst reaction",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "59"
+    ],
+    "aliases": {
+      "python": "Q_nernst",
+      "cpp": "Q_nernst",
+      "matlab": "Q_nernst",
+      "latex": "Q^{nernst}"
+    }
+  },
+  "V_oc": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Over potential",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "60"
+    ],
+    "aliases": {
+      "python": "V_oc",
+      "cpp": "V_oc",
+      "matlab": "V_oc",
+      "latex": "V^{oc}"
+    }
+  },
+  "V_loss": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Loss",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "61"
+    ],
+    "aliases": {
+      "python": "V_loss",
+      "cpp": "V_loss",
+      "matlab": "V_loss",
+      "latex": "V^{loss}"
+    }
+  },
+  "V": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Voltage",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0
+    ],
+    "equation_list": [
+      "62",
+      "66"
+    ],
+    "aliases": {
+      "python": "V",
+      "cpp": "V",
+      "matlab": "V",
+      "latex": "V"
+    }
+  },
+  "Pel": {
+    "variable_type": "sec_states",
+    "layer": "physical",
+    "doc": "Watt",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "63"
+    ],
+    "aliases": {
+      "python": "Pel",
+      "cpp": "Pel",
+      "matlab": "Pel",
+      "latex": "P^{el}"
+    }
+  },
+  "Feel": {
+    "variable_type": "network",
+    "layer": "physical",
+    "doc": "Incidence electric energy",
+    "index_structures": [
+      "node",
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "Feel",
+      "cpp": "Feel",
+      "matlab": "Feel",
+      "latex": "F^{e,el}"
+    }
+  },
+  "Pelhat": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Electric energy transport",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "64"
+    ],
+    "aliases": {
+      "python": "Pelhat",
+      "cpp": "Pelhat",
+      "matlab": "Pelhat",
+      "latex": "\\hat{P}^{el}"
+    }
+  },
+  "P_given": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Power drawn from different parts",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "P_given",
+      "cpp": "P_given",
+      "matlab": "P_given",
+      "latex": "P^{el,g}"
+    }
+  },
+  "dt": {
+    "variable_type": "frame",
+    "layer": "physical",
+    "doc": "length of integration step",
+    "index_structures": [],
+    "units": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "dt",
+      "cpp": "dt",
+      "matlab": "dt",
+      "latex": "\\Delta t"
+    }
+  },
+  "power_system": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Root power system",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "power_system",
+      "cpp": "power_system",
+      "matlab": "power_system",
+      "latex": "ps^{el}"
+    }
+  },
+  "S_electron_reac": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection of energy reactions",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_electron_reac",
+      "cpp": "S_electron_reac",
+      "matlab": "S_electron_reac",
+      "latex": "S^{el,prod}"
+    }
+  },
+  "ne": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Electrones generated in reaction",
+    "index_structures": [
+      "species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "ne",
+      "cpp": "ne",
+      "matlab": "ne",
+      "latex": "n^{e}"
+    }
+  },
+  "ne_nr": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Electrones used pr simulation",
+    "index_structures": [
+      "node & species_conversion"
+    ],
+    "units": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "69"
+    ],
+    "aliases": {
+      "python": "ne_nr",
+      "cpp": "ne_nr",
+      "matlab": "ne_nr",
+      "latex": "n^{e}"
+    }
+  },
+  "S_solid": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection solid phase",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_solid",
+      "cpp": "S_solid",
+      "matlab": "S_solid",
+      "latex": "S^{s}"
+    }
+  },
+  "manifolds": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Number of cells",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "manifolds",
+      "cpp": "manifolds",
+      "matlab": "manifolds",
+      "latex": "N^{cell}"
+    }
+  },
+  "A_single_cell": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Surface area single cell",
+    "index_structures": [],
+    "units": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "A_single_cell",
+      "cpp": "A_single_cell",
+      "matlab": "A_single_cell",
+      "latex": "A^{cell}"
+    }
+  },
+  "ohm_specific": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Resistance",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "ohm_specific",
+      "cpp": "ohm_specific",
+      "matlab": "ohm_specific",
+      "latex": "\\Omega"
+    }
+  },
+  "S_reac": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection nodes with normal reaction",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_reac",
+      "cpp": "S_reac",
+      "matlab": "S_reac",
+      "latex": "S^{reac}"
+    }
+  },
+  "S_equ": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Selection nodes with equlibrium",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "S_equ",
+      "cpp": "S_equ",
+      "matlab": "S_equ",
+      "latex": "S_equ"
+    }
+  },
+  "ne_reac": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "El in reaction",
+    "index_structures": [],
+    "units": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [],
+    "aliases": {
+      "python": "ne_reac",
+      "cpp": "ne_reac",
+      "matlab": "ne_reac",
+      "latex": "n^{e, o}"
+    }
+  },
+  "Vhat_v_uni": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Unidirectional volumetric flow",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -1,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "72"
+    ],
+    "aliases": {
+      "python": "Vhat_v_uni",
+      "cpp": "Vhat_v_uni",
+      "matlab": "Vhat_v_uni",
+      "latex": "Vhat_v_uni"
+    }
+  },
+  "That": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "Temperature in flow",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "73"
+    ],
+    "aliases": {
+      "python": "That",
+      "cpp": "That",
+      "matlab": "That",
+      "latex": "\\hat{T}"
+    }
+  },
+  "mMa": {
+    "variable_type": "constant",
+    "layer": "physical",
+    "doc": "Molar mass i arcs",
+    "index_structures": [
+      "arc & species"
+    ],
+    "units": [
+      0,
+      0,
+      -1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "74"
+    ],
+    "aliases": {
+      "python": "mMa",
+      "cpp": "mMa",
+      "matlab": "mMa",
+      "latex": "\\lambda"
+    }
+  },
+  "mhat_v": {
+    "variable_type": "transport",
+    "layer": "physical",
+    "doc": "mass flow volumetric",
+    "index_structures": [
+      "arc"
+    ],
+    "units": [
+      -1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "75"
+    ],
+    "aliases": {
+      "python": "mhat_v",
+      "cpp": "mhat_v",
+      "matlab": "mhat_v",
+      "latex": "\\hat{m}"
+    }
+  },
+  "Htilde": {
+    "variable_type": "transposition",
+    "layer": "physical",
+    "doc": "Reaction enthalpy",
+    "index_structures": [
+      "node"
+    ],
+    "units": [
+      -3,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "equation_list": [
+      "76"
+    ],
+    "aliases": {
+      "python": "Htilde",
+      "cpp": "Htilde",
+      "matlab": "Htilde",
+      "latex": "\\tilde{H}"
+    }
+  }
+}

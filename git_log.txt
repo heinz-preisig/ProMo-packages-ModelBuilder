@@ -1,0 +1,519 @@
+commit 75d8a71a127054159f8872d15d2f3df7295c8eb0
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Tue May 28 11:29:39 2019 +0200
+
+    Initialization ok
+
+commit 0ee9d401f6c9d80811f9a4669bed78309de2b207
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Mon May 27 18:49:33 2019 +0200
+
+    ok initialization!!!
+
+commit 9a733ca64ab5005a7ecf6057356eeba6dd4585a6
+Merge: ddd6dec 6f749c7
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Fri May 24 16:19:07 2019 +0200
+
+    Merge branch 'master' of /home/elve/Dropbox/Git/ProcessModeller_v6_00
+
+commit ddd6dec7394091fcccd15b3e162234f1120fba5f
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Fri May 24 16:18:52 2019 +0200
+
+    Table initialization
+
+commit 6f749c7c99ed3c57edcacea39e7804756fa51ad1
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri May 24 11:07:04 2019 +0200
+
+    auto commit
+
+commit bc3c85d204daa745e9b920111c3c23a2413c641b
+Merge: 3a152ea a04c4e4
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu May 23 15:33:10 2019 +0200
+
+    Merge branch 'master' of /home/elve/Dropbox/Git/ProcessModeller_v6_00
+
+commit 3a152ead028a0d3657960c95a2da49d8aa958c91
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu May 23 15:32:48 2019 +0200
+
+    Table initializing
+
+commit a04c4e48f80d22bbe3c03444ea77fca41b4cf469
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu May 23 14:43:30 2019 +0200
+
+    auto commit
+
+commit 496efbe3c1b480fd3c560997fd056fcd3ca3011d
+Merge: 2ffbc31 154f265
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu May 23 14:43:30 2019 +0200
+
+    Merge branch 'master' of /home/heinz/Dropbox/remoteGit/ProcessModeller_v6_00
+
+commit 2ffbc3177d2f7999ec897305de616eaa0b360d8f
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 22 18:14:34 2019 +0200
+
+    auto commit
+
+commit 154f26517fab29d6b6e615a3045f07956c16b01f
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 22 13:50:46 2019 +0200
+
+    Changed reading from file
+
+commit 2e3fff6e6a974f416ab68196ee6646deff02171b
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 22 12:20:41 2019 +0200
+
+    Before major change
+
+commit aca279766ad0ecccd390224d188292d41c72185c
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue May 21 18:45:44 2019 +0200
+
+    auto commit
+
+commit e0f14c77498dc932079cea91356c6a09c37ecfc6
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Tue May 21 18:37:45 2019 +0200
+
+    New model factory
+
+commit 6e3f04076b7d58ea2df1bf910dbdb0c17b80b41c
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Mon May 20 23:06:44 2019 +0200
+
+    auto commit
+
+commit 1ae8bc7fb93988769703f22f8adde85e11348d12
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Mon May 20 17:39:01 2019 +0200
+
+    New version
+
+commit 4cdbad8708af22930f481986ef334909eb5b9500
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Mon May 20 12:13:14 2019 +0200
+
+    New version
+
+commit 7bb505dbf0cb41a4cab94428485e2cefede42818
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sun May 19 14:26:04 2019 +0200
+
+    auto commit
+
+commit caf4e31619923ef725e3ee3d292c0e7742d828ec
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Tue May 14 10:14:19 2019 +0200
+
+    Initialization
+
+commit 404acdf80e2326b38603aee1a6823ac827489aa4
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sun May 12 18:02:49 2019 +0200
+
+    auto commit
+
+commit a11aa61e3e17d397de2ab186dd1a669b603dd1c8
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu May 9 11:54:07 2019 +0200
+
+    New editor
+
+commit e5f0836a7cc7431ac2e44a708fb2ed4755f86ae9
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 8 22:00:23 2019 +0200
+
+    auto commit
+
+commit a1f54c1d963cbd4d43bbcabe85c6dedc290f39bf
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 8 20:24:46 2019 +0200
+
+    auto commit
+
+commit b8764cb187723a6807cdebcee5d950af1008d63d
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 8 17:48:29 2019 +0200
+
+    auto commit
+
+commit 17d1c5940e2978e3825392e4bc174763ecd0bf3c
+Merge: 48045e0 7bdd5b0
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 8 09:03:01 2019 +0200
+
+    Merge branch 'master' of /home/elve/Dropbox/Git/ProcessModeller_v6_00
+
+commit 48045e02f8bda1603f171c4916d2f334246bfdc8
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 8 09:02:42 2019 +0200
+
+    Update instatiation
+
+commit 7bdd5b0bb29b6b1d26ce3b82e2b291d98ff096c3
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue May 7 22:02:17 2019 +0200
+
+    auto commit
+
+commit 709d07a62f836c79ce506586eb12e7cc4cee6e1b
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue May 7 17:28:22 2019 +0200
+
+    auto commit
+
+commit 1245c51be8a70fc4a720bcc6cd86a048d30ad7f9
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Tue May 7 10:41:27 2019 +0200
+
+    Some changes
+
+commit ec98db5c2296944dd270dd80b12f2c1c2917a87d
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Sun May 5 15:14:23 2019 +0200
+
+    Added instantiation procedure
+
+commit ffc49d5a74a64d6a6bb9cb28c99cb73fd47a42a5
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Sun May 5 10:20:41 2019 +0200
+
+    Before Andreas
+
+commit eb845b868593711f94573d38912bfa6914a65019
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat May 4 15:05:27 2019 +0200
+
+    auto commit
+
+commit d74f45a08e68d3eac2ddc7282b72ef6705946860
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri May 3 17:23:46 2019 +0200
+
+    auto commit
+
+commit 4b250d32e189b38ccfa04af06492bf135db13b3b
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri May 3 10:00:45 2019 +0200
+
+    auto commit
+
+commit 95ec77c2a3cbf96eeac1b769a9b2b95a53957cc9
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri May 3 09:16:44 2019 +0200
+
+    auto commit
+
+commit cdf55aab3fd621d728caf29044ec0e8bc81236bb
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri May 3 09:05:46 2019 +0200
+
+    auto commit
+
+commit 4f49d1fd85820dff0090ac9d4abe984869da04e8
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu May 2 17:29:56 2019 +0200
+
+    auto commit
+
+commit 0866fa1a424e2755218972384a94b12d6870d7c7
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu May 2 15:46:41 2019 +0200
+
+    auto commit
+
+commit bb86535ae88ebfceb78a0f8f5f8cd127ae7f6bfa
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 1 15:43:01 2019 +0200
+
+    Now works
+
+commit 8e6d7bf1170db2c915bd92ce02296efa2e9c99d5
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Wed May 1 14:23:40 2019 +0200
+
+    Fixed latex stuff
+
+commit 211b1f292bcc928f4b6fda04ec3905bc4dd50f7f
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 1 10:41:27 2019 +0200
+
+    Merge branch 'master' of /home/heinz/Dropbox/remoteGit/ProcessModeller_v6_00
+    
+    # Conflicts:
+    #       src/OntologyEquationEditor/ui_ontology_design_impl.py
+
+commit bcaaa5879a29a4c4d30ab9fd80b734db5bd87940
+Merge: 067676a 118d9b8
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 1 10:37:37 2019 +0200
+
+    Merge branch 'master' of /home/heinz/Dropbox/remoteGit/ProcessModeller_v6_00
+    
+    # Conflicts:
+    #       src/OntologyEquationEditor/ui_ontology_design_impl.py
+
+commit 067676ab39d0d7d832756e452b00d614796f55f7
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed May 1 10:30:28 2019 +0200
+
+    auto commit
+
+commit 118d9b882be97532535d731bd5de3bfbc3f8451e
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 30 17:47:47 2019 +0200
+
+    auto commit
+
+commit 306120e9ad7c33b0ee75d034afdb0767da184358
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 30 17:09:43 2019 +0200
+
+    auto commit
+
+commit cff4efbd7c0660c58a465093ae4d7bfca10ff8c1
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 30 16:09:21 2019 +0200
+
+    auto commit
+
+commit 3810e36c7958305ed0c96050c455baaa607d7a7f
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 30 09:30:06 2019 +0200
+
+    auto commit
+
+commit 2ef8e060ee409df514690f3105bd5bf4d763c4a1
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu Apr 25 18:36:17 2019 +0200
+
+    Syntax complaints
+
+commit b23870547cc0504463af3029f9e81dd279879058
+Merge: 4861415 e247231
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu Apr 25 18:35:31 2019 +0200
+
+    Merge branch 'master' of /home/elve/Dropbox/Git/ProcessModeller_v6_00
+
+commit 4861415524f392a2c546cde1295bcec9e4b3bc12
+Author: Arne Tobias Elve <arne.t.elve@ntnu.no>
+Date:   Thu Apr 25 18:34:32 2019 +0200
+
+    Fixed the model factory
+
+commit e24723119b95c2f5ee456f2f31d81a55ca0b9794
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 25 16:28:45 2019 +0200
+
+    auto commit
+
+commit d06a1a437d57e4e1ad2cfb0bfb8923903e0b8c46
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 25 16:23:16 2019 +0200
+
+    auto commit
+
+commit 3382c2cc3ed46ec100c9909d27419d27e041a032
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 25 10:18:03 2019 +0200
+
+    auto commit
+
+commit 3242e33409f3342ddbe46ddfa42a54cb7fe967ee
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 25 10:10:08 2019 +0200
+
+    auto commit
+
+commit 3a721b5eb72aa7650ecaa96945f0716c0c4cd46d
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 24 17:08:33 2019 +0200
+
+    auto commit
+
+commit 5e8cd818687498ba886cc1f25abcf4296ff44879
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 24 16:44:47 2019 +0200
+
+    auto commit
+
+commit fbb89c313271e2cadbe47676d9f223ed774bc374
+Merge: ec374ab 4bb6e30
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 24 16:44:33 2019 +0200
+
+    Merge branch 'master' of /home/heinz/Dropbox/remoteGit/ProcessModeller_v6_00
+    
+    # Conflicts:
+    #       src/OntologyEquationEditor/ui_ontology_design_impl.py
+
+commit ec374aba52779c2ea98bfbf19b04c0d59d9f5524
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 24 14:17:13 2019 +0200
+
+    auto commit
+
+commit 4bb6e303ca891ea66987cc6f76e2d0ba6c7220ff
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 23 20:16:54 2019 +0200
+
+    auto commit
+
+commit b19b8b0b346205dbbc4ed6cf7b6ed829e8df321b
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 23 20:09:15 2019 +0200
+
+    auto commit
+
+commit b1647cbfc8ab18de4bc523ae7249b77a96cb4dbd
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 23 16:46:40 2019 +0200
+
+    auto commit
+
+commit 9178acb1f3e1a622d5a1f8f9a9d6865e2867407d
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Mon Apr 22 23:51:07 2019 +0200
+
+    auto commit
+
+commit ff643816e62e1c993432fd936f793f8e137a0a96
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Mon Apr 22 12:17:55 2019 +0200
+
+    auto commit
+
+commit 0affcfb3822907cb8ed63a60f60370d2746148ed
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sun Apr 21 11:11:15 2019 +0200
+
+    auto commit
+
+commit 42585123ba81a0d826e2905bda7701498c60cd1a
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 18 09:17:58 2019 +0200
+
+    auto commit
+
+commit 3fd6dba5df33e896686c84c9dfd3618328d3b34d
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 17 15:20:24 2019 +0200
+
+    auto commit
+
+commit 36ce31dbc6f696bd8e3e7bb6327b73478dfbf1f3
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 17 13:26:41 2019 +0200
+
+    auto commit
+
+commit 8fae39a2717bc89c812c523f54322d87126774d9
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 17 11:03:09 2019 +0200
+
+    auto commit
+
+commit 2c56250ba6cdd0dddccf7290ca23b43489928292
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 17 09:38:06 2019 +0200
+
+    auto commit
+
+commit 7f211ae65e727d0de118c4350a75db7d58b2f0d9
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat Apr 13 22:21:21 2019 +0200
+
+    auto commit
+
+commit 15f30c1f72471acf6e8b32bb45614e71efa29e61
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Fri Apr 12 17:24:50 2019 +0200
+
+    auto commit
+
+commit 4fdd450ae52ef99f433f65d23e64e97d7b3142e4
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 11 23:41:49 2019 +0200
+
+    auto commit
+
+commit 53ab4810f95e53b0da4fb66e03a2e6df265a520a
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Thu Apr 11 17:48:30 2019 +0200
+
+    auto commit
+
+commit ba97ef9372e633f8abefd51430a4e9a399052e7c
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 10 17:45:49 2019 +0200
+
+    auto commit
+
+commit 0dd32a310b4ab4aa5022a7765917b12e0b1ba628
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Wed Apr 10 15:25:56 2019 +0200
+
+    auto commit
+
+commit 1da4331e61d5c3f7bc62966c589c7ad07d4f1b81
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Tue Apr 9 17:49:44 2019 +0200
+
+    auto commit
+
+commit 19a08781c69162815239746326e37044bd3a552b
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Mon Apr 8 17:38:18 2019 +0200
+
+    auto commit
+
+commit 6ec2f93d7cb471f3e0d89aa628da19dc6a467d97
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Mon Apr 8 09:51:07 2019 +0200
+
+    auto commit
+
+commit 9261123a8dabd4108f28c2892afd8ee6017da38a
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sun Apr 7 21:46:45 2019 +0200
+
+    auto commit
+
+commit 65b79b5bbe4b3bff8650f479fbf5a28f54816d62
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sun Apr 7 13:01:08 2019 +0200
+
+    auto commit
+
+commit afc502293f79aec9b3a958c9a5d9e478b3e6e780
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat Apr 6 21:30:13 2019 +0200
+
+    auto commit
+
+commit 3cb2e9d272760131bbf439ed22fe2962536a7128
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat Apr 6 15:10:10 2019 +0200
+
+    auto commit
+
+commit 88c15d00e8e9cc7ffaf708b5a55883549ec710d0
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat Apr 6 14:33:19 2019 +0200
+
+    auto commit
+
+commit a5970cd471baf7341e9b3364a6f65695eabc8d9b
+Author: Heinz A Preisig <heinz.preisig@chemeng.ntnu.no>
+Date:   Sat Apr 6 14:03:16 2019 +0200
+
+    changing ontology to having two sections, ontology_tree and interfaces
