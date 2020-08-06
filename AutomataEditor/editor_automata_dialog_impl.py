@@ -27,7 +27,7 @@ import shutil  as U
 import subprocess
 
 from PyQt5 import QtCore
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 import Common.common_resources as CR
 import Common.graphics_objects as GRO
@@ -60,7 +60,7 @@ class Doc(list):
     self.append(newline + '\n')
 
 
-class GraphEditorDialogImpl(QtGui.QWidget):
+class GraphEditorDialogImpl(QtWidgets.QWidget):
   """
    dialogue control for mouse menu design.
    puts up a list box for selecting the states
@@ -73,7 +73,7 @@ class GraphEditorDialogImpl(QtGui.QWidget):
 
   # setting up GUI --------------------------------------------------------------
   def __init__(self):
-    QtGui.QWidget.__init__(self)
+    super().__init__()
     self.ui = Ui_Dialog()
     self.initialise = True
     self.ui.setupUi(self)
@@ -121,10 +121,11 @@ class GraphEditorDialogImpl(QtGui.QWidget):
     self.mouse_automata, self.key_automata = \
       getAutomata(FILES["automata_working_file_spec"] % self.ontology_name, active_objects_all_phases)
 
-  @QtCore.pyqtSignature('QString')
-  def on_comboPhase_activated(self, qt_string):
+  # @QtCore.pyqtSignature('QString')
+  def on_comboPhase_activated(self, index):
+    s = self.ui.comboPhase.currentText()
 
-    self.current_phase = str(qt_string)
+    self.current_phase = str(s)
 
     if self.current_phase == M_None:
       return
@@ -408,7 +409,7 @@ class GraphEditorDialogImpl(QtGui.QWidget):
       n_rows = n_rows + 1
 
   def __makeTextItem(self, s):
-    return QtGui.QTableWidgetItem(s)
+    return QtWidgets.QTableWidgetItem(s)
 
   def __loadStateTable(self, editor_state):
     t = self.ui.tableState
@@ -456,7 +457,7 @@ class GraphEditorDialogImpl(QtGui.QWidget):
   def __loadCursorList(self):
     # cursor
     for i in self.cursors:
-      item = QtGui.QListWidgetItem()
+      item = QtWidgets.QListWidgetItem()
       item.setIcon(self.cursors.getIcon(i))
       item.setText(i)
       self.ui.listCursors.addItem(item)
@@ -539,6 +540,7 @@ class GraphEditorDialogImpl(QtGui.QWidget):
       f_name = FILES["latex_shell_automata_doc_command"] % self.ontology_name
       latex_location = DIRECTORIES["latex_location"] % self.ontology_name
       args = ['sh', f_name, latex_location]  # ontology_location + '/']
+      print('ARGS: ', args)
       make_it = subprocess.Popen(
               args,
               # start_new_session=True,
