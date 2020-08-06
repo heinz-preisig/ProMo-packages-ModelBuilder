@@ -26,13 +26,12 @@ import os as OS
 import shutil  as U
 import subprocess
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 import Common.common_resources as CR
 import Common.graphics_objects as GRO
 import Common.qt_resources as QR
-from ModelBuilder.AutomataEditor.editor_automata_dialog import Ui_Dialog
 from Common.automata_objects import BUTTONS
 from Common.automata_objects import getAutomata
 from Common.automata_objects import GRAPH_EDITOR_STATES
@@ -41,6 +40,7 @@ from Common.graphics_objects import PHASES
 from Common.ontology_container import OntologyContainer
 from Common.resource_initialisation import DIRECTORIES
 from Common.resource_initialisation import FILES
+from ModelBuilder.AutomataEditor.editor_automata_dialog import Ui_Dialog
 from ModelBuilder.ModelComposer.resources import ACTIONS
 from ModelBuilder.ModelComposer.resources import M_None
 from ModelBuilder.ModelComposer.resources import ModellerCursor
@@ -99,7 +99,7 @@ class GraphEditorDialogImpl(QtGui.QWidget):
     # self.file_resources = DataFileResources(self.ontology_name)
 
     #
-    ontology = OntologyContainer(self.ontology_name) #DIRECTORIES["ontology_location"] % self.ontology_name)
+    ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
     self.application_node_types = ontology.node_type_list
     self.application_arcs_types = ontology.arc_type_list
     self.tokens = ontology.tokens
@@ -148,36 +148,36 @@ class GraphEditorDialogImpl(QtGui.QWidget):
 
   def __setupControlLists(self):
     self.GUI_components = [
-          self.ui.comboPhase,  # 0
-          #                self.ui.pushConstructGraph, #1
-          #                self.ui.pushInstallAutomaton, #2
-          self.ui.pushSaveAutomaton,  # 3
-          self.ui.pushLaTex,  # 3
-          self.ui.listSelectState,  # 4
-          self.ui.listStates,  # 5
-          self.ui.listActions,  # 6
-          self.ui.listCursors,  # 7
-          # self.ui.pushAddState, # 8
-          # self.ui.pushDeleteState, # 9
-          # self.ui.lineEditNewState, # 10
-          self.ui.tableState,  # 11
-          #
-          self.ui.pushAddKey,  # 12
-          self.ui.pushDeleteKey,  # 13
-          #                self.ui.pushConstructGraph, #14
-          self.ui.listActionsForKeyAutomaton,  # 15
-          self.ui.listKeysForKeyAutomaton,  # 16
-          self.ui.listStatesForKeyAutomaton,  # 17
-          self.ui.tableKeyAutomaton,  # 18
-          ]
+            self.ui.comboPhase,  # 0
+            #                self.ui.pushConstructGraph, #1
+            #                self.ui.pushInstallAutomaton, #2
+            self.ui.pushSaveAutomaton,  # 3
+            self.ui.pushLaTex,  # 3
+            self.ui.listSelectState,  # 4
+            self.ui.listStates,  # 5
+            self.ui.listActions,  # 6
+            self.ui.listCursors,  # 7
+            # self.ui.pushAddState, # 8
+            # self.ui.pushDeleteState, # 9
+            # self.ui.lineEditNewState, # 10
+            self.ui.tableState,  # 11
+            #
+            self.ui.pushAddKey,  # 12
+            self.ui.pushDeleteKey,  # 13
+            #                self.ui.pushConstructGraph, #14
+            self.ui.listActionsForKeyAutomaton,  # 15
+            self.ui.listKeysForKeyAutomaton,  # 16
+            self.ui.listStatesForKeyAutomaton,  # 17
+            self.ui.tableKeyAutomaton,  # 18
+            ]
 
     n_g = len(self.GUI_components)
     self.GUI_control = {
-          'start'        : ([0], range(1, n_g)),
-          'save'         : ([], []),
-          'install'      : ([], []),
-          'edit_automata': (range(0, n_g), []),
-          }
+            'start'        : ([0], range(1, n_g)),
+            'save'         : ([], []),
+            'install'      : ([], []),
+            'edit_automata': (range(0, n_g), []),
+            }
 
   #    @QQtCore.pyqtSignature('QModelIndex')
   def on_tableState_cellPressed(self, row, column):
@@ -312,13 +312,13 @@ class GraphEditorDialogImpl(QtGui.QWidget):
   def on_pushSaveAutomaton_pressed(self):
     #
     vars = {
-          'mouse': self.mouse_automata,
-          'key'  : self.key_automata
-          }
+            'mouse': self.mouse_automata,
+            'key'  : self.key_automata
+            }
 
     # automata_working_file_name = self.file_resources["automata_working_file_name"]
     automata_working_file_spec = FILES["automata_working_file_spec"] % self.ontology_name
-    if self.backup: CR.saveBackupFile(automata_working_file_spec) #, "")  # automata_working_file_name, '.json')
+    if self.backup: CR.saveBackupFile(automata_working_file_spec)  # , "")  # automata_working_file_name, '.json')
 
     # CR.putData(vars, self.file_resources["automata_working_file_spec"], indent=2)
     CR.putData(vars, automata_working_file_spec, indent=2)
@@ -525,9 +525,9 @@ class GraphEditorDialogImpl(QtGui.QWidget):
             a = i.replace(r'&', r'\&')
             arg.append(a.replace(r'_', r'\_'))
           lines(
-                r"\object{%s} &\cursor{%s} &(\leftnextstate{%s}, \leftaction{%s}) &("
-                r"\rightnextstate{%s}, \rightaction{%s})\\" \
-                % (arg[0], arg[1], arg[2], arg[3], arg[4], arg[5]))
+                  r"\object{%s} &\cursor{%s} &(\leftnextstate{%s}, \leftaction{%s}) &("
+                  r"\rightnextstate{%s}, \rightaction{%s})\\" \
+                  % (arg[0], arg[1], arg[2], arg[3], arg[4], arg[5]))
         lines(r'\end{tabular}')
         lines(r'\\')
 
@@ -540,9 +540,9 @@ class GraphEditorDialogImpl(QtGui.QWidget):
       latex_location = DIRECTORIES["latex_location"] % self.ontology_name
       args = ['sh', f_name, latex_location]  # ontology_location + '/']
       make_it = subprocess.Popen(
-            args,
-            # start_new_session=True,
-            # stdout=subprocess.PIPE,
-            # stderr=subprocess.PIPE
-            )
+              args,
+              # start_new_session=True,
+              # stdout=subprocess.PIPE,
+              # stderr=subprocess.PIPE
+              )
       out, error = make_it.communicate()

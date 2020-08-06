@@ -17,17 +17,18 @@ __version__ = "5.01"
 __email__ = "heinz.preisig@chemeng.ntnu.no"
 __status__ = "beta"
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from ModelBuilder.ModelComposer.modeller_logger import Ui_LoggerForm
 
 
-class Logger(QtGui.QWidget):
+class Logger(QtWidgets.QWidget):
 
   def __init__(self, model_container, parent):
 
-    QtGui.QWidget.__init__(self)
+    QtWidgets.QWidget.__init__(self)
     self.ui = Ui_LoggerForm()
     self.ui.setupUi(self)
     self.model_container = model_container
@@ -38,13 +39,13 @@ class Logger(QtGui.QWidget):
     self.std_outbox.moveCursor(QtGui.QTextCursor.Start)
     self.std_outbox.ensureCursorVisible()
     self.std_outbox.setLineWrapColumnOrWidth(500)
-    self.std_outbox.setLineWrapMode(QtGui.QTextEdit.FixedPixelWidth)
+    self.std_outbox.setLineWrapMode(QtWidgets.QTextEdit.FixedPixelWidth)
 
-    self.err_outbox = self.ui.err_outbox  # this is the QtGui.QTextEdit()
+    self.err_outbox = self.ui.err_outbox  # this is the QtWidgets.QTextEdit()
     self.err_outbox.moveCursor(QtGui.QTextCursor.Start)
     self.err_outbox.ensureCursorVisible()
     self.err_outbox.setLineWrapColumnOrWidth(500)
-    self.err_outbox.setLineWrapMode(QtGui.QTextEdit.FixedPixelWidth)
+    self.err_outbox.setLineWrapMode(QtWidgets.QTextEdit.FixedPixelWidth)
 
   def onUpdateStandardOutput(self, text):
     cursor = self.std_outbox.textCursor()
@@ -66,7 +67,7 @@ class Logger(QtGui.QWidget):
     self.ui.Logger.append("\n-----------------\nTree \n-----------------")
     tree = self.model_container["ID_tree"]
     for n in tree:
-      s = "node %s : %s"%(n, tree[n])
+      s = "node %s : %s" % (n, tree[n])
       self.ui.Logger.append(s)
 
   @QtCore.pyqtSlot()  # signal with no arguments
@@ -83,10 +84,10 @@ class Logger(QtGui.QWidget):
       nodes = self.model_container["nodes"]
 
     for node in sorted(nodes.keys()):
-      s = "node %s : "%node
+      s = "node %s : " % node
       self.ui.Logger.append(s)
       for item in nodes[node]:
-        s = "   -- %s : %s "%(item, nodes[node][item])
+        s = "   -- %s : %s " % (item, nodes[node][item])
         self.ui.Logger.append(s)
       # try:
       #   s = "   -+ %s : %s " % ("state", self.state_nodes[node])
@@ -98,7 +99,7 @@ class Logger(QtGui.QWidget):
     self.ui.Logger.append("\n-----------------\nArcs \n-----------------")
     arcs = self.model_container["arcs"]
     for id in sorted(arcs):
-      s = "%s :: %s --> %s   +   %s"%(id, arcs[id]["source"], arcs[id]["sink"], arcs[id]["token"])
+      s = "%s :: %s --> %s   +   %s" % (id, arcs[id]["source"], arcs[id]["sink"], arcs[id]["token"])
       self.ui.Logger.append(s)
 
   @QtCore.pyqtSlot()  # signal with no arguments
@@ -109,10 +110,10 @@ class Logger(QtGui.QWidget):
       nodes = scenes[id]["nodes"]
       arcs = scenes[id]["arcs"]
       for nn in nodes:
-        s = "scene nodes %s - %s  , %s"%(id, nn, nodes[nn])
+        s = "scene nodes %s - %s  , %s" % (id, nn, nodes[nn])
         self.ui.Logger.append(s)
       for a in arcs:
-        s = "scene arcs %s - %s  , %s"%(id, a, arcs[a])
+        s = "scene arcs %s - %s  , %s" % (id, a, arcs[a])
         self.ui.Logger.append(s)
 
   @QtCore.pyqtSlot()  # signal with no arguments

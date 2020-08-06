@@ -27,8 +27,9 @@ import os as os
 #
 import sys
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from Common.automata_objects import GRAPH_EDITOR_STATES
 from Common.common_resources import askForModelFileGivenOntologyLocation  # askForModelFile,
@@ -43,7 +44,6 @@ from Common.radio_selector_impl import RadioSelector
 from Common.resource_initialisation import DIRECTORIES
 from Common.resource_initialisation import FILES
 from Common.save_file_impl import SaveFileDialog
-from Common.toggle_button import ToggleButton
 from Common.ui_string_dialog_impl import UI_String
 from ModelBuilder.ModelComposer.modeller_commander import Commander
 from ModelBuilder.ModelComposer.modeller_logger_impl import Logger
@@ -84,9 +84,9 @@ class ErrorMessage():
     media(msg)
 
 
-class MainWindowImpl(QtGui.QMainWindow):
+class MainWindowImpl(QtWidgets.QMainWindow):
   def __init__(self):
-    QtGui.QMainWindow.__init__(self)
+    QtWidgets.QMainWindow.__init__(self)
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
     self.move(QtCore.QPoint(0, 0))
@@ -239,28 +239,31 @@ class MainWindowImpl(QtGui.QMainWindow):
     l_2 = l_1 + ["pushSave"]
 
     e = {
-      "start": l_2,
-      "pushExit": [],
-      "pushNewModel": l_2,
-      "pushLoadFromFile": l_2,
-      "pushSave": l_2,
-      "pushSaveAs": l_2,
-      }
+            "start"           : l_2,
+            "pushExit"        : [],
+            "pushNewModel"    : l_2,
+            "pushLoadFromFile": l_2,
+            "pushSave"        : l_2,
+            "pushSaveAs"      : l_2,
+            }
     return e
 
   def __setupSignals(self):
     #  connect signals
     u = self.ui
     b = {
-      "pushExit": [u.pushExit, self.pushExit],
-      "pushSave": [u.pushSave, self.pushSave],
-      "pushSaveAs": [u.pushSaveAs, self.saveAs],
-      "pushSchnipsel": [u.pushSchnipsel, self.showSchnipselPopWindow],
-      }
+            "pushExit"     : [u.pushExit, self.pushExit],
+            "pushSave"     : [u.pushSave, self.pushSave],
+            "pushSaveAs"   : [u.pushSaveAs, self.saveAs],
+            "pushSchnipsel": [u.pushSchnipsel, self.showSchnipselPopWindow],
+            }
     self.buttons = {}
     for i in b:
-      self.connect(b[i][0], QtCore.SIGNAL("clicked()"), b[i][1])
+      # self.connect(b[i][0], QtCore.pyqtSignal("clicked()"), b[i][1])
       self.buttons[i] = b[i][0]
+
+  def on_pushExit_pressed(self):
+    print(">>>> exiting")
 
   def __setupModellerApl(self):
     """
@@ -323,10 +326,11 @@ class MainWindowImpl(QtGui.QMainWindow):
     count = 0
     for k in sorted(self.radio[phase]):
       radio = self.radio[phase][k]
-      self.ui.formKeyAutomaton.setWidget(count, QtGui.QFormLayout.LabelRole, radio)
+      self.ui.formKeyAutomaton.setWidget(count, QtWidgets.QFormLayout.LabelRole, radio)
       count += 1
 
-    if self.initialising: self.commander.setDefaultEditorState()  # NOTE: only place being used -- caused a lot of problems when using it rules
+    if self.initialising: self.commander.setDefaultEditorState()  # NOTE: only place being used -- caused a lot of
+    # problems when using it rules
 
   def __mapAndSave(self):
     """
@@ -337,12 +341,12 @@ class MainWindowImpl(QtGui.QMainWindow):
     #   "file": self.model_file
     #   }
     pars = {
-      "nodeID": None,
-      "action": "map&save model",
-      "object": None,
-      "pos": None,
-      "file": self.model_file
-      }
+            "nodeID": None,
+            "action": "map&save model",
+            "object": None,
+            "pos"   : None,
+            "file"  : self.model_file
+            }
     self.commander.processMainEvent(pars)
 
   def __buttonLogics(self, state):
@@ -375,7 +379,6 @@ class MainWindowImpl(QtGui.QMainWindow):
     # # RULE: no rule for the equation topology as yet
     # enabled_editor_phases.append(("equation_topology"))
     # self.ui.comboEditorPhase.addItems(enabled_editor_phases)
-
 
     self.__clearLayout(self.ui.layoutNetworks)
     self.radio_selectors["networks"] = self.__makeAndAddSelector("networks",
@@ -461,7 +464,7 @@ class MainWindowImpl(QtGui.QMainWindow):
 
   @QtCore.pyqtSlot(str)
   def on_comboEditorPhase_currentIndexChanged(self, phase):
-    self.writeStatus("phase :%s"%phase)
+    self.writeStatus("phase :%s" % phase)
     self.setEditorPhase(phase)
     pass
 
@@ -557,7 +560,7 @@ class MainWindowImpl(QtGui.QMainWindow):
       if token_string in self.ontology.token_typedtoken_on_networks[nw].keys():
         # self.__clearLayout(self.ui.layoutInteractiveWidgetTop) #__trimLayout(1, )
         nature = list(
-          self.ontology.ontology_tree[nw]["structure"]["arc"][self.selected_token[self.editor_phase][nw]].keys())
+                self.ontology.ontology_tree[nw]["structure"]["arc"][self.selected_token[self.editor_phase][nw]].keys())
 
         if "auto" not in nature:
           typed_tokens = self.nw_token_typedtoken_dict[nw][token_string]
@@ -587,8 +590,9 @@ class MainWindowImpl(QtGui.QMainWindow):
     if toggle:
       self.__trimLayout(1, self.ui.layoutInteractiveWidgetBottom)
       print(
-        "radioReceiverTypedTokenTool: reciever class -%s-, radio token -%s-.,token_string -%s-, self.items_to_inject -%s-"
-        % (token_class, token, token_string, self.items_to_inject))
+              "radioReceiverTypedTokenTool: reciever class -%s-, radio token -%s-.,token_string -%s-, "
+              "self.items_to_inject -%s-"
+              % (token_class, token, token_string, self.items_to_inject))
       self.state_inject_or_constrain_or_convert = token_string
       self.commander.redrawCurrentScene()  # may have changed since last
       if token_string in ["inject", "constrain"]:
@@ -633,20 +637,20 @@ class MainWindowImpl(QtGui.QMainWindow):
     self.ui.labelSchnipsel.setText(self.schnipsel_name)
     self.ui.labelSchnipsel.show()
 
-    self.schnipsel_file = FILES["model_file"]%(self.ontology_name, self.schnipsel_name)
+    self.schnipsel_file = FILES["model_file"] % (self.ontology_name, self.schnipsel_name)
     self.__buttonLogics("pushLoadFromFile")
     pars = {
-      "nodeID": None,
-      "action": "library file",
-      "object": None,
-      "pos": None,
-      "file": self.schnipsel_file
-      }
+            "nodeID": None,
+            "action": "library file",
+            "object": None,
+            "pos"   : None,
+            "file"  : self.schnipsel_file
+            }
     self.commander.processMainEvent(pars)
 
   def save_topology_png(self, file_name):
     outfile = os.path.join(file_name, 'figures', 'topo.png')
-    p = QtGui.QPixmap.grabWindow(self.ui.graphicsView.winId())
+    p = QtWidgets.QPixmap.grabWindow(self.ui.graphicsView.winId())
     p.save(outfile)
 
   def insertModelFromFile(self, model_name):
@@ -657,12 +661,12 @@ class MainWindowImpl(QtGui.QMainWindow):
     # print("stop")
 
     pars = {
-      "nodeID": None,
-      "action": "load from file",
-      "object": None,
-      "pos": None,
-      "file": self.model_file
-      }
+            "nodeID": None,
+            "action": "load from file",
+            "object": None,
+            "pos"   : None,
+            "file"  : self.model_file
+            }
     self.commander.processMainEvent(pars)
 
   def injectTypedTokens(self):
@@ -787,12 +791,12 @@ class MainWindowImpl(QtGui.QMainWindow):
       os.mkdir(self.model_location)
 
     pars = {
-      "nodeID": None,
-      "action": "save model",
-      "object": None,
-      "pos": None,
-      "file": self.model_file
-      }
+            "nodeID": None,
+            "action": "save model",
+            "object": None,
+            "pos"   : None,
+            "file"  : self.model_file
+            }
     # print(self.model_name)
     # print(self.model_file)
     # self.save_topology_png(self.model_file)
@@ -803,8 +807,8 @@ class MainWindowImpl(QtGui.QMainWindow):
     # self.commander.flipPage(str(0))
     # self.__buttonLogics("pushReset")
     pars = {
-      "action": "reset"
-      }
+            "action": "reset"
+            }
     self.commander.processMainEvent(pars)
 
   def pushExit(self, *args):
@@ -836,13 +840,13 @@ class MainWindowImpl(QtGui.QMainWindow):
     open_arcs = self.commander.model_container.checkforOpenArcs()
 
     if len(open_arcs) != 0:
-      msg_box = QtGui.QMessageBox()
+      msg_box = QtWidgets.QMessageBox()
       msg_box.setText("there are open arcs - close them ! %s" % open_arcs)
       msg_box.exec_()
       self.setEditorPhase("topology")
       return {
-        "failed": True
-        }
+              "failed": True
+              }
     else:
       # RULE: all arcs must be closed before the token domain can be computed
       if self.current_network:

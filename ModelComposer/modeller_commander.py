@@ -23,8 +23,9 @@ import copy
 import os
 from collections import OrderedDict
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 import Common.common_resources as CR
 import Common.resource_initialisation as RI
@@ -32,12 +33,12 @@ import ModelBuilder.ModelComposer.resources             as R
 from Common.automata_objects import GRAPH_EDITOR_STATES
 # from Common.automata_objects import STATES               # TODO: What's this?
 from Common.common_resources import askForModelFileGivenOntologyLocation
-from Common.graphics_objects import STATES                 # TODO: Bug or real?
 from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import LOCATION_PARAMETERS
 from Common.graphics_objects import NAMES
 from Common.graphics_objects import OBJECTS_with_state
+from Common.graphics_objects import STATES  # TODO: Bug or real?
 from Common.graphics_objects import TOOLTIP_TEMPLATES
 from Common.qt_resources import BUTTON_NAMES
 from Common.ui_string_dialog_impl import UI_String
@@ -83,7 +84,7 @@ class Commander(QtCore.QObject):
     self.__loadAutomata()
 
     # model container - start with a root node
-    self.current_ID_node_or_arc = ROOTID   # str(ROOTID)  # nodeID    #HAP: ID string to integer
+    self.current_ID_node_or_arc = ROOTID  # str(ROOTID)  # nodeID    #HAP: ID string to integer
     self.model_container = ModelContainer(self.main.networks)
 
     # initial commander state
@@ -255,13 +256,13 @@ class Commander(QtCore.QObject):
       self.editor_state = next_state
 
     pars = {
-      "nodeID": item.parent.ID,
-      "action": action,
-      "object": item.decoration,
-      "pos": position,
-      "file": "-",
-      "failed": False,
-      }
+            "nodeID": item.parent.ID,
+            "action": action,
+            "object": item.decoration,
+            "pos"   : position,
+            "file"  : "-",
+            "failed": False,
+            }
     if graphics_root_object == NAMES["connection"]:
       pars["arc"] = item.parent.getArcID()
 
@@ -483,8 +484,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(self.current_ID_node_or_arc)
     # self.dialog.addNode(newnodeID, self.current_ID_node_or_arc)
 
-    return {"new node": newnodeID,
-            "failed": False
+    return {
+            "new node": newnodeID,
+            "failed"  : False
             }
 
   def __addBoundaryNode(self, pos, boundary, network, named_connection_network):
@@ -526,8 +528,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(self.current_ID_node_or_arc)
     # self.dialog.addNode(newnodeID, self.current_ID_node_or_arc)
 
-    return {"new node": newnodeID,
-            "failed": False
+    return {
+            "new node": newnodeID,
+            "failed"  : False
             }
 
   def __c03_deleteNode(self, nodeID):
@@ -611,8 +614,8 @@ class Commander(QtCore.QObject):
     self.__redrawScene(parentID)
 
     return {
-      "failed": False
-      }
+            "failed": False
+            }
 
   def __c05_explodeNode(self, nodeID):
     """
@@ -630,9 +633,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(parentID)
 
     return {
-      "exploded node": nodeID,
-      "failed": False
-      }
+            "exploded node": nodeID,
+            "failed"       : False
+            }
 
   def __c01_makeThisCurrentNode(self, nodeID):
     """
@@ -649,9 +652,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(nodeID)
 
     return {
-      "viewed node": nodeID,
-      "failed": False
-      }
+            "viewed node": nodeID,
+            "failed"     : False
+            }
 
   def __c06_beginArc(self, nodeID):
     """
@@ -676,9 +679,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(self.current_ID_node_or_arc)
 
     return {
-      "selected source": nodeID,
-      "failed": False
-      }
+            "selected source": nodeID,
+            "failed"         : False
+            }
 
   def __c07_addTheArc(self, toNodeID):
     """
@@ -806,7 +809,7 @@ class Commander(QtCore.QObject):
         interface = self.main.ontology.interfaces[connection_network]
         token = interface["token"]
         mechanism = interface["mechanism"]
-        arctype = interface[          "nature"]
+        arctype = interface["nature"]
         named_network = self.model_container["nodes"][self.arcSourceID]["named_network"]
         arcID, views_with_arc = self.model_container.addArc(self.arcSourceID, newnodeID,
                                                             source_network,
@@ -841,16 +844,14 @@ class Commander(QtCore.QObject):
     self.clearSelectedNodes()
     self.clearBlockedNodes()
 
-
     self.current_ID_node_or_arc = self.model_container["ID_tree"].getImmediateParent(toNodeID)
     self.__redrawScene(self.current_ID_node_or_arc)
 
-
     return {
-      "added arc": arcID,
-      "sink node": toNodeID,
-      "failed": False
-      }
+            "added arc": arcID,
+            "sink node": toNodeID,
+            "failed"   : False
+            }
 
   def __c11_insertKnot(self):
     """
@@ -905,9 +906,9 @@ class Commander(QtCore.QObject):
     self.redrawCurrentScene()
 
     return {
-      "arc": arcID,
-      "failed": False
-      }
+            "arc"   : arcID,
+            "failed": False
+            }
 
   def __c08_removeArc(self, arcID):
     """
@@ -962,9 +963,9 @@ class Commander(QtCore.QObject):
     else:
       self.redrawCurrentScene()
     return {
-      "arc": arcID,
-      "failed": False
-      }
+            "arc"   : arcID,
+            "failed": False
+            }
 
   def __c12_removeKnot(self):
     """
@@ -980,9 +981,9 @@ class Commander(QtCore.QObject):
     self.redrawCurrentScene()
 
     return {
-      "arc": knot.arcID,
-      "failed": False
-      }
+            "arc"   : knot.arcID,
+            "failed": False
+            }
 
   def __c09_reconnectArc(self, pointer_object_name):
     """
@@ -1005,10 +1006,12 @@ class Commander(QtCore.QObject):
 
     if NAMES["tail"] in pointer_object_name:
       self.end_to_move = "source"
-      node_to_block = (self.model_container["arcs"][self.selected_arcID]["sink"]) #str(self.model_container["arcs"][self.selected_arcID]["sink"]) #HAP: str --> int
+      node_to_block = (self.model_container["arcs"][self.selected_arcID]["sink"])  # str(self.model_container[
+      # "arcs"][self.selected_arcID]["sink"]) #HAP: str --> int
     elif NAMES["head"] in pointer_object_name:
       self.end_to_move = "sink"
-      node_to_block = (self.model_container["arcs"][self.selected_arcID]["source"]) #str(self.model_container["arcs"][self.selected_arcID]["source"]) #HAP: str --> int
+      node_to_block = (self.model_container["arcs"][self.selected_arcID]["source"])  # str(self.model_container[
+      # "arcs"][self.selected_arcID]["source"]) #HAP: str --> int
 
     self.state_nodes[node_to_block] = "selected"
 
@@ -1016,9 +1019,9 @@ class Commander(QtCore.QObject):
     self.redrawCurrentScene()
 
     return {
-      # "target node": S_ID,
-      "failed": False
-      }
+            # "target node": S_ID,
+            "failed": False
+            }
 
   def __c10_changeArc(self, C_ID):
     """
@@ -1049,8 +1052,8 @@ class Commander(QtCore.QObject):
     self.__redrawScene(nodeID)
 
     return {
-      "failed": False
-      }
+            "failed": False
+            }
 
   def __c13_makeCopy(self, nodeID):
     """
@@ -1112,8 +1115,8 @@ class Commander(QtCore.QObject):
     self.__redrawScene(self.current_ID_node_or_arc)
 
     return {
-      "failed": False,
-      }
+            "failed": False,
+            }
 
   def __c15_reset(self):
     """
@@ -1168,8 +1171,8 @@ class Commander(QtCore.QObject):
     """
     self.schnipsel_file = schnipsel_file
     return {
-      "failed": False
-      }
+            "failed": False
+            }
 
   def __c22_mapAndSaveModel(self, model, f):  # TODO this is obsolete model is always mapped just save maps!
     """
@@ -1222,15 +1225,15 @@ class Commander(QtCore.QObject):
     # self.model_container.write(f)
     node_map = self.model_container.write(f)
     mapped_currently_viewed_node = node_map[int(self.currently_viewed_node)]
-    self.currently_viewed_node = (mapped_currently_viewed_node) #str(mapped_currently_viewed_node) #HAP: str --> int
+    self.currently_viewed_node = (mapped_currently_viewed_node)  # str(mapped_currently_viewed_node) #HAP: str --> int
     self.__redrawScene(self.currently_viewed_node)
     print("__c23_saveData",
           "--------- currently node viewed : %s ---> %s" % (self.currently_viewed_node, mapped_currently_viewed_node))
     print("__c23_saveData", "--------- saved graph file:", f)
     return {
-      "saved file": f,
-      "failed": False
-      }
+            "saved file": f,
+            "failed"    : False
+            }
 
   def __c25_insertSchnipsel(self, position):
     """
@@ -1254,7 +1257,7 @@ class Commander(QtCore.QObject):
 
     f = self.schnipsel_file
     if not os.path.exists(f):
-      self.main.writeStatus("no such file %s"%f)
+      self.main.writeStatus("no such file %s" % f)
       return {"failed": True}
 
     tree, node_map, arc_map, node_offset, parent_ID = \
@@ -1266,9 +1269,9 @@ class Commander(QtCore.QObject):
     self.__redrawScene(self.current_ID_node_or_arc)
 
     return {
-      "failed": False,
-      "library file": self.library_model_name
-      }
+            "failed"      : False,
+            "library file": self.library_model_name
+            }
 
   def setDefaultEditorState(self):
     self.editor_state = GRAPH_EDITOR_STATES[self.editor_phase][0]  # RULE: first state in the list is default
@@ -1363,10 +1366,10 @@ class Commander(QtCore.QObject):
       # add tool tip
       data = self.model_container["nodes"][ID]
       s = TOOLTIP_TEMPLATES["nodes"] % (
-        data["network"],
-        data["named_network"],
-        data["type"],
-        data["tokens"])
+              data["network"],
+              data["named_network"],
+              data["type"],
+              data["tokens"])
       if "injected_conversions" in data:
         s.join("<br>%s" % data["injected_conversions"])
       node.setToolTip(s)
@@ -1385,7 +1388,7 @@ class Commander(QtCore.QObject):
 
     self.scene.addItem(node)
     name = self.model_container["nodes"][ID][NAMES["name"]]
-    self.__setName(node, str(name))       #HAP: str --> int
+    self.__setName(node, str(name))  # HAP: str --> int
     return node
 
   def __drawArc(self, arcID, fromNode, toNode):
@@ -1418,11 +1421,11 @@ class Commander(QtCore.QObject):
     v = self.main.ui.graphicsView
     scene = self.scene
     v.setScene(scene)
-    v.setCacheMode(QtGui.QGraphicsView.CacheBackground)
+    v.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
     v.setRenderHint(QtGui.QPainter.Antialiasing)
-    v.setViewportUpdateMode(QtGui.QGraphicsView.SmartViewportUpdate)
-    v.setTransformationAnchor(QtGui.QGraphicsView.AnchorUnderMouse)
-    v.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
+    v.setViewportUpdateMode(QtWidgets.QGraphicsView.SmartViewportUpdate)
+    v.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
+    v.setResizeAnchor(QtWidgets.QGraphicsView.AnchorViewCenter)
     self.view = v
     scene.update()
     self.view.update()
@@ -1537,9 +1540,9 @@ class Commander(QtCore.QObject):
     scene_height = self.main.ui.graphicsView.height()
 
     adjust = 10
-    scene = QtGui.QGraphicsScene(self.main)  # tie on to main widget
-    scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)  # TODO check which one works better
-    scene.setItemIndexMethod(QtGui.QGraphicsScene.BspTreeIndex)
+    scene = QtWidgets.QGraphicsScene(self.main)  # tie on to main widget
+    scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)  # TODO check which one works better
+    scene.setItemIndexMethod(QtWidgets.QGraphicsScene.BspTreeIndex)
     scene.setSceneRect(float(-scene_width / 2.0), -float(scene_height / 2.0),
                        float(scene_width - adjust), float(scene_height - adjust))
     self.scene = scene
@@ -1589,11 +1592,13 @@ class Commander(QtCore.QObject):
         colour = self.main.TOKENS[token]['colour']  # rgba_colour[token]
         x, y = pos[token]
         # print("set tokens token %s, x: %s, y: %s" % (token, x, y))
-        indicator[name] = {"name": name,
-                           "position_x": x,
-                           "position_y": y,
-                           "colour": colour,
-                           "type": NAMES["indicator token"]}
+        indicator[name] = {
+                "name"      : name,
+                "position_x": x,
+                "position_y": y,
+                "colour"    : colour,
+                "type"      : NAMES["indicator token"]
+                }
 
         typed_tokens = self.model_container["nodes"][ID]["tokens"][token]
         y_t = copy.copy(y) - 25
@@ -1601,12 +1606,14 @@ class Commander(QtCore.QObject):
           name = "%s-%s" % (token, typed_token)
           colour = self.main.TOKENS[token]['colour']
           y_t = y_t - 15
-          indicator[name] = {"name": name,
-                             "position_x": x - 10,
-                             "position_y": y_t,
-                             "colour": colour,
-                             "type": NAMES["indicator typed token"],
-                             "label": typed_token}
+          indicator[name] = {
+                  "name"      : name,
+                  "position_x": x - 10,
+                  "position_y": y_t,
+                  "colour"    : colour,
+                  "type"      : NAMES["indicator typed token"],
+                  "label"     : typed_token
+                  }
           pass
 
     # print("indicator definition:", indicator)
@@ -1680,8 +1687,10 @@ class Commander(QtCore.QObject):
       if arcID not in self.state_arcs:
         self.state_arcs[arcID] = STATES[self.editor_phase]["arcs"][0]
 
-      fromNodeID = self.model_container["arcs"][arcID]["source"]   #str(self.model_container["arcs"][arcID]["source"]) #HAP: str --> int
-      toNodeID = self.model_container["arcs"][arcID]["sink"] # str(self.model_container["arcs"][arcID]["sink"])   #HAP: str --> int
+      fromNodeID = self.model_container["arcs"][arcID]["source"]  # str(self.model_container["arcs"][arcID][
+      # "source"]) #HAP: str --> int
+      toNodeID = self.model_container["arcs"][arcID][
+        "sink"]  # str(self.model_container["arcs"][arcID]["sink"])   #HAP: str --> int
       nodes_IDs = self.model_container["ID_tree"].getNodes()
 
       if fromNodeID not in nodes_IDs:
@@ -1804,7 +1813,8 @@ class Commander(QtCore.QObject):
               self.state_nodes[node] = "enabled"
 
   def __ruleNodeAccessInNetworkOnly(self):
-    nodeID = (self.model_container["arcs"][self.selected_arcID][self.end_to_move]) #str(self.model_container["arcs"][self.selected_arcID][self.end_to_move]) #HAP:str --> int
+    nodeID = (self.model_container["arcs"][self.selected_arcID][self.end_to_move])  # str(self.model_container[
+    # "arcs"][self.selected_arcID][self.end_to_move]) #HAP:str --> int
 
     source_network = self.model_container["nodes"][nodeID][NAMES["network"]]
     children = self.model_container["ID_tree"].getChildren(self.currently_viewed_node)
@@ -1912,9 +1922,9 @@ class Commander(QtCore.QObject):
           #  be one
 
           if self.model_container["nodes"][node]["tokens_left"].keys() == \
-                self.model_container["nodes"][node]["tokens_right"].keys():
+                  self.model_container["nodes"][node]["tokens_right"].keys():
             if self.main.selected_token[self.main.editor_phase][self.main.current_network] in \
-                  self.model_container["nodes"][node]["tokens_left"].keys():
+                    self.model_container["nodes"][node]["tokens_left"].keys():
               self.state_nodes[node] = "enabled"
     pass
 

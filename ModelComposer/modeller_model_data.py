@@ -13,12 +13,15 @@ __email__ = "heinz.preisig@chemeng.ntnu.no"
 __status__ = "beta"
 
 from collections import OrderedDict
-from copy import deepcopy, copy
+from copy import copy
+from copy import deepcopy
 
 import Common.common_resources as CR
-from Common.graphics_objects import NAMES, STRUCTURES_Gaph_Item
+from Common.common_resources import walkBreathFirstFnc
+from Common.common_resources import walkDepthFirstFnc
+from Common.graphics_objects import NAMES
+from Common.graphics_objects import STRUCTURES_Gaph_Item
 from Common.treeid import Tree
-from Common.common_resources import walkBreathFirstFnc, walkDepthFirstFnc
 
 ROOTID = 0
 
@@ -44,7 +47,8 @@ class DataError(Exception):
 # ==================================
 
 
-class NodeInfo(dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+class NodeInfo(
+        dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
   def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None):
     # OrderedDict.__init__(self)
     dict.__init__(self)
@@ -55,27 +59,28 @@ class NodeInfo(dict):  # (OrderedDict): # NOTE: changed to dictionary -- Ordered
     self["type"] = node_type
 
     if node_class == NAMES["intraface"]:
-      self["transfer_constraints"] = {}       # dict hash=tokens value=list of typed tokens
-      self["tokens_left"] = {}               # dict hash=tokens value=list of typed tokens
-      self["tokens_right"] = {}              # dict hash=tokens value=list of typed tokens
+      self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
+      self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
+      self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
     if node_class == NAMES["interface"]:
       pass
-    else:  #TODO: should the format be the same as in the arcs -- not important -- but a canonical question
-      self["tokens"] = {}                     # dict hash=tokens value=list of typed tokens
+    else:  # TODO: should the format be the same as in the arcs -- not important -- but a canonical question
+      self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
 
     # RULE: typed tokens can only be injected in reservoirs
     if node_type == NAMES["reservoir"]:
-      self["injected_typed_tokens"] = {}      # dict hash=tokens value=list of typed tokens
+      self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
     # RULE: typed token conversion can only be injected in dynamic nodes
     # NOTE: this fixes a term in the ontology
     # RULE ? : think about making the event dynamic also constraint transport like a boundary
     # TODO : need for conversion and injected_conversion -- currently only injected_conversion used
     elif "dynamic" in node_type:
-      self["conversions"] = {}                # dict hash=tokens value=list of active conversions
-      self["injected_conversions"] = {}       # dict hash=tokens value=list of active conversions
+      self["conversions"] = {}  # dict hash=tokens value=list of active conversions
+      self["injected_conversions"] = {}  # dict hash=tokens value=list of active conversions
 
 
-class ArcInfo(dict):  #OrderedDict):  # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+class ArcInfo(dict):  # OrderedDict):  # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract
+  # subtree)
   def __init__(self, fromNodeID, toNodeID, network, named_network, mechanism, token, nature):
     # OrderedDict.__init__(self)
     dict.__init__(self)
@@ -90,11 +95,12 @@ class ArcInfo(dict):  #OrderedDict):  # NOTE: changed to dictionary -- OrderedDi
     self["nature"] = nature
     # self["type"] = arctype                   # removed
 
-  def cleanTypedTokens(self):   # Does not work with the current implementation
-    self["typed_tokens"] = []                                    # TODO: Remove
+  def cleanTypedTokens(self):  # Does not work with the current implementation
+    self["typed_tokens"] = []  # TODO: Remove
 
   def addTypedTokens(self, typed_tokens):
     self["typed_tokens"].append(typed_tokens)
+
 
 class ModelGraphicsData(dict):
   def __init__(self, graphics_object, x, y, graphics_data, phase, application, state):
@@ -107,19 +113,21 @@ class ModelGraphicsData(dict):
                                                                     decoration,
                                                                     application, state)
       dec_x = graphics_data[phase][r][d][a][s]
-      self[decoration] = {"position_x": dec_x["position_x"],
-                          "position_y": dec_x["position_y"]}
+      self[decoration] = {
+              "position_x": dec_x["position_x"],
+              "position_y": dec_x["position_y"]
+              }
 
 
 class ModelContainer(dict):
   def __init__(self, networks):
 
-    self["ID_tree"] = Tree(ROOTID) #StrTree(str(ROOTID))    #HAP: ID string to integer
+    self["ID_tree"] = Tree(ROOTID)  # StrTree(str(ROOTID))    #HAP: ID string to integer
 
     self["named_networks"] = {}
     # NOTE: adding named networks implemented to update older versions
     for nw in networks:
-      self["named_networks"][nw] = [nw]                             # define a default named network
+      self["named_networks"][nw] = [nw]  # define a default named network
 
     # global nodes
     #               the_hash  : nodeID
@@ -134,10 +142,9 @@ class ModelContainer(dict):
     self.arcID = 0
     self["scenes"] = {}
 
-    rootID = ROOTID   #str(ROOTID)   #HAP: ID string to integer
+    rootID = ROOTID  # str(ROOTID)   #HAP: ID string to integer
     self["nodes"][rootID] = NodeInfo(rootID)
     self.__newScene(rootID)
-
 
   def __newScene(self, nodeID):
     self["scenes"][nodeID] = {}
@@ -149,7 +156,7 @@ class ModelContainer(dict):
     childNodeID = self["ID_tree"].addChild(parentNodeID)
 
     self["nodes"][childNodeID] = NodeInfo(CR.DEFAULT, network=network, named_network=named_network,
-                                             node_class=node_class, node_type=nodetype)
+                                          node_class=node_class, node_type=nodetype)
     self.__newScene(childNodeID)
     self["scenes"][parentNodeID]["nodes"][childNodeID] = decoration_positions
     self["nodes"][childNodeID]["network"] = network
@@ -184,7 +191,7 @@ class ModelContainer(dict):
     # del_nodes = [nodeID]
     # del_nodes.extend(list(self["ID_tree"].walkDepthFirst(nodeID)))
 
-    del_nodes = walkDepthFirstFnc(self["ID_tree"],nodeID)
+    del_nodes = walkDepthFirstFnc(self["ID_tree"], nodeID)
 
     print("delete nodes -  nodes ", del_nodes)
 
@@ -213,7 +220,7 @@ class ModelContainer(dict):
     # print("redo arcs   sink %s " % redo_arcs_sink)
     # print("redo arcs   source %s " % redo_arcs_source)
 
-    #TODO: this did not work. Problem is the knots thus we delete for the time being. See above
+    # TODO: this did not work. Problem is the knots thus we delete for the time being. See above
     # for arc in redo_arcs_sink:
     #   self.openThisArc(arc, del_nodes, "sink")
     #
@@ -241,8 +248,8 @@ class ModelContainer(dict):
 
     # keep for handling tokens
     token = self["arcs"][arcID]["token"]
-    source = self["arcs"][arcID]["source"]#str(self["arcs"][arcID]["source"]) #HAP str --> int
-    sink = self["arcs"][arcID]["sink"] #str(self["arcs"][arcID]["sink"]) #HAP str --> int
+    source = self["arcs"][arcID]["source"]  # str(self["arcs"][arcID]["source"]) #HAP str --> int
+    sink = self["arcs"][arcID]["sink"]  # str(self["arcs"][arcID]["sink"]) #HAP str --> int
     network = self["arcs"][arcID]["network"]
 
     # remove arc
@@ -271,10 +278,10 @@ class ModelContainer(dict):
 
   def getArcsInAndOutOfNode(self, nodeID):
     arcs_out = []
-    arcs_in  = []
+    arcs_in = []
     for arc in self["arcs"]:
-      source = self["arcs"][arc]["source"] #str(self["arcs"][arc]["source"]) # HAP: str --> int
-      sink = self["arcs"][arc]["sink"] #str(self["arcs"][arc]["sink"])  #HAP: str --> int
+      source = self["arcs"][arc]["source"]  # str(self["arcs"][arc]["source"]) # HAP: str --> int
+      sink = self["arcs"][arc]["sink"]  # str(self["arcs"][arc]["sink"])  #HAP: str --> int
       if nodeID == source:
         arcs_out.append(arc)
       elif nodeID == sink:
@@ -297,19 +304,19 @@ class ModelContainer(dict):
       for arc_si in sink_arc_in:
         source = self["arcs"][arc_si]["source"]
         if sink == source:
-          if self["nodes"][sink]["class"] == NAMES["intraface"]: #self["nodes"][str(sink)]["type"] == NAMES["intraface"]: # HAP:str --> int
+          if self["nodes"][sink]["class"] == NAMES["intraface"]:  # self["nodes"][str(sink)]["type"] == NAMES[
+            # "intraface"]: # HAP:str --> int
             common_intraface.append(sink)
-    for arc_so in source_arc_in:        # can go the opposite direction
+    for arc_so in source_arc_in:  # can go the opposite direction
       sink = self["arcs"][arc_so]["source"]
       for arc_si in sink_arc_out:
         source = self["arcs"][arc_si]["sink"]
         if sink == source:
-          if self["nodes"][sink]["class"] == NAMES["intraface"]: #self["nodes"][str(sink)]["type"] == NAMES["intraface"]: #HAP: str --> int
+          if self["nodes"][sink]["class"] == NAMES[
+            "intraface"]:  # self["nodes"][str(sink)]["type"] == NAMES["intraface"]: #HAP: str --> int
             common_intraface.append(sink)
 
     return common_intraface
-
-
 
   def getTokensInNode(self, nodeID):
 
@@ -334,7 +341,6 @@ class ModelContainer(dict):
     application = CR.TEMPLATE_ARC_APPLICATION % (transferred_token, transfer_mechanism, transfer_nature)
     return application
 
-
   def fixTokensInNode(self, nodeID, token):
 
     # token = self["arcs"][arcID]["token"]
@@ -349,7 +355,8 @@ class ModelContainer(dict):
       try:
         del self["nodes"][nodeID]["tokens"][token]
       except:
-        print(">>> warning >>> issues with fixing tokens in node %s with tokens %s trying to delete token %s"%(nodeID, tokens, token))
+        print(">>> warning >>> issues with fixing tokens in node %s with tokens %s trying to delete token %s" % (
+        nodeID, tokens, token))
 
   def addArc(self, fromNodeID, toNodeID, network, named_network, mechanism, token, nature):
 
@@ -359,11 +366,11 @@ class ModelContainer(dict):
     if arcsIDList == []:
       self.arcID = 0
     else:
-      self.arcID = max(arcsIDList) +1
+      self.arcID = max(arcsIDList) + 1
       # arcsIDs = []
       # [arcsIDs.append(a) for a in arcsIDList]
       # self.arcID = max(arcsIDs) + 1
-    arcID = self.arcID   #str(self.arcID)   #HAP:  str -- int
+    arcID = self.arcID  # str(self.arcID)   #HAP:  str -- int
     self["arcs"][arcID] = ArcInfo(fromNodeID, toNodeID, network, named_network, mechanism, token, nature)
     subarcsIDs = self.getArcOnNodeScene(arcID)
     nodes_with_arcIDs = list(subarcsIDs.keys())
@@ -387,7 +394,6 @@ class ModelContainer(dict):
 
   def addTypedTokensToIntraface(self, nodeID, token, typed_tokens, network):
 
-
     network_left, network_right = self.__getBoundaryNetworks(nodeID)
     if network == network_left:
       self["nodes"][nodeID]["tokens_left"][token] = typed_tokens
@@ -409,8 +415,8 @@ class ModelContainer(dict):
 
     fromNodeID = self["arcs"][arcID]["source"]
     toNodeID = self["arcs"][arcID]["sink"]
-    fromNodeID = fromNodeID    #str(fromNodeID)   #HAP: str --> int
-    toNodeID = toNodeID   #str(toNodeID)          #HAP: str --> int
+    fromNodeID = fromNodeID  # str(fromNodeID)   #HAP: str --> int
+    toNodeID = toNodeID  # str(toNodeID)          #HAP: str --> int
     fromPathID = [fromNodeID] + self["ID_tree"].getAncestors(fromNodeID)
     toPathID = [toNodeID] + self["ID_tree"].getAncestors(toNodeID)
     common_ancestorID = self["ID_tree"].getFirstCommonNode(fromNodeID, toNodeID)
@@ -425,8 +431,8 @@ class ModelContainer(dict):
     # print("from_remainder ", from_remainderIDs)
     # print("to_remainder ",to_remainderIDs)
     _nodes_with_arcIDs = from_remainderIDs + \
-                            to_remainderIDs + \
-                            [common_ancestorID]
+                         to_remainderIDs + \
+                         [common_ancestorID]
     _nodes_with_arcIDs.remove(fromNodeID)
     _nodes_with_arcIDs.remove(toNodeID)
     nodes_with_arcIDs = list(set(_nodes_with_arcIDs))
@@ -482,7 +488,7 @@ class ModelContainer(dict):
     typed_tokens_to_transfer = deepcopy(self["arcs"][arcID]["typed_tokens"])
 
     if end_to_move == 'source':
-      disconnected_node = self["arcs"][arcID]["source"]  #str(self["arcs"][arcID]["source"]) #HAP str --> int
+      disconnected_node = self["arcs"][arcID]["source"]  # str(self["arcs"][arcID]["source"]) #HAP str --> int
       self["arcs"][arcID]["source"] = movedNodeID
     elif end_to_move == 'sink':
       disconnected_node = self["arcs"][arcID]["sink"]  # str(self["arcs"][arcID]["sink"])  #HAP: str --> int
@@ -514,7 +520,7 @@ class ModelContainer(dict):
 
     return
 
-  def openThisArc(self, arcID, del_nodes, where ):
+  def openThisArc(self, arcID, del_nodes, where):
     node_to_change = self["arcs"][arcID][where]
     parentID = self["ID_tree"].getImmediateParent(node_to_change)
     while parentID in del_nodes:
@@ -557,24 +563,25 @@ class ModelContainer(dict):
     node_map = self["ID_tree"].mapMe()
     arcIDs = list(data["arcs"].keys())
     no_arcIDs = len(arcIDs)
-    arcID_map = dict([(arcIDs[i], i) for i in range(no_arcIDs)])  #dict([(arcIDs[i], str(i)) for i in range(no_arcIDs)]) #HAP: str --> int
+    arcID_map = dict([(arcIDs[i], i) for i in
+                      range(no_arcIDs)])  # dict([(arcIDs[i], str(i)) for i in range(no_arcIDs)]) #HAP: str --> int
 
     odata = OrderedDict()
     for the_hash in data:
       odata[the_hash] = OrderedDict()
 
     for node in data["nodes"]:
-      nodeID = node_map[node] #str(node_map[int(node)])     #HAP: str --> int
+      nodeID = node_map[node]  # str(node_map[int(node)])     #HAP: str --> int
       odata["nodes"][nodeID] = data["nodes"][node]
 
     for scene in data["scenes"]:
-      scene_node_ID = node_map[scene]    #str(node_map[int(scene)]) #HAP: str --> int
+      scene_node_ID = node_map[scene]  # str(node_map[int(scene)]) #HAP: str --> int
       odata["scenes"][scene_node_ID] = OrderedDict()
       odata["scenes"][scene_node_ID]["nodes"] = OrderedDict()
       odata["scenes"][scene_node_ID]["arcs"] = OrderedDict()
 
       for nodeID in data["scenes"][scene]["nodes"]:  # knots are not saved only position --> see below
-        onode_ID = node_map[nodeID]    #str(node_map[int(nodeID)])  #HAP: str--> int
+        onode_ID = node_map[nodeID]  # str(node_map[int(nodeID)])  #HAP: str--> int
         odata["scenes"][scene_node_ID]["nodes"][onode_ID] = data["scenes"][scene]["nodes"][nodeID]
 
       for arc in data["scenes"][scene]["arcs"]:
@@ -631,7 +638,8 @@ class ModelContainer(dict):
     tree, node_map = self["ID_tree"].getSubTree(nodeID)
 
     no_arcIDs = len(internal_arcs)
-    arcID_map = dict([(internal_arcs[i], (i)) for i in range(no_arcIDs)]) #dict([(internal_arcs[i], str(i)) for i in range(no_arcIDs)]) #HAP: str --> int
+    arcID_map = dict([(internal_arcs[i], (i)) for i in range(no_arcIDs)])  # dict([(internal_arcs[i], str(i)) for i
+    # in range(no_arcIDs)]) #HAP: str --> int
 
     container["ID_tree"] = tree
 
@@ -657,7 +665,7 @@ class ModelContainer(dict):
       c_arc = arcID_map[arc]
       container["arcs"][c_arc] = deepcopy(self["arcs"][arc])
       # source = node_map[str(self["arcs"][arc]["source"])]    #HAP: str --> int
-      source = node_map[self["arcs"][arc]["source"]]         #HAP: str -->int
+      source = node_map[self["arcs"][arc]["source"]]  # HAP: str -->int
       sink = node_map[self["arcs"][arc]["sink"]]
       container["arcs"][c_arc]["source"] = source
       container["arcs"][c_arc]["sink"] = sink
@@ -696,11 +704,12 @@ class ModelContainer(dict):
 
   def write(self, f):
 
-    # TODO: DONE mapping could be done on reading instead of writing. Solves problem of intermediate writing --> makeFromFile
+    # TODO: DONE mapping could be done on reading instead of writing. Solves problem of intermediate writing -->
+    #  makeFromFile
     node_map = self.mapMe()
 
     a = deepcopy(self["ID_tree"])
-    self["ID_tree"] = self["ID_tree"].toJson()    #self["ID_tree"].ID_tree.toJson()   #HAP: str --> int
+    self["ID_tree"] = self["ID_tree"].toJson()  # self["ID_tree"].ID_tree.toJson()   #HAP: str --> int
     # del self["ID_tree"]
 
     CR.putData(self, f, indent=2)
@@ -727,7 +736,7 @@ class ModelContainer(dict):
           new_data[d].pop(i)
         new_data[d][i_i] = data[d][i]
 
-  # this is not elegant, but there seems to be a python problem if one does it more elegantly
+    # this is not elegant, but there seems to be a python problem if one does it more elegantly
     d = "scenes"
     for i in list(data[d].keys()):
       i_i = int(i)
@@ -742,9 +751,8 @@ class ModelContainer(dict):
     # print("got here")
     return new_data
 
-
   def makeFromFile(self, f):
-    data = self.getAndFixData(f) #CR.getData(f)
+    data = self.getAndFixData(f)  # CR.getData(f)
     tree = Tree(0)
     tree.fromJson(data["ID_tree"])
     # self["ID_tree"].imposeIDTree(tree)
@@ -757,7 +765,7 @@ class ModelContainer(dict):
 
   def addFromFile(self, f, parentID, position, graphics_data, editor_phase):
 
-    data = self.getAndFixData(f) #CR.getData(f)
+    data = self.getAndFixData(f)  # CR.getData(f)
     if not data: return
 
     # offset first
@@ -782,18 +790,18 @@ class ModelContainer(dict):
     del odata["ID_tree"]
 
     for node in data["nodes"]:
-      nodeID =  node_map[int(node)]  #str(node_map[int(node)])                 #HAP: str --> int
+      nodeID = node_map[int(node)]  # str(node_map[int(node)])                 #HAP: str --> int
       odata["nodes"][nodeID] = data["nodes"][node]
 
     for scene in sorted(data["ID_tree"].keys()):
-      scene_node_ID = node_map[int(scene)] #str(node_map[int(scene)]) # HAP: str --> int
+      scene_node_ID = node_map[int(scene)]  # str(node_map[int(scene)]) # HAP: str --> int
       odata["scenes"][scene_node_ID] = {}
       odata["scenes"][scene_node_ID]["nodes"] = {}
       odata["scenes"][scene_node_ID]["class"] = {}
       odata["scenes"][scene_node_ID]["arcs"] = {}
 
       for nodeID in data["scenes"][scene]["nodes"]:  # knots are not saved only position --> see below
-        onode_ID = node_map[int(nodeID)]   # str(node_map[int(nodeID)])  # HAP: str--> int
+        onode_ID = node_map[int(nodeID)]  # str(node_map[int(nodeID)])  # HAP: str--> int
         odata["scenes"][scene_node_ID]["nodes"][onode_ID] = data["scenes"][scene]["nodes"][nodeID]
 
       for arc in data["scenes"][scene]["arcs"]:
@@ -812,8 +820,8 @@ class ModelContainer(dict):
       token = data["arcs"][arcID]["token"]
       nature = data["arcs"][arcID]["nature"]
       odata["arcs"][arcID_map[arcID]] = ArcInfo(mapped_arc_source_ID, mapped_arc_sink_ID, network,
-                                                      named_network,
-                                                      mechanism, token, nature)
+                                                named_network,
+                                                mechanism, token, nature)
 
     for the_hash in self:
       if the_hash == "ID_tree":
@@ -829,8 +837,6 @@ class ModelContainer(dict):
       else:
         self[the_hash].update(odata[the_hash])
 
-
-
     # pos = [position.x(), position.y()]
     # self["nodes"][str(node_offset)]["name"] = CR.DEFAULT                #HAP: str --> int
     # self["nodes"][str(node_offset)]["type"] = NAMES["branch"]          #HAP: str --> int
@@ -844,12 +850,12 @@ class ModelContainer(dict):
     #                                                                            CR.M_None,
     #                                                                            'normal')
     self["scenes"][parentID]["nodes"][node_offset] = ModelGraphicsData(NAMES["branch"],
-                                                                               position.x(),
-                                                                               position.y(),
-                                                                               graphics_data,
-                                                                               editor_phase,
-                                                                               CR.M_None,
-                                                                               'normal')
+                                                                       position.x(),
+                                                                       position.y(),
+                                                                       graphics_data,
+                                                                       editor_phase,
+                                                                       CR.M_None,
+                                                                       'normal')
     #   def __init__(self, graphics_object, x, y, graphics_data, phase, application, state):
     # [pos, R.STRUCTURES[R.S_NODE_COMPOSITE]]
 
@@ -866,7 +872,7 @@ class ModelContainer(dict):
       self["ID_tree"].moveID(child, parentID)
       self["scenes"][parentID]["nodes"][child] = self["scenes"][nodeID]["nodes"][child]
 
-    for arc in self["scenes"][nodeID]["arcs"]: # top_arc:
+    for arc in self["scenes"][nodeID]["arcs"]:  # top_arc:
       self["scenes"][parentID]["arcs"][arc] = self["scenes"][nodeID]["arcs"][arc]
 
     for scene in children:
@@ -898,7 +904,7 @@ class ModelContainer(dict):
     arcs = list(self["scenes"][nodeID]["arcs"].keys())
     nodes_in_branch = []
     iter = walkBreathFirstFnc(self["ID_tree"], newNodeID)
-    for n in iter: #self["ID_tree"].walkBreadthFirst(newNodeID):
+    for n in iter:  # self["ID_tree"].walkBreadthFirst(newNodeID):
       nodes_in_branch.append(n)
     nodes_in_branch.remove(newNodeID)
 
@@ -920,11 +926,11 @@ class ModelContainer(dict):
         # print("arc %s is not connected to this branch %s"%(arc, newNodeID))
         pass
 
-    for arc in internal: # these need transferring they only show on the new view
+    for arc in internal:  # these need transferring they only show on the new view
       self["scenes"][newNodeID]["arcs"][arc] = deepcopy(self["scenes"][nodeID]["arcs"][arc])
       del self["scenes"][nodeID]["arcs"][arc]
 
-    for arc in external: # these need copying as they show on both views
+    for arc in external:  # these need copying as they show on both views
       self["scenes"][newNodeID]["arcs"][arc] = deepcopy(self["scenes"][nodeID]["arcs"][arc])
 
     for scene in nodeGroupIDS:
@@ -958,7 +964,7 @@ class ModelContainer(dict):
   def injectListInToNodes(self, node_group, token, list, where):
     print('list: ', list, "to where ", where)
     for node in node_group:
-      print('node directory for node %s'%node, self["nodes"][node].keys())
+      print('node directory for node %s' % node, self["nodes"][node].keys())
       # print("inject tokens ", node_group, token, list, self["nodes"][node])
       self["nodes"][node][where][token] = list
 
@@ -1102,7 +1108,7 @@ class ModelContainer(dict):
         self["nodes"][node]["tokens"][token] = []
       connected_arcs = self.getArcsConnectedToNode(node)
       for arc in connected_arcs:
-        if self["arcs"][arc]["token"] == token:           # Not resetting token
+        if self["arcs"][arc]["token"] == token:  # Not resetting token
           arcs_in_domain.add(arc)
 
     adj_matrix = self.computeTokenAdjacencyMatrix(domain, token)
@@ -1129,7 +1135,7 @@ class ModelContainer(dict):
             else:
               raise DataError(">>>> cannot find a simple node")
               sys.exit()
-          typed_tokens = copy(self["nodes"][node_]["tokens"][token]) # !!! copy
+          typed_tokens = copy(self["nodes"][node_]["tokens"][token])  # !!! copy
           self["arcs"][arc]["typed_tokens"] = typed_tokens
 
     # for arc in arcs_in_domain:              # Happens after reaction injections
@@ -1178,7 +1184,7 @@ class ModelContainer(dict):
             Plist = eval(P)
             Es_set = set(Elist)
             typed_token_set = set(typed_tokens)
-            if Es_set.issubset(typed_token_set):     # reaction takes place
+            if Es_set.issubset(typed_token_set):  # reaction takes place
               conversions[node].add(conversion)
               for ss in Plist:
                 self.colourBranch(network, node, token, ss, adj_matrix, conversions)

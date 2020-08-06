@@ -53,7 +53,7 @@ __status__ = "beta"
 
 import os as OS
 
-from PyQt4 import QtGui  as Q_Gui
+from PyQt5 import QtGui  as Q_Gui
 
 from Common.common_resources import M_None
 from Common.resource_initialisation import DEFAULT_EXTENSION_CURSOR
@@ -97,16 +97,16 @@ class ModellerCursor(dict):
 
   def __init__(self):
     hotpoints = {
-          'TL': (0, 0),
-          'TC': (16, 0),
-          'TR': (32, 0),
-          'LC': (0, 16),
-          'CC': (16, 16),
-          'RC': (16, 32),
-          'BL': (0, 32),
-          'BC': (16, 32),
-          'BR': (32, 32),
-          }
+            'TL': (0, 0),
+            'TC': (16, 0),
+            'TR': (32, 0),
+            'LC': (0, 16),
+            'CC': (16, 16),
+            'RC': (16, 32),
+            'BL': (0, 32),
+            'BC': (16, 32),
+            'BR': (32, 32),
+            }
 
     c_loc = DIRECTORIES["cursor_location"]
     li = OS.listdir(c_loc)

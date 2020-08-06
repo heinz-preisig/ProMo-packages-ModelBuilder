@@ -23,7 +23,7 @@ __status__ = "beta"
 import os
 import sys
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 from ModelBuilder.AutomataEditor import GraphEditorDialogImpl
 

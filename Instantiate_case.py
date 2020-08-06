@@ -8,7 +8,7 @@
 import os
 import sys
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 from ModelBuilder.Instantiate_case.Editor.editor_initialise_system_gui_impl import Ui_Initialise_system
 

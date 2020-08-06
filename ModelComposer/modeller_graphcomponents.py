@@ -14,8 +14,9 @@ __version__ = "5.01"
 __email__ = "heinz.preisig@chemeng.ntnu.no"
 __status__ = "beta"
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from Common.common_resources import M_None
 from Common.graphics_objects import IndicatorDot
@@ -52,10 +53,10 @@ class ComponentError(Exception):
 # root components --------------------------------------------------------------
 
 
-class R_Item(QtGui.QGraphicsItem):
+class R_Item(QtWidgets.QGraphicsItem):
 
   def __init__(self, strID, graphics_root_object, scene, view, commander):
-    QtGui.QGraphicsItem.__init__(self)
+    QtWidgets.QGraphicsItem.__init__(self)
     self.scene = scene
     self.view = view
     self.commander = commander
@@ -92,14 +93,14 @@ class R_Item(QtGui.QGraphicsItem):
           application = M_None
       elif self.graphics_root_object == NAMES["connection"]:
         application = self.commander.model_container.getArcApplication(self.ID)
-        state = self.commander.state_arcs[(self.ID)]     #self.commander.state_arcs[str(self.ID)]  #  HAP: str --> int
+        state = self.commander.state_arcs[(self.ID)]  # self.commander.state_arcs[str(self.ID)]  #  HAP: str --> int
         # print("get shape >>> application:", application)
       else:
-        raise ComponentError(" no such class of components :%s"%self.graphics_root_object)
+        raise ComponentError(" no such class of components :%s" % self.graphics_root_object)
       r, d, a, s = \
         self.commander.main.graphics_DATA.getActiveObjectRootDecorationState(
-              phase, self.graphics_root_object,
-              decoration, application, state)  # filter
+                phase, self.graphics_root_object,
+                decoration, application, state)  # filter
 
       if decoration == "network":
         obj_str = self.commander.model_container["nodes"][self.ID]["network"]
@@ -146,13 +147,13 @@ class R_Item(QtGui.QGraphicsItem):
     self.items[name] = ShapeEllipse(x, y, NAMES["indicator token"], brush, shape_data, self)
     self.items[name].position = self.items[name].pos()
     self.items[name].setParentItem(self)
-    self.items[name].setAcceptsHoverEvents(True)
+    self.items[name].setAcceptHoverEvents(True)
 
   def addIndicatorText(self, name, x, y, text):
     item = ShapeText(x, y, NAMES["indicator typed token"], self)
     item.position = item.pos()
     item.setParentItem(self)
-    item.setAcceptsHoverEvents(True)
+    item.setAcceptHoverEvents(True)
     item.setText(text)
 
     self.items[name] = item
@@ -193,7 +194,7 @@ class R_Item(QtGui.QGraphicsItem):
     item = self.items[dec_ID]
 
     if method == 'setText':
-      item.setText(str(params))                                #HAP: ID string to integer
+      item.setText(str(params))  # HAP: ID string to integer
       item.show()
     elif method == 'hide':
       item.hide()
@@ -211,7 +212,7 @@ class R_Node(R_Item):  # root component
     self.view = view
     self.application = application
 
-    self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
 
     if graphics_root_object == NAMES["elbow"]:
       self.network = None
@@ -228,9 +229,9 @@ class R_Node(R_Item):  # root component
     self.__inList = []  # inlist
     self.__outList = []  # outlist
 
-    self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
-    self.setFlag(QtGui.QGraphicsItem.ItemSendsGeometryChanges)
-    self.setCacheMode(QtGui.QGraphicsItem.DeviceCoordinateCache)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemSendsGeometryChanges)
+    self.setCacheMode(QtWidgets.QGraphicsItem.DeviceCoordinateCache)
 
     p = QtCore.QPointF(x, y)  # puts it into its place
     self.setPos(p)
@@ -239,7 +240,7 @@ class R_Node(R_Item):  # root component
     return self.childrenBoundingRect()
 
   def itemChange(self, change, value):
-    if change == QtGui.QGraphicsItem.ItemPositionChange:
+    if change == QtWidgets.QGraphicsItem.ItemPositionChange:
       for edge in self.__inList:
         sourcePoint, destPoint = edge.arcCoord()
         self.__prepareEdgeDrawing(destPoint, edge, sourcePoint)
@@ -247,7 +248,7 @@ class R_Node(R_Item):  # root component
         sourcePoint, destPoint = edge.arcCoord()
         self.__prepareEdgeDrawing(destPoint, edge, sourcePoint)
 
-    return QtGui.QGraphicsItem.itemChange(self, change, value)
+    return QtWidgets.QGraphicsItem.itemChange(self, change, value)
 
   # def getID(self):
   #   return self.ID
@@ -288,14 +289,14 @@ class R_Node(R_Item):  # root component
     del self
 
 
-class G_Item(QtGui.QGraphicsItem):
+class G_Item(QtWidgets.QGraphicsItem):
   def __init__(self, parent, decoration):
     #  ToRemember: it seems that the object must be movable in order to
     #  ToRemember: in order to accept hover vents.
     #  one can also make it selectable, but that leads to problems with
     #  having to unselect also after the operation.
 
-    QtGui.QGraphicsItem.__init__(self)
+    QtWidgets.QGraphicsItem.__init__(self)
 
     self._scene = parent.commander.scene
     self.view = parent.commander.view  # current_view_object
@@ -335,10 +336,14 @@ class G_Item(QtGui.QGraphicsItem):
 
     self.shape_data = getShapeData(self.graphics_root_object, decoration, parent)  # moving uses it !
 
-    self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
-    self.setFlag(QtGui.QGraphicsItem.ItemIsFocusable)
-    self.setFlag(QtGui.QGraphicsItem.ItemSendsGeometryChanges)
-    self.setAcceptsHoverEvents(True)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable)
+    self.setFlag(QtWidgets.QGraphicsItem.ItemSendsGeometryChanges)
+    try:
+      self.setAcceptHoverEvents(True)
+    except:
+      print("debugging -- set hover event error")
+      pass
     # c = R.ModellerCursor()
     self.move_cursor = self.commander.cursors.getCursor('grab')
     self.moved_root = False
@@ -348,9 +353,13 @@ class G_Item(QtGui.QGraphicsItem):
     self.setMyCursor()
 
     self.mousePressDelayTimerMove = QtCore.QTimer()  # timer to control delay
-    QtGui.QWidget.connect(self.mousePressDelayTimerMove,
-                          QtCore.SIGNAL("timeout()"),
-                          self.__mousePressDelayTimerMoveEvent)
+    # QtWidgets.QWidget.connect(self.mousePressDelayTimerMove,
+    #                       # QtCore.SIGNAL("timeout()"),
+    #                       QtCore.pyqtSignal("timeout()"),
+    #                       self.__mousePressDelayTimerMoveEvent)
+    # QtCore.QTimer.singleShot(100, self.__mousePressDelayTimerMoveEvent())
+
+    self.mousePressDelayTimerMove.timeout.connect(self.__mousePressDelayTimerMoveEvent)
 
   # def prepare(self, locPoint):
   #   # self.locPoint = locPoint
@@ -381,7 +390,7 @@ class G_Item(QtGui.QGraphicsItem):
     if NAMES["panel"] not in self.parent.graphics_root_object:
       self.mousePressDelayTimerMove.start(MOUSE_PRESS_DELAY_MOVE)
 
-      QtGui.QGraphicsItem.mousePressEvent(self, event)
+      QtWidgets.QGraphicsItem.mousePressEvent(self, event)
 
   def __mousePressDelayTimerMoveEvent(self):
     #  handles time event of "mousePressDelayTimerMove"
@@ -410,8 +419,8 @@ class G_Item(QtGui.QGraphicsItem):
         # print("posintion: ", dir(self.parent))
         # x = self.parentItem().x()
         # y = self.parentItem().y()
-        x = 5*round(float(self.parentItem().x())/5)
-        y = 5*round(float(self.parentItem().y())/5)
+        x = 5 * round(float(self.parentItem().x()) / 5)
+        y = 5 * round(float(self.parentItem().y()) / 5)
 
         print("moving node: {} to position ({},{}) ".format(self.parent.ID, x, y))
         if self.graphics_root_object == NAMES["elbow"]:
@@ -661,17 +670,17 @@ def getShapeData(graphics_root_object, graph_object, parent):
   return shape_data
 
 
-class ShapePannel(QtGui.QGraphicsRectItem, G_Item):
+class ShapePannel(QtWidgets.QGraphicsRectItem, G_Item):
   def __init__(self, x, y, decoration, brush, shape_data, parent):
     w = shape_data["width"]
     h = shape_data["height"]
     self.brush = brush
 
-    QtGui.QGraphicsRectItem.__init__(self, x, y, w, h)  # must be before G_item ini
+    QtWidgets.QGraphicsRectItem.__init__(self, x, y, w, h)  # must be before G_item ini
     G_Item.__init__(self, parent, decoration)
     self.size = QtCore.QRectF(x, y, w, h)
     self.setRect(self.size)
-    self.setAcceptsHoverEvents(True)
+    self.setAcceptHoverEvents(True)
     self.setVisible(True)
     self.setBrush(brush)
     z = LAYERS[shape_data["layer"]]
@@ -690,7 +699,7 @@ class ShapePannel(QtGui.QGraphicsRectItem, G_Item):
     pass
 
 
-class ShapeEllipse(QtGui.QGraphicsEllipseItem, G_Item):
+class ShapeEllipse(QtWidgets.QGraphicsEllipseItem, G_Item):
   def __init__(self, x, y, decoration, brush, shape_data, parent):
     G_Item.__init__(self, parent, decoration)
 
@@ -701,7 +710,7 @@ class ShapeEllipse(QtGui.QGraphicsEllipseItem, G_Item):
     h = shape_data["height"]
     z = LAYERS[shape_data["layer"]]
 
-    QtGui.QGraphicsEllipseItem.__init__(self, x, y, w, h)
+    QtWidgets.QGraphicsEllipseItem.__init__(self, x, y, w, h)
     G_Item.__init__(self, parent, decoration)
     self.size = QtCore.QRectF(x, y, w, h)
     # self.offset = x, y
@@ -709,7 +718,7 @@ class ShapeEllipse(QtGui.QGraphicsEllipseItem, G_Item):
     if self.decoration in ["property", "indicator"]:
       print("ellipse ", self.decoration, x, y, w, h)
 
-    self.setPos(x - w/2, y - h/2)
+    self.setPos(x - w / 2, y - h / 2)
     self.setRect(self.size)
     self.setZValue(z)
 
@@ -735,21 +744,21 @@ class ShapeEllipse(QtGui.QGraphicsEllipseItem, G_Item):
 
     if self.decoration in [NAMES["tail"], NAMES["head"]]:
       # print("ellipse  head tails")
-      x = self.locPoint.x() - width/2
-      y = self.locPoint.y() - height/2
+      x = self.locPoint.x() - width / 2
+      y = self.locPoint.y() - height / 2
       painter.drawEllipse(0, 0, width, height)
       self.setPos(x, y)
     else:
-      x = self.pos().x() + width/2  # self.offset[0] - width / 2
-      y = self.pos().y() + height/2  # self.offset[1] - height / 2
+      x = self.pos().x() + width / 2  # self.offset[0] - width / 2
+      y = self.pos().y() + height / 2  # self.offset[1] - height / 2
       painter.drawEllipse(x, y, width, height)
       # if self.decoration in ["property", "indicator"]:
       #   print("painting ", self.decoration, x,y, width, height)#, self.offset)
 
 
-class ShapeLine(QtGui.QGraphicsLineItem, G_Item):
+class ShapeLine(QtWidgets.QGraphicsLineItem, G_Item):
   def __init__(self, decoration, pen, shape_data, parent):
-    QtGui.QGraphicsLineItem.__init__(self)
+    QtWidgets.QGraphicsLineItem.__init__(self)
     G_Item.__init__(self, parent, decoration)
 
     self.pen = pen
@@ -767,8 +776,8 @@ class ShapeLine(QtGui.QGraphicsLineItem, G_Item):
     tail_width = tail_data["width"]
     tail_height = tail_data["height"]
 
-    self.header_offset = QtCore.QPointF(head_height/2, head_width/2)
-    self.tail_offset = QtCore.QPointF(tail_height/2, tail_width/2)
+    self.header_offset = QtCore.QPointF(head_height / 2, head_width / 2)
+    self.tail_offset = QtCore.QPointF(tail_height / 2, tail_width / 2)
     self.extra = 20
 
   def boundingRect(self):  # essential for moving arc
@@ -794,9 +803,9 @@ class ShapeLine(QtGui.QGraphicsLineItem, G_Item):
     painter.drawLine(line)
 
 
-class ShapeText(QtGui.QGraphicsSimpleTextItem, G_Item):
+class ShapeText(QtWidgets.QGraphicsSimpleTextItem, G_Item):
   def __init__(self, x, y, decoration, parent):
-    QtGui.QGraphicsSimpleTextItem.__init__(self)
+    QtWidgets.QGraphicsSimpleTextItem.__init__(self)
     G_Item.__init__(self, parent, decoration)
 
     shape_data = getShapeData(parent.graphics_root_object, decoration, parent)
@@ -805,7 +814,7 @@ class ShapeText(QtGui.QGraphicsSimpleTextItem, G_Item):
     z = LAYERS[shape_data["layer"]]
     self.setZValue(z)
     self.setText('text')
-    self.setAcceptsHoverEvents(True)
+    self.setAcceptHoverEvents(True)
     self.setPos(x - 5, y - 5)
     self.show()
 
@@ -834,9 +843,9 @@ class NodeView(R_Item):
     pass
 
 
-class Rubber(QtGui.QRubberBand):
+class Rubber(QtWidgets.QRubberBand):
   def __init__(self, view, origin, offset):
-    QtGui.QRubberBand.__init__(self, QtGui.QRubberBand.Rectangle, view)
+    QtWidgets.QRubberBand.__init__(self, QtWidgets.QRubberBand.Rectangle, view)
     self.offset = offset
     self.origin = origin.toPoint() - self.offset
 
@@ -861,7 +870,7 @@ class Node(R_Node):
   """
 
   def __init__(self, strID, graphics_root_object, application, x, y, scene, view, commander):
-    QtGui.QGraphicsItem.__init__(self)
+    QtWidgets.QGraphicsItem.__init__(self)
     # print("Node -- graphics_root_object", graphics_root_object)
     self.graphics_root_object = graphics_root_object
     R_Node.__init__(self, strID, graphics_root_object, application, x, y, scene, view, commander)
@@ -886,7 +895,7 @@ class Knot(R_Node):
   """
 
   def __init__(self, knotID, arcID, x, y, scene, view, commander):
-    QtGui.QGraphicsItem.__init__(self)
+    QtWidgets.QGraphicsItem.__init__(self)
     self.graphics_root_object = NAMES["elbow"]
     self.arcID = arcID
     R_Node.__init__(self, knotID, NAMES["elbow"], M_None, x, y, scene, view, commander)
@@ -914,7 +923,7 @@ class Arc_Edge(R_Item):
   """
 
   def __init__(self, arcID, sourceNode, destNode, scene, view, commander):
-    QtGui.QGraphicsItem.__init__(self, None)
+    QtWidgets.QGraphicsItem.__init__(self, None)
     self.scene = scene
     self.view = view
     R_Item.__init__(self, arcID, NAMES["connection"], scene, view, commander)
@@ -927,7 +936,7 @@ class Arc_Edge(R_Item):
     self.dest = destNode
     self.source.addOutEdge(self)
     self.dest.addInEdge(self)
-    self.setAcceptsHoverEvents(True)
+    self.setAcceptHoverEvents(True)
     # self.arc_type = self.commander.model_container["arcs"][arcID]["type"]
 
   def updateMe(self):
@@ -960,15 +969,15 @@ class Arc_Edge(R_Item):
     S_rect = S.items["root"].boundingRect()
     D_rect = D.items["root"].boundingRect()
     f = LOCATION_PARAMETERS["arc_node_gap_factor"]  # factor makes a gap to the outer rim of root decorator
-    S_w = S_rect.width()*f
-    S_h = S_rect.height()*f
-    D_w = D_rect.width()*f
-    D_h = D_rect.height()*f
+    S_w = S_rect.width() * f
+    S_h = S_rect.height() * f
+    D_w = D_rect.width() * f
+    D_h = D_rect.height() * f
     l = line.length()
     dx = line.dx()
     dy = line.dy()
-    source_Offset = QtCore.QPointF(S_w/l*dx, S_h/l*dy)
-    dest_Offset = QtCore.QPointF(D_w/l*dx, D_h/l*dy)
+    source_Offset = QtCore.QPointF(S_w / l * dx, S_h / l * dy)
+    dest_Offset = QtCore.QPointF(D_w / l * dx, D_h / l * dy)
     sourcePoint = source + source_Offset
     destPoint = dest - dest_Offset
     return sourcePoint, destPoint
@@ -976,8 +985,8 @@ class Arc_Edge(R_Item):
   def getMidPoint(self):
     sourcePoint = self.source.pos()
     destPoint = self.dest.pos()
-    middlePoint = sourcePoint + (destPoint - sourcePoint)/2.0
+    middlePoint = sourcePoint + (destPoint - sourcePoint) / 2.0
     return middlePoint
 
   def printMe(self):
-    print('edge %s'%self)
+    print('edge %s' % self)

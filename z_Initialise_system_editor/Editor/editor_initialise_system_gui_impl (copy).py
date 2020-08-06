@@ -3,8 +3,8 @@ import itertools
 from os import mkdir
 from os import path
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 from Common.common_resources import askForCasefileGivenLocation as afc
 from Common.common_resources import askForModelFileGivenOntologyLocation as afm

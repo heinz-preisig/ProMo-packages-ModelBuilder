@@ -26,8 +26,9 @@ __status__ = "beta"
 
 from copy import deepcopy
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 import Common.common_resources as CR
 import Common.graphics_objects as GRO
@@ -55,10 +56,10 @@ class EditorError(Exception):
     self.msg = msg
 
 
-class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
+class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   # setting up GUI --------------------------------------------------------------
   def __init__(self):
-    QtGui.QWidget.__init__(self)
+    QtWidgets.QWidget.__init__(self)
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
     self.__setupSignals()
@@ -69,7 +70,7 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     self.ui.labelOntology.setText(self.ontology_name)
 
     # self.file_resources = DataFileResources(self.ontology_name)
-    self.graph_resource_file_spec = FILES["graph_resource_file_spec"]%self.ontology_name
+    self.graph_resource_file_spec = FILES["graph_resource_file_spec"] % self.ontology_name
 
     ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
     self.ontology = ontology
@@ -99,15 +100,17 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     self.newcomponent = False
     self.current_editor_phase = None
     self.structures = None
+    self.current_colour = 0, 255, 0, 10
+    self.current_token = None
 
     self.__makeComboEditorPhase()
     self.__makeListTokens()
 
     # initialise colour dialogue
-    self.colourDialog = QtGui.QColorDialog()
+    self.colourDialog = QtWidgets.QColorDialog()
 
     for i in range(0, 16):  # reset all custom colours first to white
-      colour = QtGui.QColor(255, 255, 255).rgba()
+      colour = QtGui.QColor(255, 255, 255)  # .rgba()
       self.colourDialog.setCustomColor(i, colour)
 
     count = 0
@@ -115,18 +118,18 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     for token in tokens:
       print(token, ' : ', count)
       r, g, b, a = self.TOKENS[token]["colour"]
-      colour = QtGui.QColor(r, g, b, a).rgba()
+      colour = QtGui.QColor(r, g, b, a)  # .rgba()
       self.colourDialog.setCustomColor(count, colour)
       count += 2  # makes it the first row
-    colour_select = QtGui.QColor(255, 255, 0).rgba()
+    colour_select = QtGui.QColor(255, 255, 0)  # .rgba()
     self.colourDialog.setCustomColor(1, colour_select)
-    colour_open = QtGui.QColor(0, 255, 255).rgba()
+    colour_open = QtGui.QColor(0, 255, 255)  # .rgba()
     self.colourDialog.setCustomColor(3, colour_open)
-    colour_uni_directional = QtGui.QColor(85, 85, 85).rgba()
+    colour_uni_directional = QtGui.QColor(85, 85, 85)  # .rgba()
     self.colourDialog.setCustomColor(5, colour_uni_directional)
-    colour_bi_directional = QtGui.QColor(170, 170, 170).rgba()
+    colour_bi_directional = QtGui.QColor(170, 170, 170)  # .rgba()
     self.colourDialog.setCustomColor(7, colour_bi_directional)
-    colour_distributed = QtGui.QColor(225, 225, 225).rgba()
+    colour_distributed = QtGui.QColor(225, 225, 225)  # .rgba()
     self.colourDialog.setCustomColor(9, colour_distributed)
 
     # allow for filling of gui widgets
@@ -141,8 +144,8 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
   def on_radioButtonTokens_pressed(self):
     self.__group_controls("edit_tokens")
 
-  @QtCore.pyqtSignature('QString')
-  def on_comboEditorPhase_activated(self, phase):
+  def on_comboEditorPhase_activated(self, index):
+    phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
     self.__group_controls("select_root_object")
 
@@ -157,16 +160,15 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     self.ui.stackedProperties.setCurrentIndex(0)
     self.__makeListComponents()
 
-  @QtCore.pyqtSignature('QString')
-  def on_comboApplication_activated(self, q_string):
+  def on_comboApplication_activated(self, index):
+    q_string = self.ui.comboApplication.currentText()
     print("application selected")
 
     self.selected_application = str(q_string)
     self.__processSelectedComponent()
 
-  @QtCore.pyqtSignature('QString')
-  def on_comboState_activated(self, q_string):
-    # 
+  def on_comboState_activated(self, index):
+    q_string = self.ui.comboApplication.currentText()
     self.selected_object_state = str(q_string)
     # self.__selectedComponent()
     self.__processSelectedComponent()
@@ -190,6 +192,7 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     self.toolchoose = True
     self.current_colour = self.NETWORK.getData(self.current_network)
     self.__showColour(self.ui.groupBoxNetworkColour)
+    self.__group_controls("network_selected")
 
   def on_radioButtonComponents_pressed(self):
     self.ui.groupPhase.hide()
@@ -264,6 +267,7 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     self.toolchoose = True
     self.current_colour = self.TOKENS.getData(self.current_token)
     self.__showColour(self.ui.groupBoxTokenColour)
+    self.__group_controls("token_selected")
 
   def on_toolNetworkColour_clicked(self):
     where = self.ui.groupBoxNetworkColour
@@ -285,38 +289,38 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
     where = self.ui.groupBoxPanelColour
     return self.__selectColour(where)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinRelPositionX_valueChanged(self, x):
     self.__changeData('position_x', x)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinRelPositionY_valueChanged(self, y):
-    x = self.ui.spinEllipseWidth.value()
+    # y = self.ui.spinEllipseWidth.value()
     self.__changeData('position_y', y)
 
   # @QtCore.pyqtSignature('int')
   # def on_spinLayer_valueChanged(self, value):
   #   self.__changeData("layer", value)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinEllipseWidth_valueChanged(self, w):
     self.__changeData('width', w)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinEllipseHeight_valueChanged(self, h):
     self.__changeData('height', h)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinPanelWidth_valueChanged(self, h):
     w = self.ui.spinPanelWidth.value()
     self.__changeData('width', w)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinPanelHeight_valueChanged(self, h):
     w = self.ui.spinPanelHeight.value()
     self.__changeData('height', w)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_spinLineWidth_valueChanged(self, h):
     w = self.ui.spinLineWidth.value()
     self.__changeData('width', w)
@@ -361,15 +365,15 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
   def on_radioText_pressed(self):
     self.__changeData("layer", "text")
 
-  @QtCore.pyqtSignature('QString')
-  def on_comboLineStyle_activated(self, style):
+  def on_comboLineStyle_activated(self, index):
+    style = self.ui.comboApplication.currentText()
     self.__changeData('style', str(style))
 
-  @QtCore.pyqtSignature('QString')
   def on_comboLineWidth_valueChanged(self, w):
+    W = self.ui.comboApplication.currentText()
     self.__changeData('width', w)
 
-  @QtCore.pyqtSignature('int')
+  # @QtCore.pyqtSignature('int')
   def on_checkMovable_stateChanged(self, no):
     if no == QtCore.Qt.Unchecked:
       self.__changeData('movable', False)
@@ -398,10 +402,10 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
 
   def on_pushSave_pressed(self):
     data_dict = {
-          'networks': self.NETWORK,
-          'data'    : self.DATA,
-          'tokens'  : self.TOKENS,
-          }
+            'networks': self.NETWORK,
+            'data'    : self.DATA,
+            'tokens'  : self.TOKENS,
+            }
     CR.putDataOrdered(data_dict, self.graph_resource_file_spec, indent=2)
 
   def on_pushCopyPhaseToPhases_pressed(self):
@@ -419,161 +423,168 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
   def __setupSignals(self):
 
     self.LAYERS = {
-          "mainPanel": self.ui.radioMainPanel,
-          "sidePanel": self.ui.radioSidePanel,
-          "network"  : self.ui.radioNetwork,
-          "arc"      : self.ui.radioArc,
-          "knot"     : self.ui.radioKnot,
-          "node"     : self.ui.radioNode,
-          "property" : self.ui.radioProperty,
-          "text"     : self.ui.radioText
-          }
+            "mainPanel": self.ui.radioMainPanel,
+            "sidePanel": self.ui.radioSidePanel,
+            "network"  : self.ui.radioNetwork,
+            "arc"      : self.ui.radioArc,
+            "knot"     : self.ui.radioKnot,
+            "node"     : self.ui.radioNode,
+            "property" : self.ui.radioProperty,
+            "text"     : self.ui.radioText
+            }
 
   def __setupControlLists(self):
     u = self.ui
     self.gui_groups = {}
     self.gui_groups = \
       {
-            "groupMain"              : u.groupMain,
-            "groupNetworks"          : u.groupNetworks,
-            "groupComponents"        : u.groupComponents,
-            "groupControls"          : u.groupControls,
-            "groupPosition"          : u.groupPosition,
-            "stackedProperties"      : u.stackedProperties,
-            "groupLayer"             : u.groupLayer,
-            "groupActions"           : u.groupActions,
-            "groupStateApplication"  : u.groupStateApplication,
-            "groupTokens"            : u.groupTokens,
-            "groupShapes"            : u.groupShapes,
-            "groupComponentEditor"   : u.groupComponentEditor,
-            "groupNetworksComponents": u.groupNetworksComponents,
-            }
+              "groupMain"              : u.groupMain,
+              "groupNetworks"          : u.groupNetworks,
+              "groupComponents"        : u.groupComponents,
+              "groupControls"          : u.groupControls,
+              "groupPosition"          : u.groupPosition,
+              "stackedProperties"      : u.stackedProperties,
+              "groupLayer"             : u.groupLayer,
+              "groupActions"           : u.groupActions,
+              "groupStateApplication"  : u.groupStateApplication,
+              "groupTokens"            : u.groupTokens,
+              "groupShapes"            : u.groupShapes,
+              "groupComponentEditor"   : u.groupComponentEditor,
+              "groupNetworksComponents": u.groupNetworksComponents,
+              "toolNetworkColour"      : u.groupBoxTokenColour,
+              "groupBoxNetworkColour"  : u.groupBoxNetworkColour,
+              }
 
     self.gui_behaviour = \
       {
-            "start"                       : ["groupMain",
-                                             ],
-            "edit_network_colours"        : ["groupMain",
-                                             "groupControls",
-                                             "groupNetworks",
-                                             ],
-            # "network_selection"   : ["groupMain",
-            #                           "groupControls",
-            #                          "groupPhase",
-            #                          "groupNetworks",
-            #                          ],
-            "edit_tokens"                 : ["groupMain",
-                                             "groupControls",
-                                             "groupTokens"
-                                             ],
-            "select_root_object"          : ["groupMain",
-                                             "groupControls",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             ],
-            "selected_root_object"        : ["groupMain",
-                                             "groupControls",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupShapes",
-                                             ],
-            "edit_object"                 : ["groupMain",
-                                             "groupControls",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupShapes",
-                                             ],
-            "edit_components"             : ["groupMain",
-                                             "groupControls",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             # "groupShapes"
-                                             ],
-            "no_state"                    : ["groupMain",
-                                             "groupControls",
-                                             "groupComponentEditor",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupShapes",
-                                             "groupPosition",
-                                             "stackedProperties",
-                                             "groupLayer",
-                                             "groupActions"
-                                             ],
-            "with_state"                  : ["groupMain",
-                                             "groupControls",
-                                             "groupComponentEditor",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupShapes",
-                                             "groupPosition",
-                                             "stackedProperties",
-                                             "groupLayer",
-                                             "groupActions",
-                                             "groupStateApplication",
-                                             ],
-            "select_components_network"   : ["groupMain",
-                                             "groupControls",
-                                             # "groupComponentEditor",
-                                             # "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupNetworksComponents",
-                                             # "groupShapes",
-                                             # "groupPosition",
-                                             # "stackedProperties",
-                                             # "groupLayer",
-                                             # "groupActions",
-                                             # "groupStateApplication",
-                                             ],
-            "select_edit_inter_intra_face": ["groupMain",
-                                             "groupControls",
-                                             # "groupComponentEditor",
-                                             # "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             # "groupNetworksComponents",
-                                             # "groupShapes",
-                                             # "groupPosition",
-                                             # "stackedProperties",
-                                             # "groupLayer",
-                                             # "groupActions",
-                                             # "groupStateApplication",
-                                             ],
-            "edit_components"             : ["groupMain",
-                                             "groupControls",
-                                             # "groupComponentEditor",
-                                             # "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             # "groupNetworksComponents",
-                                             # "groupShapes",
-                                             # "groupPosition",
-                                             # "stackedProperties",
-                                             # "groupLayer",
-                                             # "groupActions",
-                                             # "groupStateApplication",
-                                             ],
-            "select_graphobject_network"  : ["groupMain",
-                                             "groupControls",
-                                             # "groupComponentEditor",
-                                             "groupPhase",
-                                             # "groupNetworks",
-                                             "groupComponents",
-                                             "groupShapes",
-                                             "groupPosition",
-                                             "stackedProperties",
-                                             "groupLayer",
-                                             "groupActions",
-                                             "groupStateApplication",
-                                             ]
-            }
+              "start"                       : ["groupMain",
+                                               ],
+              "edit_network_colours"        : ["groupMain",
+                                               "groupControls",
+                                               "groupNetworks",
+                                               ],
+              "network_selected"            : ["groupMain",
+                                               "groupControls",
+                                               "groupPhase",
+                                               "groupNetworks",
+                                               "groupBoxNetworkColour"
+                                               ],
+              "edit_tokens"                 : ["groupMain",
+                                               "groupControls",
+                                               "groupTokens",
+                                               ],
+              "token_selected"              : ["groupMain",
+                                               "groupControls",
+                                               "groupTokens",
+                                               "toolNetworkColour", ],
+              "select_root_object"          : ["groupMain",
+                                               "groupControls",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               ],
+              "selected_root_object"        : ["groupMain",
+                                               "groupControls",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupShapes",
+                                               ],
+              "edit_object"                 : ["groupMain",
+                                               "groupControls",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupShapes",
+                                               ],
+              "edit_components"             : ["groupMain",
+                                               "groupControls",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               # "groupShapes"
+                                               ],
+              "no_state"                    : ["groupMain",
+                                               "groupControls",
+                                               "groupComponentEditor",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupShapes",
+                                               "groupPosition",
+                                               "stackedProperties",
+                                               "groupLayer",
+                                               "groupActions"
+                                               ],
+              "with_state"                  : ["groupMain",
+                                               "groupControls",
+                                               "groupComponentEditor",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupShapes",
+                                               "groupPosition",
+                                               "stackedProperties",
+                                               "groupLayer",
+                                               "groupActions",
+                                               "groupStateApplication",
+                                               ],
+              "select_components_network"   : ["groupMain",
+                                               "groupControls",
+                                               # "groupComponentEditor",
+                                               # "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupNetworksComponents",
+                                               # "groupShapes",
+                                               # "groupPosition",
+                                               # "stackedProperties",
+                                               # "groupLayer",
+                                               # "groupActions",
+                                               # "groupStateApplication",
+                                               ],
+              "select_edit_inter_intra_face": ["groupMain",
+                                               "groupControls",
+                                               # "groupComponentEditor",
+                                               # "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               # "groupNetworksComponents",
+                                               # "groupShapes",
+                                               # "groupPosition",
+                                               # "stackedProperties",
+                                               # "groupLayer",
+                                               # "groupActions",
+                                               # "groupStateApplication",
+                                               ],
+              "edit_components"             : ["groupMain",
+                                               "groupControls",
+                                               # "groupComponentEditor",
+                                               # "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               # "groupNetworksComponents",
+                                               # "groupShapes",
+                                               # "groupPosition",
+                                               # "stackedProperties",
+                                               # "groupLayer",
+                                               # "groupActions",
+                                               # "groupStateApplication",
+                                               ],
+              "select_graphobject_network"  : ["groupMain",
+                                               "groupControls",
+                                               # "groupComponentEditor",
+                                               "groupPhase",
+                                               # "groupNetworks",
+                                               "groupComponents",
+                                               "groupShapes",
+                                               "groupPosition",
+                                               "stackedProperties",
+                                               "groupLayer",
+                                               "groupActions",
+                                               "groupStateApplication",
+                                               ]
+              }
 
   def __group_controls(self, state):
     for g in self.gui_groups:
@@ -683,15 +694,14 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
       return
     else:
       self.toolchoose = False
-      colour, valid = self.__colourDialog()
-      if valid:
-        if what == "network":
-          self.NETWORK[self.current_network]["colour"] = colour
-        elif what == "token":
-          self.TOKENS[self.current_token]["colour"] = colour
-        else:
-          self.__changeData("colour", colour)
-        self.current_colour = colour
+      colour = self.__colourDialog()
+      if what == "network":
+        self.NETWORK[self.current_network]["colour"] = colour
+      elif what == "token":
+        self.TOKENS[self.current_token]["colour"] = colour
+      else:
+        self.__changeData("colour", colour)
+      self.current_colour = colour
       self.__showColour(where)
       return
 
@@ -730,7 +740,7 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
 
   def __printComponentData(self):
     self.ui.Logger.clear()
-    s = 'root_object : %s \ncomponent data: %s\n\n'%(self.selected_root_object, self.selected_component)
+    s = 'root_object : %s \ncomponent data: %s\n\n' % (self.selected_root_object, self.selected_component)
     component_data = self.__getComponentData()
     for l in component_data:
       s += str(l) + ' : '
@@ -763,7 +773,7 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
 
     # RULE : only the root carry the state
     if (self.selected_component in GRO.DECORATIONS_with_state) and \
-          (self.selected_root_object in GRO.OBJECTS_with_state):
+            (self.selected_root_object in GRO.OBJECTS_with_state):
       self.__makeComboState()
       self.__makeComboApplication()
       self.__group_controls("with_state")
@@ -847,9 +857,8 @@ class EditorGraphComponentsDialogImpl(QtGui.QMainWindow):
   def __colourDialog(self, ):
     r, g, b, a = self.current_colour
     colour = QtGui.QColor(r, g, b, a)
-    c, v = self.colourDialog.getRgba(colour.rgba())
-    c_ = QtGui.QColor(c)
-    return c_.getRgb(), v
+    c = self.colourDialog.getColor(colour).getRgb()
+    return c  # c_.getRgb(), v
 
   def __showColour(self, box):
     # print("colour :", self.current_colour)

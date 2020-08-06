@@ -1,7 +1,7 @@
 from os import path, mkdir
 import itertools
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 
 from Common.common_resources import getData, getOntologyName
 from Common.common_resources import askForModelFileGivenOntologyLocation as afm

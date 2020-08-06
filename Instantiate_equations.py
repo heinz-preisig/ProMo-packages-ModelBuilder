@@ -5,7 +5,7 @@
 """
 # __docformat__ = "restructuredtext en"
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 from ModelBuilder.Instantiate_equations.Editor.editor_initialise_equations_gui_impl import Ui_Initialise_equations
 # from Initialise_system_editor.master_project import Initialization
 import sys
