@@ -75,7 +75,7 @@ class Ui_Initialise_system(QtGui.QMainWindow):
     # return
 
   def fill_starting_points(self):
-    vars_dict = self.ontology.vars #getData(self.variable_file)
+    vars_dict = self.ontology.variables #getData(self.variable_file)
     states = []
     for var_ID in vars_dict:
       if vars_dict[var_ID]["type"] == 'state':
