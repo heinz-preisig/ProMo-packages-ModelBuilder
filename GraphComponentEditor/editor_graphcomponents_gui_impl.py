@@ -168,7 +168,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__processSelectedComponent()
 
   def on_comboState_activated(self, index):
-    q_string = self.ui.comboApplication.currentText()
+    q_string = self.ui.comboState.currentText()
     self.selected_object_state = str(q_string)
     # self.__selectedComponent()
     self.__processSelectedComponent()
