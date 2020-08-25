@@ -106,7 +106,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.current_colour = 0, 255, 0, 10
     self.current_token = None
 
-    # self.__makeComboEditorPhase()
+    self.__makeComboEditorPhase()
     self.__makeListTokens()
     self.__makeListStates()
 
@@ -153,10 +153,12 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def on_radioButtonStates_pressed(self):
     self.__group_controls("edit_states")
 
-  # def on_comboEditorPhase_activated(self, index):
-  #   phase = self.ui.comboEditorPhase.currentText()
-  #   self.current_editor_phase = str(phase)
-  #   self.__group_controls("select_root_object")
+  def on_comboEditorPhase_activated(self, index):
+    phase = self.ui.comboEditorPhase.currentText()
+    self.current_editor_phase = str(phase)
+    component_data = self.__getComponentData()
+    self.__makeListActivity(component_data["action"])
+    self.__group_controls("selected_editor_phase")
 
   #    @QtCore.pyqtSignature('QListWidgetItem')
   def on_listRootObjects_itemClicked(self, item):
@@ -189,7 +191,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # self.__buttonLogics('F' + self.struc_type)
     print("component selected", item.text())
     self.__group_controls("edit_object")
-    self.ui.groupActions.show()
     self.selected_component = str(item.text())
     self.__selectedComponent()
 
@@ -519,33 +520,32 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupControls",
                                                "groupTokens",
                                                "toolNetworkColour", ],
-              "select_root_object"          : ["groupMain",
+              "selected_editor_phase"          : ["groupMain",
                                                "groupControls",
+                                               "groupComponentEditor",
                                                "groupPhase",
-                                               "groupNetworks",
+                                               # "groupNetworks",
                                                "groupComponents",
+                                               "groupShapes",
+                                               "groupPosition",
+                                               "stackedProperties",
+                                               "groupLayer",
+                                               "groupActions",
+                                               "groupStateApplication",
                                                ],
               "selected_root_object"        : ["groupMain",
                                                "groupControls",
                                                "groupPhase",
-                                               "groupNetworks",
+                                               "groupActions",
                                                "groupComponents",
                                                "groupShapes",
                                                ],
               "edit_object"                 : ["groupMain",
                                                "groupControls",
                                                "groupPhase",
-                                               "groupNetworks",
+                                               "groupActions",
                                                "groupComponents",
                                                "groupShapes",
-                                               ],
-              "edit_components"             : ["groupMain",
-                                               "groupControls",
-                                               # "groupPhase",
-                                               # "groupNetworks",
-                                               "groupobjexts",
-                                               "groupComponents",
-                                               # "groupShapes"
                                                ],
               "no_state"                    : ["groupMain",
                                                "groupControls",
@@ -638,10 +638,10 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         self.gui_groups[g].hide()
     pass
 
-  # def __makeComboEditorPhase(self):
-  #   self.ui.comboEditorPhase.clear()
-  #   self.ui.comboEditorPhase.addItems(list(GRO.STATES.keys()))
-  #   self.current_editor_phase = str(self.ui.comboEditorPhase.currentText())
+  def __makeComboEditorPhase(self):
+    self.ui.comboEditorPhase.clear()
+    self.ui.comboEditorPhase.addItems(list(GRO.STATES.keys()))
+    self.current_editor_phase = str(self.ui.comboEditorPhase.currentText())
 
   # def __makeComboState(self):
   #   self.ui.comboState.clear()
@@ -675,9 +675,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         # applications = self.arcApplications[self.current_network]  # application_arcs_types
       else:
         applications = [CR.M_None]
-
+  
     self.ui.comboApplication.clear()
-    self.ui.comboApplication.addItems(applications)
+    self.ui.comboApplication.addItems(set(applications))
     self.selected_application = str(self.ui.comboApplication.currentText())
 
   def __makeListNetwork(self, network_type, listNetworks):
@@ -815,7 +815,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                         self.selected_root_object,
                         self.selected_component,
                         self.selected_application,
-                        self.selected_object_state,
+                        GRO.STATE_OBJECT_COLOURED,
                         )
       self.__printComponentData()
     else:

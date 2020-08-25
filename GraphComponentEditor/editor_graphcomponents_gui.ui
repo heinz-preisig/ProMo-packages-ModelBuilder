@@ -1359,9 +1359,9 @@
     <widget class="QGroupBox" name="groupActions">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>500</x>
        <y>560</y>
-       <width>331</width>
+       <width>341</width>
        <height>351</height>
       </rect>
      </property>
@@ -2106,6 +2106,39 @@
        <pointsize>8</pointsize>
       </font>
      </property>
+    </widget>
+    <widget class="QGroupBox" name="groupPhase">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>490</y>
+       <width>311</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>phase</string>
+     </property>
+     <widget class="QComboBox" name="comboEditorPhase">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>281</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>graph editor phases -- choose</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="labelOntology">
