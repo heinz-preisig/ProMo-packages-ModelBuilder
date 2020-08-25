@@ -283,7 +283,7 @@
       </palette>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_ampty">
       <widget class="QLabel" name="label_31">
