@@ -28,7 +28,7 @@ from Common.graphics_objects import OBJECTS_changing_position
 from Common.graphics_objects import OBJECTS_not_move
 from Common.graphics_objects import OBJECTS_with_application
 from Common.graphics_objects import OBJECTS_with_state
-from Common.graphics_objects import STRUCTURES_Gaph_Item
+from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.qt_resources import KEYS
 from Common.qt_resources import PRESET_COLOURS
 
@@ -64,7 +64,7 @@ class R_Item(QtWidgets.QGraphicsItem):
     self.graphics_root_object = graphics_root_object
 
     self.items = {}
-    decorations = STRUCTURES_Gaph_Item[self.graphics_root_object]
+    decorations = STRUCTURES_Graph_Item[self.graphics_root_object]
     for decoration in decorations:
       self.items[decoration] = self.addItem(decoration)
       self.items[decoration].position = self.items[decoration].pos()
@@ -74,7 +74,7 @@ class R_Item(QtWidgets.QGraphicsItem):
     return self.childrenBoundingRect()
 
   def addItem(self, decoration):
-    shape = STRUCTURES_Gaph_Item[self.graphics_root_object][decoration]
+    shape = STRUCTURES_Graph_Item[self.graphics_root_object][decoration]
 
     # get shape
     phase = self.commander.editor_phase

@@ -89,10 +89,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     connection_networks.update(ontology.intraconnection_network_dictionary)
     self.connection_network_list = sorted(connection_networks.keys())
 
-    self.NETWORK, \
-    self.TOKENS, \
-    self.DATA, \
-    self.STATES_colours = GRO.getGraphData(self.networks, self.connection_network_list,
+    self.NETWORK, self.TOKENS, self.DATA = GRO.getGraphData(self.networks, self.connection_network_list,
                                                             ontology.node_type_list,
                                                             ontology.arc_type_list, tokens,
                                                             self.graph_resource_file_spec)
@@ -101,14 +98,13 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.toolchoose = True
     self.newcomponent = False
-    self.current_editor_phase = '*'
+    self.current_editor_phase = None
     self.structures = None
     self.current_colour = 0, 255, 0, 10
     self.current_token = None
 
-    # self.__makeComboEditorPhase()
+    self.__makeComboEditorPhase()
     self.__makeListTokens()
-    self.__makeListStates()
 
     # initialise colour dialogue
     self.colourDialog = QtWidgets.QColorDialog()
@@ -142,21 +138,16 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.groupBoxPanelColour.setAutoFillBackground(True)
     self.ui.groupBoxNetworkColour.setAutoFillBackground(True)
     self.ui.groupBoxTokenColour.setAutoFillBackground(True)
-    self.ui.groupBoxStateColour.setAutoFillBackground(True)
 
     self.__group_controls("start")
 
   def on_radioButtonTokens_pressed(self):
     self.__group_controls("edit_tokens")
 
-
-  def on_radioButtonStates_pressed(self):
-    self.__group_controls("edit_states")
-
-  # def on_comboEditorPhase_activated(self, index):
-  #   phase = self.ui.comboEditorPhase.currentText()
-  #   self.current_editor_phase = str(phase)
-  #   self.__group_controls("select_root_object")
+  def on_comboEditorPhase_activated(self, index):
+    phase = self.ui.comboEditorPhase.currentText()
+    self.current_editor_phase = str(phase)
+    self.__group_controls("select_root_object")
 
   #    @QtCore.pyqtSignature('QListWidgetItem')
   def on_listRootObjects_itemClicked(self, item):
@@ -176,12 +167,12 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.selected_application = str(q_string)
     self.__processSelectedComponent()
 
-  # def on_comboState_activated(self, index):
-  #   q_string = self.ui.comboState.currentText()
-  #   self.selected_object_state = str(q_string)
-  #   # self.__selectedComponent()
-  #   self.__processSelectedComponent()
-  #   # self.initialise = False
+  def on_comboState_activated(self, index):
+    q_string = self.ui.comboState.currentText()
+    self.selected_object_state = str(q_string)
+    # self.__selectedComponent()
+    self.__processSelectedComponent()
+    # self.initialise = False
 
   #    @QtCore.pyqtSignature('QListWidgetItem')
   def on_listComponents_itemClicked(self, item):
@@ -204,7 +195,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("network_selected")
 
   def on_radioButtonComponents_pressed(self):
-    # self.ui.groupPhase.hide()
+    self.ui.groupPhase.hide()
     self.ui.groupShapes.hide()
     self.ui.groupObjects.hide()
     self.ui.groupComponents.show()
@@ -212,16 +203,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonNetworksComponents_pressed(self):
     print("on_radioButtonNetworksComponents_pressed")
-    # self.__makeListNetwork("network", self.ui.listNetworksComponents)
+    self.__makeListNetwork("network", self.ui.listNetworksComponents)
 
     self.ui.listRootObjects.clear()
-    structures = []
-    for s in GRO.STRUCTURES_Graph_Item:
-      if s not in [GRO.NAMES["intraface"], GRO.NAMES["interface"]]:
-        structures.append(s)
-
-    self.__makeObjectList(structures)
-
     self.__group_controls("select_components_network")
 
   def on_listNetworksComponents_itemClicked(self, item):
@@ -248,7 +232,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonInterfacesComponents_pressed(self):
     print("on_radioButtonInterfacesComponents_pressed")
-    # self.__makeListNetwork("interface", self.ui.listNetworksComponents)
+    self.__makeListNetwork("interface", self.ui.listNetworksComponents)
     structures = GRO.INTERFACE
     # self.__makeObjectList(structures)
     self.ui.listRootObjects.clear()
@@ -272,7 +256,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # self.current_colour = self.NETWORK.getData(self.current_network)
     # self.__showColour(self.ui.groupBoxNetworkColour)
     # self.__group_controls("edit_components")
-    # self.ui.groupPhase.show()
+    self.ui.groupPhase.show()
     self.ui.groupShapes.show()
     self.ui.groupObjects.show()
 
@@ -285,27 +269,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__showColour(self.ui.groupBoxTokenColour)
     self.__group_controls("token_selected")
 
-
-  def on_listStates_itemClicked(self, item):
-    self.current_state = str(item.text())
-    self.current_state_colour = self.STATES_colours[self.current_state]
-
-    self.toolchoose = True
-    self.current_colour = self.current_state_colour
-    self.__showColour(self.ui.groupBoxStateColour)
-    self.__group_controls("state_selected")
-
   def on_toolNetworkColour_clicked(self):
     where = self.ui.groupBoxNetworkColour
     return self.__selectColour(where, what="network")
-
-  def on_toolTokenColour_clicked(self):
-    where = self.ui.groupBoxTokenColour
-    return self.__selectColour(where, what="token")
-
-  def on_toolStateColour_clicked(self):
-    where = self.ui.groupBoxStateColour
-    return self.__selectColour(where, what="state")
 
   def on_toolEllipseColour_clicked(self):
     where = self.ui.groupBoxEllipseColour
@@ -315,6 +281,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     where = self.ui.groupBoxLineColour
     return self.__selectColour(where)
 
+  def on_toolTokenColour_clicked(self):
+    where = self.ui.groupBoxTokenColour
+    return self.__selectColour(where, what="token")
 
   def on_toolPanelColour_clicked(self):
     where = self.ui.groupBoxPanelColour
@@ -436,7 +405,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
             'networks': self.NETWORK,
             'data'    : self.DATA,
             'tokens'  : self.TOKENS,
-            'states' : self.STATES,
             }
     CR.putDataOrdered(data_dict, self.graph_resource_file_spec, indent=2)
 
@@ -480,11 +448,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
               "groupActions"           : u.groupActions,
               "groupStateApplication"  : u.groupStateApplication,
               "groupTokens"            : u.groupTokens,
-              "groupStates"            : u.groupStates,
               "groupShapes"            : u.groupShapes,
               "groupComponentEditor"   : u.groupComponentEditor,
-              "groupObjects"           : u.groupObjects,
-              # "groupNetworksComponents": u.groupNetworksComponents,
+              "groupNetworksComponents": u.groupNetworksComponents,
               "toolNetworkColour"      : u.groupBoxTokenColour,
               "groupBoxNetworkColour"  : u.groupBoxNetworkColour,
               }
@@ -507,14 +473,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupControls",
                                                "groupTokens",
                                                ],
-              "edit_states"                 : ["groupMain",
-                                               "groupControls",
-                                               "groupStates",
-                                               ],
-              "state_selected"              : ["groupMain",
-                                               "groupControls",
-                                               "groupStates",
-                                               "toolStateColour", ],
               "token_selected"              : ["groupMain",
                                                "groupControls",
                                                "groupTokens",
@@ -541,9 +499,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                ],
               "edit_components"             : ["groupMain",
                                                "groupControls",
-                                               # "groupPhase",
+                                               "groupPhase",
                                                # "groupNetworks",
-                                               "groupobjexts",
                                                "groupComponents",
                                                # "groupShapes"
                                                ],
@@ -577,7 +534,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                # "groupComponentEditor",
                                                # "groupPhase",
                                                # "groupNetworks",
-                                               "groupObjects",
                                                "groupComponents",
                                                "groupNetworksComponents",
                                                # "groupShapes",
@@ -638,43 +594,36 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         self.gui_groups[g].hide()
     pass
 
-  # def __makeComboEditorPhase(self):
-  #   self.ui.comboEditorPhase.clear()
-  #   self.ui.comboEditorPhase.addItems(list(GRO.STATES.keys()))
-  #   self.current_editor_phase = str(self.ui.comboEditorPhase.currentText())
+  def __makeComboEditorPhase(self):
+    self.ui.comboEditorPhase.clear()
+    self.ui.comboEditorPhase.addItems(list(GRO.STATES.keys()))
+    self.current_editor_phase = str(self.ui.comboEditorPhase.currentText())
 
-  # def __makeComboState(self):
-  #   self.ui.comboState.clear()
-  #   if self.selected_root_object in GRO.NODES:
-  #     states = GRO.STATES[self.current_editor_phase]["nodes"]
-  #   elif (self.selected_root_object in GRO.ARCS) or (self.selected_root_object in GRO.KNOTS):
-  #     states = GRO.STATES[self.current_editor_phase]["arcs"]
-  #   else:
-  #     states = None
-  #     print("__makeComboState -- no state defined")
-  #
-  #   self.ui.comboState.addItems(states)
-  #   self.selected_object_state = str(self.ui.comboState.currentText())
-  #   # self.ui.comboState.show()
+  def __makeComboState(self):
+    self.ui.comboState.clear()
+    if self.selected_root_object in GRO.NODES:
+      states = GRO.STATES[self.current_editor_phase]["nodes"]
+    elif (self.selected_root_object in GRO.ARCS) or (self.selected_root_object in GRO.KNOTS):
+      states = GRO.STATES[self.current_editor_phase]["arcs"]
+    else:
+      states = None
+      print("__makeComboState -- no state defined")
+
+    self.ui.comboState.addItems(states)
+    self.selected_object_state = str(self.ui.comboState.currentText())
+    # self.ui.comboState.show()
 
   def __makeComboApplication(self):
-
     if self.selected_root_object in GRO.NODES:
       if self.selected_root_object in GRO.OBJECTS_with_application:
-        applications = []
-        for nw in self.networks:
-          applications.extend(self.nodeTypes[nw])
-        # applications = self.nodeTypes[self.current_network]  # application_node_types
+        applications = self.nodeTypes[self.current_network]  # application_node_types
       else:
-        applications = [CR.M_None]
+        applications = CR.M_None
     else:
       if self.selected_root_object in GRO.OBJECTS_with_application:
-        applications = []
-        for nw in self.networks:
-          applications.extend(self.arcApplications[nw] )
-        # applications = self.arcApplications[self.current_network]  # application_arcs_types
+        applications = self.arcApplications[self.current_network]  # application_arcs_types
       else:
-        applications = [CR.M_None]
+        applications = CR.M_None
 
     self.ui.comboApplication.clear()
     self.ui.comboApplication.addItems(applications)
@@ -704,14 +653,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       #   tokens.add(token)
 
     self.ui.listTokens.addItems(sorted(tokens))
-
-  def __makeListStates(self):
-    self.ui.listStates.clear()
-    items = set()
-    for s in sorted(self.STATES_colours.keys()):
-      if s not in GRO.STATE_OBJECT_COLOURED:
-        items.add(s)
-    self.ui.listStates.addItems(sorted(items))
 
   def __makeListActivity(self, enabled_actions):
     self.ui.listAvailableActions.clear()
@@ -758,8 +699,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         self.NETWORK[self.current_network]["colour"] = colour
       elif what == "token":
         self.TOKENS[self.current_token]["colour"] = colour
-      elif what == "state":
-          self.STATES_colours[self.current_state]= colour
       else:
         self.__changeData("colour", colour)
       self.current_colour = colour
@@ -826,9 +765,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                              self.selected_root_object,
                              self.selected_component,
                              self.selected_application,
-                             GRO.STATE_OBJECT_COLOURED
-                             )
-                             # self.selected_object_state)
+                             self.selected_object_state)
 
   def __selectedComponent(self):
 
@@ -837,13 +774,13 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # RULE : only the root carry the state
     if (self.selected_component in GRO.DECORATIONS_with_state) and \
             (self.selected_root_object in GRO.OBJECTS_with_state):
-      # self.__makeComboState()
+      self.__makeComboState()
       self.__makeComboApplication()
       self.__group_controls("with_state")
     else:
       self.selected_object_state = CR.M_None
       self.selected_application = CR.M_None
-      # self.ui.comboState.clear()
+      self.ui.comboState.clear()
       self.ui.comboApplication.clear()
       self.__group_controls("no_state")
 
@@ -878,7 +815,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       self.current_colour = component_data["colour"]
 
       # RULE: network components are handled on a higher level
-      if self.selected_component not in GRO.OBJECTS_colour_defined_separate:
+      if self.selected_component != "network":
         self.ui.groupBoxEllipseColour.show()
         self.__showColour(self.ui.groupBoxEllipseColour)
       else:
@@ -924,7 +861,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     return c  # c_.getRgb(), v
 
   def __showColour(self, box):
-    print("colour :", self.current_colour)
+    # print("colour :", self.current_colour)
     r, g, b, a = self.current_colour
     colour = QtGui.QColor(r, g, b, a)
     palette = box.palette()

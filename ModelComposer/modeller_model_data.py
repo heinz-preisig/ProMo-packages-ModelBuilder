@@ -20,7 +20,7 @@ import Common.common_resources as CR
 from Common.common_resources import walkBreathFirstFnc
 from Common.common_resources import walkDepthFirstFnc
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import STRUCTURES_Gaph_Item
+from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
 
 ROOTID = 0
@@ -107,7 +107,7 @@ class ModelGraphicsData(dict):
     super().__init__()
     self["position_x"] = x
     self["position_y"] = y
-    for decoration in STRUCTURES_Gaph_Item[graphics_object]:
+    for decoration in STRUCTURES_Graph_Item[graphics_object]:
       r, d, a, s = graphics_data.getActiveObjectRootDecorationState(phase,
                                                                     graphics_object,
                                                                     decoration,
