@@ -148,10 +148,12 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonTokens_pressed(self):
     self.__group_controls("edit_tokens")
+    self.ui.stackedColouring.setCurrentIndex(0)
 
 
   def on_radioButtonStates_pressed(self):
     self.__group_controls("edit_states")
+    self.ui.stackedColouring.setCurrentIndex(2)
 
   def on_comboEditorPhase_activated(self, index):
     phase = self.ui.comboEditorPhase.currentText()
@@ -210,6 +212,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.groupObjects.hide()
     self.ui.groupComponents.show()
     self.__group_controls("edit_components")
+    self.current_state= GRO.STATE_OBJECT_COLOURED             # rule: only the colour of the enabled element is variable
 
   def on_radioButtonNetworksComponents_pressed(self):
     print("on_radioButtonNetworksComponents_pressed")
@@ -225,34 +228,33 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.__group_controls("select_components_network")
 
-  def on_listNetworksComponents_itemClicked(self, item):
-    self.current_network = str(item.text())
 
-    structures = []
-    if self.current_network in self.connection_network_list:
-      structures = GRO.INTERFACE
-    else:
-      for s in GRO.STRUCTURES_Graph_Item:
-        if s not in [GRO.NAMES["intraface"], GRO.NAMES["interface"]]:
-          structures.append(s)
+  # def on_listNetworksComponents_itemClicked(self, item):
+  #   self.current_network = str(item.text())
+  #
+  #   structures = []
+  #   if self.current_network in self.connection_network_list:
+  #     structures = GRO.INTERFACE
+  #   else:
+  #     for s in GRO.STRUCTURES_Graph_Item:
+  #       if s not in [GRO.NAMES["intraface"], GRO.NAMES["interface"]]:
+  #         structures.append(s)
 
-    self.__makeObjectList(structures)
-    self.__group_controls("select_components_network")
-    pass
 
   def on_radioButtonIntrafacesComponents_pressed(self):
     print("on_radioButtonIntrafacesComponents_pressed")
     structures = GRO.INTRAFACE
+    self.ui.listRootObjects.clear()
     self.__makeObjectList(structures)
-    self.__group_controls("select_edit_inter_intra_face")
+    self.__group_controls("select_components_network")
     pass
 
   def on_radioButtonInterfacesComponents_pressed(self):
     print("on_radioButtonInterfacesComponents_pressed")
     # self.__makeListNetwork("interface", self.ui.listNetworksComponents)
     structures = GRO.INTERFACE
-    # self.__makeObjectList(structures)
     self.ui.listRootObjects.clear()
+    self.__makeObjectList(structures)
     self.__group_controls("select_components_network")
     pass
 
@@ -361,17 +363,20 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.network_type = "network"
     self.__makeListNetwork("network", self.ui.listNetworks)
     self.__group_controls("edit_network_colours")
+    self.ui.stackedColouring.setCurrentIndex(1)
 
   def on_radioButtonIntrafaces_pressed(self):
     self.network_type = "intraface"
     self.__makeListNetwork("intraface", self.ui.listNetworks)
     # self.__makeStructureList(GRO.INTRAFACE)
     self.__group_controls("edit_network_colours")
+    self.ui.stackedColouring.setCurrentIndex(1)
 
   def on_radioButtonInterfaces_pressed(self):
     self.network_type = "interface"
     self.__makeListNetwork("interface", self.ui.listNetworks)
     self.__group_controls("edit_network_colours")
+    self.ui.stackedColouring.setCurrentIndex(1)
 
   def on_radioMainPanel_pressed(self):
     self.__changeData("layer", "mainPanel")
@@ -437,7 +442,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
             'networks': self.NETWORK,
             'data'    : self.DATA,
             'tokens'  : self.TOKENS,
-            'states' : self.STATES,
+            'states' : self.STATES_colours,
             }
     CR.putDataOrdered(data_dict, self.graph_resource_file_spec, indent=2)
 
@@ -747,7 +752,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       self.ui.listComponents.setEnabled(1)
 
   def __selectColour(self, where, what=""):
-    print("change colour for :", what)
+    # print("change colour for :", what)
     if not self.toolchoose:
       self.toolchoose = True
       return
@@ -809,24 +814,63 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.Logger.setText(s)
 
   def __changeData(self, what, value):
-    if what != "network":
-      self.DATA.setData(what, value,
-                        self.current_editor_phase,
-                        self.selected_root_object,
-                        self.selected_component,
-                        self.selected_application,
-                        GRO.STATE_OBJECT_COLOURED,
-                        )
-      self.__printComponentData()
+    # rule: phase -- only the actions are a function of the phase
+    # rule: root object -- none
+    # rule: selected component -- none
+    # rule: selected application -- none
+    # rule: state -- colour is the same for all editor phases, except root objects with state  STATE_OBJECT_COLOURED
+    if what == "action":
+      phases = [self.current_editor_phase]
     else:
-      self.NETWORK.setData(self.current_network, value)
+      phases  = GRO.PHASES
+
+    for phase in phases:
+      if self.selected_root_object in GRO.OBJECTS_with_state:
+        if self.selected_component in GRO.DECORATIONS_with_state:
+          if self.selected_root_object in GRO.NODES:
+            states = GRO.STATES[phase]["nodes"]
+          elif self.selected_root_object in GRO.ARCS:
+            states = GRO.STATES[phase]["arcs"]
+          for state in states:
+            if what == "colour":
+              if state == GRO.STATE_OBJECT_COLOURED:
+                _value = value
+                # print("debugging -- colour being set ", value)
+              else:
+                _value = self.STATES_colours[state]
+            else:
+              _value = value
+            self.DATA.setData(what, _value,
+                              phase, #self.current_editor_phase,
+                              self.selected_root_object,
+                              self.selected_component,
+                              self.selected_application,
+                              state,
+                              )
+        else:
+          self.DATA.setData(what, value,
+                            phase,  # self.current_editor_phase,
+                            self.selected_root_object,
+                            self.selected_component,
+                            self.selected_application,
+                            GRO.M_None,
+                            )
+      else:
+        self.DATA.setData(what, value,
+                          phase,  # self.current_editor_phase,
+                          self.selected_root_object,
+                          self.selected_component,
+                          self.selected_application,
+                          GRO.M_None,
+                          )
+    self.__printComponentData()
 
   def __getComponentData(self):
-    return self.DATA.getData(self.current_editor_phase,
+    return self.DATA.getData(GRO.DEFAULT_PHASE, #self.current_editor_phase,
                              self.selected_root_object,
                              self.selected_component,
                              self.selected_application,
-                             GRO.STATE_OBJECT_COLOURED
+                             GRO.STATE_OBJECT_COLOURED      # ditto
                              )
                              # self.selected_object_state)
 

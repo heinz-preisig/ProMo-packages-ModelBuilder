@@ -157,7 +157,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.connection_networks.update(ontology.interconnection_network_dictionary)  # intRA
     self.connection_networks.update(ontology.intraconnection_network_dictionary)  # intER
 
-    self.NETWORK, self.TOKENS, self.graphics_DATA = getGraphData(self.networks, self.connection_networks,
+    self.NETWORK, self.TOKENS, self.graphics_DATA, self.state_colours = getGraphData(self.networks, self.connection_networks,
                                                                  ontology.node_type_list,
                                                                  ontology.arc_type_list, self.tokens,
                                                                  FILES["graph_resource_file_spec"] % ontology_name)

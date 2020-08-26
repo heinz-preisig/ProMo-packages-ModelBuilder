@@ -337,7 +337,7 @@ class Commander(QtCore.QObject):
     if name == CR.DEFAULT:
       name = str(node.ID)
     for i in list(node.getItemList().keys()):
-      if "name" in i:
+      if "name" == i:
         node.modifyComponentAppearance(i, ("setText", name))
         nodeID = node.ID
         try:
