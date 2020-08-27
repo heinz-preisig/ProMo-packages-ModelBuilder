@@ -174,6 +174,35 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.PENS, self.BRUSHES = self.graphics_DATA.makeBrushesAndPens()
     NETWORK_BRUSHES = self.NETWORK.makeBrushes()
     self.BRUSHES.update(NETWORK_BRUSHES)
+    self.ui.groupNamed_NetworkColour.setAutoFillBackground(True)
+
+
+    self.colourDialog = QtWidgets.QColorDialog()
+
+    for i in range(0, 16):  # reset all custom colours first to white
+      colour = QtGui.QColor(255, 255, 255)  # .rgba()
+      self.colourDialog.setCustomColor(i, colour)
+
+    count = 0
+    tokens = sorted(self.TOKENS.keys())
+    for token in tokens:
+      print(token, ' : ', count)
+      r, g, b, a = self.TOKENS[token]["colour"]
+      colour = QtGui.QColor(r, g, b, a)  # .rgba()
+      self.colourDialog.setCustomColor(count, colour)
+      count += 2  # makes it the first row
+    colour_select = QtGui.QColor(255, 255, 0)  # .rgba()
+    self.colourDialog.setCustomColor(1, colour_select)
+    colour_open = QtGui.QColor(0, 255, 255)  # .rgba()
+    self.colourDialog.setCustomColor(3, colour_open)
+    colour_uni_directional = QtGui.QColor(85, 85, 85)  # .rgba()
+    self.colourDialog.setCustomColor(5, colour_uni_directional)
+    colour_bi_directional = QtGui.QColor(170, 170, 170)  # .rgba()
+    self.colourDialog.setCustomColor(7, colour_bi_directional)
+    colour_distributed = QtGui.QColor(225, 225, 225)  # .rgba()
+    self.colourDialog.setCustomColor(9, colour_distributed)
+
+
 
     # intialising
 
@@ -192,6 +221,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.selected_set_coversions = set()
     self.selected_set_constraints = set()
     self.state_inject_or_constrain_or_convert = None
+    self.current_named_network = None
 
     self.editor_phase = EDITOR_PHASES[0]
     self.cursors = {}
@@ -203,18 +233,20 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander = Commander(self)  # attach commander
 
     if new_model:
-      self.selected_named_network = {nw: self.commander.model_container["named_networks"][nw][0] for nw in
-                                     self.networks}
-      for cnw in self.connection_networks:
-        self.selected_named_network[cnw] = cnw
+      # self.named_network_dictionary = {nw: self.commander.model_container["named_networks"][nw][0] for nw in
+      #                                  self.networks}
+      self.named_network_dictionary = self.commander.model_container["named_networks"]
+
+      # for nw in self.networks:
+      #   self.named_network_dictionary[nw] = {nw : self.NETWORK[nw]["colour"]}
 
     self.radio_selectors = {}
 
     if not new_model:
       self.insertModelFromFile(self.model_name)
-      self.selected_named_network = {}
-      for nw in self.commander.model_container["named_networks"]:
-        self.selected_named_network[nw] = self.commander.model_container["named_networks"][nw][0]
+      # self.named_network_dictionary = {}
+      # for nw in self.commander.model_container["named_networks"]:
+      #   self.named_network_dictionary[nw] = self.commander.model_container["named_networks"][nw][0]
 
     self.__setupInterface()
     item = self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
@@ -445,6 +477,40 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     radio_selector.addListOfChoices(group_name, list_of_choices, index, autoexclusive=autoexclusive)
     return radio_selector
 
+  def __selectColour(self, where):
+
+    if not self.current_named_network:
+      self.current_named_network = self.current_network
+    colour_ = self.named_network_dictionary[self.current_network][self.current_named_network]["colour"]
+    colour = self.__colourDialog(colour_)
+    self.__changeData("colour", colour)
+    self.__showColour(where, colour)
+    return
+
+  def __showColour(self, box, colour):
+    print("colour :", colour)
+    r, g, b, a = colour
+    colour = QtGui.QColor(r, g, b, a)
+    palette = box.palette()
+    palette.setColor(QtGui.QPalette.Window, colour)
+    box.setPalette(palette)
+    box.update()
+
+  def __colourDialog(self, colour):
+    print("debugging -- ask for colour ", colour)
+    r, g, b, a = colour
+    colour = QtGui.QColor(r, g, b, a)
+    # colourDialog = QtWidgets.QColorDialog(self)
+    c = self.colourDialog.getColor(colour).getRgb()
+    # del colourDialog
+
+
+    # c = QtWidgets.QColorDialog(self).getColor(colour, parent=None)
+    # col = c.getRgb()
+    return c  # c_.getRgb(), v
+
+  def __changeData(self, what, value):
+    print("debugging -- change :", what, value)
   # action handling
   # -------------------------------------------------------------
 
@@ -456,7 +522,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     # print("setting nework from commander")
     self.current_network = nw
-    self.selected_named_network[nw] = named_network
+    # self.named_network_dictionary[nw] = named_network
     index = self.networks.index(nw)
     self.radio_selectors["networks"].check("networks", index)
     index = self.commander.model_container["named_networks"][nw].index(named_network)
@@ -480,17 +546,21 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
       self.__trimLayout(1, self.ui.layoutNetworks)
       named_networks = self.commander.model_container["named_networks"][self.current_network]
+      if not self.current_named_network:
+        self.current_named_network= self.current_network
+      _dummy = len(self.named_network_dictionary[self.current_network].keys())-1
       self.radio_selectors["named_networks"] = self.__makeAndAddSelector("named_networks",
                                                                          named_networks,
                                                                          self.radioReceiverNamedNetworks,
-                                                                         self.selected_named_network[
-                                                                           self.current_network],
+                                                                         _dummy,
                                                                          self.ui.layoutNetworks)
       self.commander.redrawCurrentScene()
 
   def radioReceiverNamedNetworks(self, token_class, token, token_string, toggle):
     if toggle:
-      self.selected_named_network[self.current_network] = token_string
+      # self.named_network_dictionary[self.current_network][token_string} = []
+      print("debugging -- token string:", token_string)
+      self.old_named_network_name = token_string
       self.__makeInteractionToolPage()
       # self.__makeInteractionToolPage()
 
@@ -625,6 +695,11 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     #    self.selected_set_typed_tokens.remove(token_string)
     pass
 
+  def on_toolNamed_NetworkColour_pressed(self):
+    print("debugging -- tool clicked")
+    where = self.ui.groupNamed_NetworkColour
+    return self.__selectColour(where)
+
   def showSchnipselPopWindow(self):
     """
     ask for and define schnipsel model name
@@ -734,7 +809,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def on_pushAddNamedNetwork_pressed(self):
 
     named_networks = self.commander.model_container["named_networks"][self.current_network]
-    current_name = self.selected_named_network[self.current_network]
+    current_name = self.named_network_dictionary[self.current_network]
     ui = UI_String("edit named network", "give new name", limiting_list=named_networks)
     ui.exec_()
 
@@ -746,16 +821,19 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def on_pushEditNamedNetwork_pressed(self):
 
     named_networks = self.commander.model_container["named_networks"][self.current_network]
-    old_name = self.selected_named_network[self.current_network]
+    old_name = self.old_named_network_name
     ui = UI_String("edit named network", old_name, limiting_list=named_networks)
     ui.exec_()
 
     new_name = ui.getText()
     if new_name:
-      index = named_networks.index(old_name)
-      named_networks[index] = new_name
+      # index = named_networks[self.current_network].index(old_name)
+      # named_networks[index] = new_name
       self.commander.model_container.renameNamedNetwork(self.current_network, old_name, new_name)
-      self.selected_named_network[self.current_network] = new_name
+      value = self.named_network_dictionary[self.current_network][old_name]
+      self.named_network_dictionary[self.current_network][new_name] = value
+      del self.named_network_dictionary[self.current_network][old_name]
+      self.current_named_network=new_name
       self.radioReceiverNetworks(None, None, self.current_network, True)
 
   def on_pushDeleteNamedNetwork_pressed(self):

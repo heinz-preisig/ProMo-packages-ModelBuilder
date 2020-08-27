@@ -753,6 +753,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def __selectColour(self, where, what=""):
     # print("change colour for :", what)
+    # without the toggle toolchoose the question for a colour is asked twice..... why ?
     if not self.toolchoose:
       self.toolchoose = True
       return

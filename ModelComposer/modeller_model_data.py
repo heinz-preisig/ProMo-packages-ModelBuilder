@@ -20,7 +20,7 @@ import Common.common_resources as CR
 from Common.common_resources import walkBreathFirstFnc
 from Common.common_resources import walkDepthFirstFnc
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import STRUCTURES_Graph_Item
+from Common.graphics_objects import STRUCTURES_Graph_Item, NetworkData
 from Common.treeid import Tree
 
 ROOTID = 0
@@ -127,7 +127,10 @@ class ModelContainer(dict):
     self["named_networks"] = {}
     # NOTE: adding named networks implemented to update older versions
     for nw in networks:
-      self["named_networks"][nw] = [nw]  # define a default named network
+      self["named_networks"][nw] = {}
+      self["named_networks"] [nw][nw] = NetworkData()  # {nw: self.NETWORK[nw]["colour"]}
+    # for nw in networks:
+    #   self["named_networks"][nw] = [nw]  # define a default named network
 
     # global nodes
     #               the_hash  : nodeID
@@ -356,7 +359,7 @@ class ModelContainer(dict):
         del self["nodes"][nodeID]["tokens"][token]
       except:
         print(">>> warning >>> issues with fixing tokens in node %s with tokens %s trying to delete token %s" % (
-        nodeID, tokens, token))
+                nodeID, tokens, token))
 
   def addArc(self, fromNodeID, toNodeID, network, named_network, mechanism, token, nature):
 
@@ -453,7 +456,8 @@ class ModelContainer(dict):
             subarcsIDs[node][0] = nl
             s = True
           kl += 1
-        if s: break
+        if s:
+          break
       for nr in N:
         t = False
         kr = 0
@@ -463,7 +467,8 @@ class ModelContainer(dict):
             # print(".......",node,  subarcsIDs[node])
             t = True
           kr += 1
-        if t: break
+        if t:
+          break
 
     # this one is very tricky indeed
     if fromNodeID == common_ancestorID:
@@ -766,7 +771,8 @@ class ModelContainer(dict):
   def addFromFile(self, f, parentID, position, graphics_data, editor_phase):
 
     data = self.getAndFixData(f)  # CR.getData(f)
-    if not data: return
+    if not data:
+      return
 
     # offset first
     node_offset = self["ID_tree"].currentID + 1
@@ -1053,7 +1059,8 @@ class ModelContainer(dict):
         m = _m[0]
         if m not in D:
           D, m = self.computeTokenDomain(m, I, D, V)
-          if m: D.append(m)
+          if m:
+            D.append(m)
 
     D = list(set(D))
     return D, m
