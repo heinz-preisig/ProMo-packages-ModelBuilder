@@ -20,7 +20,8 @@ import Common.common_resources as CR
 from Common.common_resources import walkBreathFirstFnc
 from Common.common_resources import walkDepthFirstFnc
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import STRUCTURES_Graph_Item, NetworkData
+from Common.graphics_objects import NamedNetworkDataObjects
+from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
 
 ROOTID = 0
@@ -124,13 +125,7 @@ class ModelContainer(dict):
 
     self["ID_tree"] = Tree(ROOTID)  # StrTree(str(ROOTID))    #HAP: ID string to integer
 
-    self["named_networks"] = {}
-    # NOTE: adding named networks implemented to update older versions
-    for nw in networks:
-      self["named_networks"][nw] = {}
-      self["named_networks"] [nw][nw] = NetworkData()  # {nw: self.NETWORK[nw]["colour"]}
-    # for nw in networks:
-    #   self["named_networks"][nw] = [nw]  # define a default named network
+    self["named_networks"] = NamedNetworkDataObjects(networks)
 
     # global nodes
     #               the_hash  : nodeID

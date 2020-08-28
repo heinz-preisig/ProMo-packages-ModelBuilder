@@ -453,8 +453,9 @@ class Commander(QtCore.QObject):
 
     # if not network:
     network = self.main.current_network  # default
+    named_network = self.main.current_named_network
 
-    named_network = self.main.named_network_dictionary[network]
+    # named_network = self.main.named_network_dictionary[network]
 
     # # RULE: node type for boundary is constraint to event dynamic
     # if network in self.intraconnections_dictionary:

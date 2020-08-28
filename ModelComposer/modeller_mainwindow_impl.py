@@ -233,20 +233,12 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander = Commander(self)  # attach commander
 
     if new_model:
-      # self.named_network_dictionary = {nw: self.commander.model_container["named_networks"][nw][0] for nw in
-      #                                  self.networks}
       self.named_network_dictionary = self.commander.model_container["named_networks"]
-
-      # for nw in self.networks:
-      #   self.named_network_dictionary[nw] = {nw : self.NETWORK[nw]["colour"]}
 
     self.radio_selectors = {}
 
     if not new_model:
       self.insertModelFromFile(self.model_name)
-      # self.named_network_dictionary = {}
-      # for nw in self.commander.model_container["named_networks"]:
-      #   self.named_network_dictionary[nw] = self.commander.model_container["named_networks"][nw][0]
 
     self.__setupInterface()
     item = self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
@@ -481,14 +473,14 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
     if not self.current_named_network:
       self.current_named_network = self.current_network
-    colour_ = self.named_network_dictionary[self.current_network][self.current_named_network]["colour"]
+    colour_ = self.named_network_dictionary.getColour(self.current_network, self.current_named_network)#[self.current_network][self.current_named_network]["colour"]
     colour = self.__colourDialog(colour_)
-    self.__changeData("colour", colour)
+    self.named_network_dictionary.setColour(self.current_network, self.current_named_network, colour)
     self.__showColour(where, colour)
     return
 
   def __showColour(self, box, colour):
-    print("colour :", colour)
+    # print("colour :", colour)
     r, g, b, a = colour
     colour = QtGui.QColor(r, g, b, a)
     palette = box.palette()
@@ -509,23 +501,24 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # col = c.getRgb()
     return c  # c_.getRgb(), v
 
-  def __changeData(self, what, value):
-    print("debugging -- change :", what, value)
-  # action handling
+  # def __changeData(self, what, value):
+  #   print("debugging -- change :", what, value)
+  # # action handling
   # -------------------------------------------------------------
 
   #  //////////////////////////////////////////////////////////////////////////
 
-  def setNetwork(self, nw, named_network):
+  def setNetwork(self, network, named_network):
     """
     network changer all interface components that are parametrised with the network, are to be updated
     """
     # print("setting nework from commander")
-    self.current_network = nw
+    self.current_network = network
     # self.named_network_dictionary[nw] = named_network
-    index = self.networks.index(nw)
+    index = self.networks.index(network)
     self.radio_selectors["networks"].check("networks", index)
-    index = self.commander.model_container["named_networks"][nw].index(named_network)
+    index = self.named_network_dictionary.indexForNamedNetwork(self.current_network, named_network)
+    # index = self.commander.model_container["named_networks"][nw].index(named_network)
     self.radio_selectors["named_networks"].check("named_networks", index)
 
   @QtCore.pyqtSlot(str)
@@ -545,7 +538,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       # self.__makeInteractionToolPage()
 
       self.__trimLayout(1, self.ui.layoutNetworks)
-      named_networks = self.commander.model_container["named_networks"][self.current_network]
+      named_networks = self.named_network_dictionary.listOfNamedNetwords(self.current_network) #commander.model_container["named_networks"][self.current_network]
       if not self.current_named_network:
         self.current_named_network= self.current_network
       _dummy = len(self.named_network_dictionary[self.current_network].keys())-1
@@ -554,6 +547,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                          self.radioReceiverNamedNetworks,
                                                                          _dummy,
                                                                          self.ui.layoutNetworks)
+      self.current_named_network = named_networks[_dummy]
       self.commander.redrawCurrentScene()
 
   def radioReceiverNamedNetworks(self, token_class, token, token_string, toggle):
@@ -808,31 +802,25 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
   def on_pushAddNamedNetwork_pressed(self):
 
-    named_networks = self.commander.model_container["named_networks"][self.current_network]
-    current_name = self.named_network_dictionary[self.current_network]
+    named_networks = self.named_network_dictionary.listOfNamedNetwords(self.current_network)
     ui = UI_String("edit named network", "give new name", limiting_list=named_networks)
     ui.exec_()
 
     new_name = ui.getText()
     if new_name:
-      named_networks.append(new_name)
+      self.named_network_dictionary.add(self.current_network, new_name)
       self.radioReceiverNetworks(None, None, self.current_network, True)
 
   def on_pushEditNamedNetwork_pressed(self):
 
-    named_networks = self.commander.model_container["named_networks"][self.current_network]
+    named_networks = self.named_network_dictionary.listOfNamedNetwords(self.current_network)
     old_name = self.old_named_network_name
     ui = UI_String("edit named network", old_name, limiting_list=named_networks)
     ui.exec_()
 
     new_name = ui.getText()
     if new_name:
-      # index = named_networks[self.current_network].index(old_name)
-      # named_networks[index] = new_name
-      self.commander.model_container.renameNamedNetwork(self.current_network, old_name, new_name)
-      value = self.named_network_dictionary[self.current_network][old_name]
-      self.named_network_dictionary[self.current_network][new_name] = value
-      del self.named_network_dictionary[self.current_network][old_name]
+      self.named_network_dictionary.rename(self.current_network, old_name, new_name)
       self.current_named_network=new_name
       self.radioReceiverNetworks(None, None, self.current_network, True)
 
