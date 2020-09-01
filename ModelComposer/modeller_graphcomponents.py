@@ -101,9 +101,12 @@ class R_Item(QtWidgets.QGraphicsItem):
         self.commander.main.graphics_DATA.getActiveObjectRootDecorationState(
                 phase, self.graphics_root_object,
                 decoration, application, state)  # filter
-
+      pass
       if decoration == "network":
         obj_str = self.commander.model_container["nodes"][self.ID]["network"]
+
+      elif decoration == "named_network":
+          obj_str = self.commander.model_container["nodes"][self.ID]["named_network"]
       else:
         obj_str = str([phase, r, d, a, s])
       # print("R_Item obj string", obj_str)
@@ -702,6 +705,8 @@ class ShapePannel(QtWidgets.QGraphicsRectItem, G_Item):
 class ShapeEllipse(QtWidgets.QGraphicsEllipseItem, G_Item):
   def __init__(self, x, y, decoration, brush, shape_data, parent):
     G_Item.__init__(self, parent, decoration)
+    # if decoration == "named_network":
+    #   print("debugging -- got a named network")
 
     self.shape_data = shape_data
     self.brush = brush

@@ -370,28 +370,12 @@
        <rect>
         <x>0</x>
         <y>20</y>
-        <width>92</width>
-        <height>111</height>
+        <width>178</width>
+        <height>104</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QPushButton" name="pushSave">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>save</string>
-         </property>
-        </widget>
-       </item>
-       <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
         <widget class="QPushButton" name="pushSaveAs">
          <property name="enabled">
           <bool>true</bool>
@@ -407,7 +391,23 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushSave">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>save</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
         <widget class="QPushButton" name="pushExit">
          <property name="minimumSize">
           <size>
@@ -417,6 +417,19 @@
          </property>
          <property name="text">
           <string>exit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushTakeScreenShot">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>take picture</string>
          </property>
         </widget>
        </item>

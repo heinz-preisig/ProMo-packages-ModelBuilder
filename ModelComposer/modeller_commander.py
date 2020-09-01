@@ -1112,6 +1112,8 @@ class Commander(QtCore.QObject):
     f = model_file  # + RI.EXTENSION_GRAPH_DATA
     # print(model_file)
     self.model_container.makeFromFile(f)
+    self.main.named_network_dictionary = self.model_container["named_networks"]
+    self.main.makeNamedNetworkBrushes()
 
     self.__redrawScene(self.current_ID_node_or_arc)
 

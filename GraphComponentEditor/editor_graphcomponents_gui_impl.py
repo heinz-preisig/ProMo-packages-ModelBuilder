@@ -403,7 +403,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__changeData("layer", "text")
 
   def on_comboLineStyle_activated(self, index):
-    style = self.ui.comboApplication.currentText()
+    style = self.ui.comboLineStyle.currentText()
     self.__changeData('style', str(style))
 
   def on_comboLineWidth_valueChanged(self, w):

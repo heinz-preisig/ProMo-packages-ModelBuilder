@@ -123,6 +123,8 @@ class ModelGraphicsData(dict):
 class ModelContainer(dict):
   def __init__(self, networks):
 
+    self.networks = networks
+
     self["ID_tree"] = Tree(ROOTID)  # StrTree(str(ROOTID))    #HAP: ID string to integer
 
     self["named_networks"] = NamedNetworkDataObjects(networks)
@@ -752,15 +754,18 @@ class ModelContainer(dict):
     return new_data
 
   def makeFromFile(self, f):
-    data = self.getAndFixData(f)  # CR.getData(f)
+    data = self.getAndFixData(f)
     tree = Tree(0)
     tree.fromJson(data["ID_tree"])
-    # self["ID_tree"].imposeIDTree(tree)
     tree.imposeIDTree(tree)
     self["ID_tree"] = tree
     del data["ID_tree"]
     for the_hash in data:
-      self[the_hash] = data[the_hash]
+      if the_hash == "named_networks":
+        self["named_networks"] = NamedNetworkDataObjects(self.networks)
+        self["named_networks"].updateWithData(data["named_networks"])
+      else:
+        self[the_hash] = data[the_hash]
     print(" -------- ")
 
   def addFromFile(self, f, parentID, position, graphics_data, editor_phase):
