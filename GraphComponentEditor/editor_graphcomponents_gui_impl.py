@@ -289,7 +289,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("token_selected")
 
 
-  def on_listStates_itemClicked(self, item):
+  def on_listStates_itemPressed(self, item):
     self.current_state = str(item.text())
     self.current_state_colour = self.STATES_colours[self.current_state]
 
@@ -298,28 +298,28 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__showColour(self.ui.groupBoxStateColour)
     self.__group_controls("state_selected")
 
-  def on_toolNetworkColour_clicked(self):
+  def on_toolNetworkColour_pressed(self):
     where = self.ui.groupBoxNetworkColour
     return self.__selectColour(where, what="network")
 
-  def on_toolTokenColour_clicked(self):
+  def on_toolTokenColour_pressed(self):
     where = self.ui.groupBoxTokenColour
     return self.__selectColour(where, what="token")
 
-  def on_toolStateColour_clicked(self):
+  def on_toolStateColour_pressed(self):
     where = self.ui.groupBoxStateColour
     return self.__selectColour(where, what="state")
 
-  def on_toolEllipseColour_clicked(self):
+  def on_toolEllipseColour_pressed(self):
     where = self.ui.groupBoxEllipseColour
     return self.__selectColour(where)
 
-  def on_toolLineColour_clicked(self):
+  def on_toolLineColour_pressed(self):
     where = self.ui.groupBoxLineColour
     return self.__selectColour(where)
 
 
-  def on_toolPanelColour_clicked(self):
+  def on_toolPanelColour_pressed(self):
     where = self.ui.groupBoxPanelColour
     return self.__selectColour(where)
 
@@ -754,11 +754,11 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def __selectColour(self, where, what=""):
     # print("change colour for :", what)
     # without the toggle toolchoose the question for a colour is asked twice..... why ?
-    if not self.toolchoose:
-      self.toolchoose = True
-      return
-    else:
-      self.toolchoose = False
+    # if not self.toolchoose:
+    #   self.toolchoose = True
+    #   return
+    # else:
+    #   self.toolchoose = False
       colour = self.__colourDialog()
       if what == "network":
         self.NETWORK[self.current_network]["colour"] = colour
@@ -826,6 +826,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       phases  = GRO.PHASES
 
     for phase in phases:
+      print("debugging -- going through the phases ", phase)
+      if phase == "equation_topology":
+        print("debugging -- now it is equation topology")
       if self.selected_root_object in GRO.OBJECTS_with_state:
         if self.selected_component in GRO.DECORATIONS_with_state:
           if self.selected_root_object in GRO.NODES:
