@@ -766,6 +766,9 @@ class ShapeLine(QtWidgets.QGraphicsLineItem, G_Item):
     QtWidgets.QGraphicsLineItem.__init__(self)
     G_Item.__init__(self, parent, decoration)
 
+    # if self.commander.editor_phase == "token_topology":
+    #   print("debugging -- define line")
+
     self.pen = pen
 
     z = LAYERS[shape_data["layer"]]

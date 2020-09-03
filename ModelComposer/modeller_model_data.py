@@ -968,9 +968,9 @@ class ModelContainer(dict):
   #   to_nodes = []
 
   def injectListInToNodes(self, node_group, token, list, where):
-    print('list: ', list, "to where ", where)
+    # print('list: ', list, "to where ", where)
     for node in node_group:
-      print('node directory for node %s' % node, self["nodes"][node].keys())
+      # print('node directory for node %s' % node, self["nodes"][node].keys())
       # print("inject tokens ", node_group, token, list, self["nodes"][node])
       self["nodes"][node][where][token] = list
 
@@ -1042,7 +1042,7 @@ class ModelContainer(dict):
         if sink_node not in A:
           A[sink_node] = []
         A[sink_node].append(source_node)
-    print("adjacency matrix :", A)
+    # print("adjacency matrix :", A)
     return A
 
   def computeTokenDomain(self, node, I, D, V):
@@ -1087,12 +1087,12 @@ class ModelContainer(dict):
     self["domains"] = D
     return D
 
-  def isInDomain(self, node, token):
-
-    for no in self["domains"][token]:
-      if node in self["domains"][token][no]:
+  def isInDomain(self, node, token_name):
+    # print("debugging -- landing point")
+    for no in self["domains"][token_name]:
+      if node in self["domains"][token_name][no]:
         # Note: node must only be in one domain for a given token !
-        return self["domains"][token][no]
+        return self["domains"][token_name][no]
 
     return None
 
@@ -1133,17 +1133,19 @@ class ModelContainer(dict):
         for arc in arcs:
           token = self["arcs"][arc]["token"]
           source = self["arcs"][arc]["source"]
-          sink = self["arcs"][arc]["sink"]
-          if self["nodes"][source]["class"] == NAMES["node"]:
-            node_ = source
-          else:
-            if self["nodes"][sink]["type"] == NAMES["node"]:
-              node_ = sink
-            else:
-              raise DataError(">>>> cannot find a simple node")
-              sys.exit()
-          typed_tokens = copy(self["nodes"][node_]["tokens"][token])  # !!! copy
-          self["arcs"][arc]["typed_tokens"] = typed_tokens
+          # sink = self["arcs"][arc]["sink"]
+          # if self["nodes"][source]["class"] == NAMES["node"]:
+          #   node_ = source
+          # else:
+          #   if self["nodes"][sink]["type"] == NAMES["node"]:
+          #     node_ = sink
+          #   else:
+          #     raise DataError(">>>> cannot find a simple node")
+          #     sys.exit()
+          # typed_tokens = copy(self["nodes"][node_]["tokens"][token])  # !!! copy
+          # self["arcs"][arc]["typed_tokens"] = typed_tokens
+          # self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][token])
+          self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][token])
 
     # for arc in arcs_in_domain:              # Happens after reaction injections
     #   self["arcs"][arc]["typed_tokens"] = []                      # First clean

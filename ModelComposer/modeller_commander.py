@@ -78,6 +78,7 @@ class Commander(QtCore.QObject):
     self.interconnections_dictionary = self.main.ontology.interconnection_network_dictionary
 
     # graphics view
+    self.scene = None
     self.view = None
 
     #  interface behaviour
@@ -1390,11 +1391,15 @@ class Commander(QtCore.QObject):
       node.setToolTip(s)
 
     self.scene.addItem(node)
-    name = self.model_container["nodes"][ID][NAMES["name"]]
-    self.__setName(node, str(name))  # HAP: str --> int
+    name = str(self.model_container["nodes"][ID][NAMES["name"]])  # Note: in a new model this is an integer 0
+    if name == "0":
+      name = self.main.model_name
+    self.__setName(node, name)
     return node
 
   def __drawArc(self, arcID, fromNode, toNode):
+    # if self.editor_phase == "token_topology":
+    #   print("debugging -- draw arc")
     arc = Arc_Edge(arcID,
                    fromNode, toNode,
                    self.scene,
@@ -1420,6 +1425,8 @@ class Commander(QtCore.QObject):
     set up a new view for node nodeID
     @param nodeID: node ID
     """
+
+    del self.view
 
     v = self.main.ui.graphicsView
     scene = self.scene
@@ -1539,6 +1546,8 @@ class Commander(QtCore.QObject):
     @param nodeID: node ID
     """
 
+    del self.scene
+
     scene_width = self.main.ui.graphicsView.width()
     scene_height = self.main.ui.graphicsView.height()
 
@@ -1627,6 +1636,13 @@ class Commander(QtCore.QObject):
     self.knot_group = set()
     # self.__checkNodeGroup()
 
+  def resetNodeStates(self):# RULE: the first in the list is the default usually "enabled"  # default is enabled
+    viewed_node = self.currently_viewed_node
+    children = self.model_container["ID_tree"].getChildren(viewed_node)
+    for child in children:  # set the default (initialisation, import etc.)
+      self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0]
+    return
+
   def applyControlAccessRules(self):
     phase = self.editor_phase
     state = self.editor_state
@@ -1653,6 +1669,7 @@ class Commander(QtCore.QObject):
         self.__ruleNodeAccessTypedTokensConstrain()
       else:
         self.__ruleNodeAccessUndetermined()
+
 
   def redrawCurrentScene(self):
     # print("redraw scene initialising", self.initialising)
@@ -1769,9 +1786,11 @@ class Commander(QtCore.QObject):
     viewed_node = self.currently_viewed_node
     children = self.model_container["ID_tree"].getChildren(viewed_node)
 
-    for child in children:  # set the default (initialisation, import etc.)
+    children = self.model_container["ID_tree"].getChildren(viewed_node)
+
+    for child in children:  # set the default when not defined
       if child not in self.state_nodes:
-        self.state_nodes[child] = "enabled"  # default is enabled
+        self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0] #RULE: the first in the list is the default usually "enabled"  # default is enabled
 
     self.clearBlockedNodes()
 
