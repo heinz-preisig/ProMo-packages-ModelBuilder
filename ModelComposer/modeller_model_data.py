@@ -706,20 +706,34 @@ class ModelContainer(dict):
 
   def write(self, f):
 
+    print("debugging -- file name:",f)
+
     # TODO: DONE mapping could be done on reading instead of writing. Solves problem of intermediate writing -->
     #  makeFromFile
     node_map = self.mapMe()
 
     a = deepcopy(self["ID_tree"])
-    self["ID_tree"] = self["ID_tree"].toJson()  # self["ID_tree"].ID_tree.toJson()   #HAP: str --> int
-    # del self["ID_tree"]
-
+    self["ID_tree"] = self["ID_tree"].toJson()
     CR.putData(self, f, indent=2)
-
-    # del self["ID_tree"]
-    self["ID_tree"] = a
+    self["ID_tree"] = a  #reset it
 
     return node_map
+
+  def makeAndWriteFlatTopology(self, f):
+
+    # make and write flat file
+    leave_nodes = self["ID_tree"].getAllLeaveNodes()
+    flat_data = {}
+    flat_data["nodes"] = {}
+    for node in leave_nodes:
+      flat_data["nodes"][node] = self["nodes"][node]
+    for h in ["arcs", "named_networks"]:
+      flat_data[h] = self[h]
+
+    CR.putData(flat_data, f)
+
+
+
 
   def getAndFixData(self, f):
     """
@@ -872,9 +886,9 @@ class ModelContainer(dict):
     parentID = self["ID_tree"].getImmediateParent(nodeID)
 
     # tree move children to parent
-    children = self["ID_tree"].getChildren(nodeID)
+    children = sorted(self["ID_tree"].getChildren(nodeID))
     for child in children:
-      # print("move: ", child)
+      print("debugging -- move: ", child)
       self["ID_tree"].moveID(child, parentID)
       self["scenes"][parentID]["nodes"][child] = self["scenes"][nodeID]["nodes"][child]
 

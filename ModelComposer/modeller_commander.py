@@ -119,10 +119,7 @@ class Commander(QtCore.QObject):
     self.currently_viewed_node = rootID
 
     self.string_dialog = UI_String("new node name", "node name")
-
     self.string_dialog.accepted.connect(self.__changeName)
-
-    pass
 
   def __loadAutomata(self):
     automata = CR.getData(self.main.automata_working_file_spec)
@@ -334,18 +331,6 @@ class Commander(QtCore.QObject):
 
   # internal methods and model interface ---------------------------------------
 
-  def __setName(self, node, name):
-    if name == CR.DEFAULT:
-      name = str(node.ID)
-    for i in list(node.getItemList().keys()):
-      if "name" == i:
-        node.modifyComponentAppearance(i, ("setText", name))
-        nodeID = node.ID
-        try:
-          self.dialog.changeNodeName(nodeID, name)  # note: interface is not always up-to-date
-        except:
-          pass
-
   # internal methods -----------------------------------------------------------
 
   def __c00_executeCommand(self, pars):
@@ -421,7 +406,8 @@ class Commander(QtCore.QObject):
       action = "-"
       res = {"failed": False}
 
-    if res["failed"]: return
+    if res["failed"]:
+      return
 
     if action in ["new model", "map&save model", "save model", "make a copy"]:
       self.modified = False
@@ -1149,23 +1135,6 @@ class Commander(QtCore.QObject):
 
     return {"failed": False}
 
-  def __changeName(self, name):  # connected to c16_editName
-    nodeID = self.current_ID_node_or_arc
-    self.model_container["nodes"][nodeID]["name"] = name
-
-    self.__redrawScene(self.currently_viewed_node)
-
-  def __resetNodeStatesAndSelectedArc(self):
-    self.arcSourceID = None
-    for n in self.state_nodes:
-      self.state_nodes[n] = STATES[self.editor_phase]["nodes"][0]
-    for a in self.state_arcs:
-      if self.state_arcs[a] == "selected":
-        self.state_arcs[a] = STATES[self.editor_phase]["arcs"][0]
-    self.resetGroups()
-    self.clearSelectedNodes()
-    self.selected_intraface_node = None
-
   def __c21_setCurrentLibFile(self, schnipsel_file):
     """
     Command: set current schnipsel_file name
@@ -1212,28 +1181,23 @@ class Commander(QtCore.QObject):
             "saved file": f,
             "failed": False
     """
-    # print("__c23_saveData", list(R.DATA.keys()))
-    # print('HALLLLAIS')
-    # print(model)
-    # print(f)
-    # f_ = f + RI.EXTENSION_GRAPH_DATA
-    # f_model = os.path.join(f, RI.FILE_NAMES["model_file"])
-    # print(f_model)
-    # print(dir(self))
-    # print('1: ', self.library_model_name)
-    # print('2: ', self.model_container)
-    # print('3: ', dir(model['ID_tree']))
-    # if not os.path.exists(f):
     #
-    #   os.mkdir(f)
-    # self.model_container.write(f)
+    # print("debugging -- library model name: ", self.library_model_name)
+    # print("debugging -- model container   : ", self.model_container)
+    ff= os.path.basename(f)
+    name, ext = os.path.splitext(ff)
+    dir = os.path.dirname(f)
+    f_flat = os.path.join(dir, "%s_flat%s"%(name, ext))
+
     node_map = self.model_container.write(f)
+    self.model_container.makeAndWriteFlatTopology(f_flat)
+
     mapped_currently_viewed_node = node_map[int(self.currently_viewed_node)]
     self.currently_viewed_node = (mapped_currently_viewed_node)  # str(mapped_currently_viewed_node) #HAP: str --> int
     self.__redrawScene(self.currently_viewed_node)
-    print("__c23_saveData",
-          "--------- currently node viewed : %s ---> %s" % (self.currently_viewed_node, mapped_currently_viewed_node))
-    print("__c23_saveData", "--------- saved graph file:", f)
+    # print("debugging -- __c23_saveData",
+    #       "--------- currently node viewed : %s ---> %s" % (self.currently_viewed_node, mapped_currently_viewed_node))
+    # print("debugging -- __c23_saveData", "--------- saved graph file:", f)
     return {
             "saved file": f,
             "failed"    : False
@@ -1277,12 +1241,6 @@ class Commander(QtCore.QObject):
             "library file": self.library_model_name
             }
 
-  def setDefaultEditorState(self):
-    self.editor_state = GRAPH_EDITOR_STATES[self.editor_phase][0]  # RULE: first state in the list is default
-    for event in self.key_automata[self.editor_phase]:
-      if self.editor_state == self.key_automata[self.editor_phase][event]["state"]:
-        self.main.setKeyAutomatonState(event)
-
   def __c27_selectIntrafaceNode(self, nodeID):
     """
     selects and unselects
@@ -1295,11 +1253,6 @@ class Commander(QtCore.QObject):
     self.__redrawScene(ancestors[0])
 
     return {"failed": False}
-
-  def __makeViewAndScene(self, nodeID):
-    self.__setupScene(nodeID)
-    self.__setupView(nodeID)
-    self.__putEnvironment(nodeID)
 
   def __c28_injectTypedTokensOrConversions(self, nodeID):
     self.node_group.add(nodeID)
@@ -1316,16 +1269,41 @@ class Commander(QtCore.QObject):
     print("__c31_computeTypedTokenDomains -- not yet implemented")
     return {"failed": False}
 
-  def renameNode(self, sceneID, name):
-    self.model_container.renameNode(sceneID, name)
+  def __setName(self, node, name):
+    if name == CR.DEFAULT:
+      name = str(node.ID)
+    for i in list(node.getItemList().keys()):
+      if "name" == i:
+        node.modifyComponentAppearance(i, ("setText", name))
+        nodeID = node.ID
+        try:
+          self.dialog.changeNodeName(nodeID, name)  # note: interface is not always up-to-date
+        except:
+          pass
 
-    # exception: name is changed on current view directly -
-    #   redraw gives problems on startup
-    node = self.__getObjectFromScene("Node", self.scene, sceneID)
-    if node:
-      for i in list(node.getItemList().keys()):
-        if "name" in i:
-          node.modifyComponentAppearance(i, ("setText", name))
+  def __makeViewAndScene(self, nodeID):
+    self.__setupScene(nodeID)
+    self.__setupView(nodeID)
+    self.__putEnvironment(nodeID)
+
+
+
+  def __changeName(self, name):  # connected to c16_editName
+    nodeID = self.current_ID_node_or_arc
+    self.model_container["nodes"][nodeID]["name"] = name
+
+    self.__redrawScene(self.currently_viewed_node)
+
+  def __resetNodeStatesAndSelectedArc(self):
+    self.arcSourceID = None
+    for n in self.state_nodes:
+      self.state_nodes[n] = STATES[self.editor_phase]["nodes"][0]
+    for a in self.state_arcs:
+      if self.state_arcs[a] == "selected":
+        self.state_arcs[a] = STATES[self.editor_phase]["arcs"][0]
+    self.resetGroups()
+    self.clearSelectedNodes()
+    self.selected_intraface_node = None
 
   def __reportEvent(self, state, next_state, action, item_type, event):
     """
@@ -1631,54 +1609,6 @@ class Commander(QtCore.QObject):
     # print("indicator definition:", indicator)
     return indicator
 
-  def resetGroups(self):
-    self.node_group = set()
-    self.knot_group = set()
-    # self.__checkNodeGroup()
-
-  def resetNodeStates(self):# RULE: the first in the list is the default usually "enabled"  # default is enabled
-    viewed_node = self.currently_viewed_node
-    children = self.model_container["ID_tree"].getChildren(viewed_node)
-    for child in children:  # set the default (initialisation, import etc.)
-      self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0]
-    return
-
-  def applyControlAccessRules(self):
-    phase = self.editor_phase
-    state = self.editor_state
-
-    # print("editor state :", state)
-
-    # token_control = self.main.control_tools.index
-    # typed_token_control = self.main.control_typed_tokens.index
-
-    if phase == EDITOR_PHASES[0]:
-      if state == "re-connect_arc":
-        self.__ruleNodeAccessInNetworkOnly()
-      # elif state == "insert":
-      #   return
-      else:
-        self.__ruleNodeAccessTopologyAcrossNetworks()
-    elif phase == EDITOR_PHASES[1]:
-      select = self.main.state_inject_or_constrain_or_convert
-      if select == "inject":
-        self.__ruleNodeAccessTypedTokensInject()
-      elif select == "convert":
-        self.__ruleNodeAccessTypedTokensConvert()
-      elif select == "constrain":
-        self.__ruleNodeAccessTypedTokensConstrain()
-      else:
-        self.__ruleNodeAccessUndetermined()
-
-
-  def redrawCurrentScene(self):
-    # print("redraw scene initialising", self.initialising)
-    if self.main.initialising:
-      return
-    # if "currently_viewed_node" not in dir(self):
-    #   return
-    self.__redrawScene(self.currently_viewed_node)
-
   def __redrawScene(self, nodeID, debug=False):
     """
     redraw a scene
@@ -1790,7 +1720,8 @@ class Commander(QtCore.QObject):
 
     for child in children:  # set the default when not defined
       if child not in self.state_nodes:
-        self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0] #RULE: the first in the list is the default usually "enabled"  # default is enabled
+        self.state_nodes[child] = STATES[self.editor_phase]["nodes"][
+          0]  # RULE: the first in the list is the default usually "enabled"  # default is enabled
 
     self.clearBlockedNodes()
 
@@ -1848,34 +1779,6 @@ class Commander(QtCore.QObject):
           self.state_nodes[child] = "blocked"
         else:
           self.state_nodes[child] = "enabled"  # default is enabled
-
-  def clearBlockedNodes(self):
-    self.__clearNodes("blocked")
-
-  def clearSelectedNodes(self):
-    self.__clearNodes("selected")
-
-  def __clearNodes(self, fromwhat):
-    children = self.model_container["ID_tree"].getChildren(self.currently_viewed_node)
-
-    for node in children:
-      if self.state_nodes[node] == fromwhat:
-        self.state_nodes[node] = "enabled"
-
-  def blockNodesInNetworkInViewedNode(self, network):
-    for node in self.model_container["scenes"]:
-      if network == self.model_container["nodes"]:
-        self.state_nodes[node] = "blocked"
-
-  def setPanelAsCurrentItem(self):
-    self.current_item = None
-    for i in self.scene.items():
-      if (i.graphics_root_object == NAMES["panel"]):
-        if "decoration" in dir(i):
-          if (i.decoration == NAMES["root"]):
-            self.current_item = i
-            # print("----- setting current item to panel")
-    return self.current_item
 
   def __ruleNodeAccessTypedTokensInject(self):
     # print("token control inject rule")
@@ -1959,3 +1862,86 @@ class Commander(QtCore.QObject):
     for node in children:
       self.state_nodes[node] = "blocked"
     pass
+
+  def __clearNodes(self, fromwhat):
+    children = self.model_container["ID_tree"].getChildren(self.currently_viewed_node)
+
+    for node in children:
+      if self.state_nodes[node] == fromwhat:
+        self.state_nodes[node] = STATES[self.main.current_network]["nodes"][0] #"enabled"
+
+
+
+  def resetGroups(self):
+    self.node_group = set()
+    self.knot_group = set()
+    # self.__checkNodeGroup()
+
+  def setDefaultEditorState(self):
+    self.editor_state = GRAPH_EDITOR_STATES[self.editor_phase][0]  # RULE: first state in the list is default
+    for event in self.key_automata[self.editor_phase]:
+      if self.editor_state == self.key_automata[self.editor_phase][event]["state"]:
+        self.main.setKeyAutomatonState(event)
+
+  def resetNodeStates(self):  # RULE: the first in the list is the default usually "enabled"  # default is enabled
+    viewed_node = self.currently_viewed_node
+    children = self.model_container["ID_tree"].getChildren(viewed_node)
+    for child in children:  # set the default (initialisation, import etc.)
+      self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0]
+    return
+
+  def applyControlAccessRules(self):
+    phase = self.editor_phase
+    state = self.editor_state
+
+    # print("editor state :", state)
+
+    # token_control = self.main.control_tools.index
+    # typed_token_control = self.main.control_typed_tokens.index
+
+    if phase == EDITOR_PHASES[0]:
+      if state == "re-connect_arc":
+        self.__ruleNodeAccessInNetworkOnly()
+      # elif state == "insert":
+      #   return
+      else:
+        self.__ruleNodeAccessTopologyAcrossNetworks()
+    elif phase == EDITOR_PHASES[1]:
+      select = self.main.state_inject_or_constrain_or_convert
+      if select == "inject":
+        self.__ruleNodeAccessTypedTokensInject()
+      elif select == "convert":
+        self.__ruleNodeAccessTypedTokensConvert()
+      elif select == "constrain":
+        self.__ruleNodeAccessTypedTokensConstrain()
+      else:
+        self.__ruleNodeAccessUndetermined()
+
+  def redrawCurrentScene(self):
+    # print("redraw scene initialising", self.initialising)
+    if self.main.initialising:
+      return
+    # if "currently_viewed_node" not in dir(self):
+    #   return
+    self.__redrawScene(self.currently_viewed_node)
+
+  def clearBlockedNodes(self):
+    self.__clearNodes("blocked")
+
+  def clearSelectedNodes(self):
+    self.__clearNodes("selected")
+
+  def blockNodesInNetworkInViewedNode(self, network):
+    for node in self.model_container["scenes"]:
+      if network == self.model_container["nodes"]:
+        self.state_nodes[node] = "blocked"
+
+  def setPanelAsCurrentItem(self):
+    self.current_item = None
+    for i in self.scene.items():
+      if (i.graphics_root_object == NAMES["panel"]):
+        if "decoration" in dir(i):
+          if (i.decoration == NAMES["root"]):
+            self.current_item = i
+            # print("----- setting current item to panel")
+    return self.current_item
