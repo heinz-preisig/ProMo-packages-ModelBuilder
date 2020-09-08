@@ -58,8 +58,7 @@ SPACING = 20
 
 EDITOR_PHASES = list(GRAPH_EDITOR_STATES.keys())
 
-DEBUG = {}
-DEBUG["load data"] = False
+DEBUG = {"load data": False}
 
 REDIRECT_ERROR = False
 REDIRECT_STDOUT = False
@@ -80,7 +79,7 @@ class Stream(QtCore.QObject):
     pass
 
 
-class ErrorMessage():
+class ErrorMessage:
   def __init__(self, media, msg):
     media(msg)
 
@@ -228,6 +227,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.selected_set_constraints = set()
     self.state_inject_or_constrain_or_convert = None
     self.current_named_network = None
+    self.old_named_network_name =None
+    self.items_to_convert = None
+    self.items_to_inject = None
 
     self.editor_phase = EDITOR_PHASES[0]
     self.cursors = {}
@@ -250,7 +252,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
 
     self.__setupInterface()
-    item = self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
+    self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
 
     self.initialising = False
 
@@ -267,8 +269,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.__makeMainToolPage()
     self.__buttonLogics("pushNewModel")
 
-  def __setupButtonLogics(self):
-    l_0 = {}  # "actionOntology"}
+  @staticmethod
+  def __setupButtonLogics():
+    # l_0 = {}  # "actionOntology"}
     l_1 = ["pushExit",
            "pushSaveAs",
            "pushSchnipsel",
@@ -349,7 +352,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         self.radio[phase][k].setChecked(True)
 
   def __keyAutomatonSignal(self, token_class, token, strID, value):
-    if value == True:
+    if value:
       item = self.commander.setPanelAsCurrentItem()
       self.commander.processGUIEvent("controlboard", item, strID)
 
@@ -421,7 +424,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                  self.ui.layoutNetworks)
 
     # RULE: no rule for the equation topology as yet
-    enabled_editor_phases.append(("equation_topology"))
+    enabled_editor_phases.append("equation_topology")
     self.ui.comboEditorPhase.addItems(enabled_editor_phases)
 
   def __makeInteractionToolPage(self):
@@ -456,7 +459,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       elif child.layout() is not None:
         self.__clearLayout(child.layout())
 
-  def __removeWidgetFromLayoutTopDown(self, layout, no):
+  @staticmethod
+  def __removeWidgetFromLayoutTopDown(layout, no):
     n = layout.count()
     for cnt in reversed(range(no, n)):
       widget = layout.takeAt(cnt).widget()
@@ -467,7 +471,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     if layout.count() >= no:
       self.__removeWidgetFromLayoutTopDown(layout, no)
 
-  def __makeAndAddSelector(self, group_name, what, receiver, index, layout, autoexclusive=True):
+  @staticmethod
+  def __makeAndAddSelector(group_name, what, receiver, index, layout, autoexclusive=True):
     radio_selector = RadioSelector()
     list_of_choices = []
     counter = 0
@@ -487,7 +492,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.__showColour(where, colour)
     return
 
-  def __showColour(self, box, colour):
+  @staticmethod
+  def __showColour(box, colour):
     # print("colour :", colour)
     r, g, b, a = colour
     colour = QtGui.QColor(r, g, b, a)
@@ -588,7 +594,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
   def radioReceiverArcMechanism(self, token_class, token, mechanism, toggle):
     if toggle:
-      # print("radioReceiverArcMechanism: reciever class %s, radio token %s. token_string %s" % (token_class, token,
+      # print("radioReceiverArcMechanism: receiver class %s, radio token %s. token_string %s" % (token_class, token,
       # token_string))
 
       self.__trimLayout(2, self.ui.layoutInteractiveWidgetBottom)
@@ -611,7 +617,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
   def radioReceiverNodeToken(self, token_class, token, token_string, toggle):
     if toggle:
-      # print("radioReceiverNodeToken: reciever class %s, radio token %s. token_string %s" % (
+      # print("radioReceiverNodeToken: receiver class %s, radio token %s. token_string %s" % (
       # token_class, token, token_string))
       self.current_token = token_string
       nw = self.current_network
@@ -620,7 +626,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       #fixme: -- which is the network is the main "changer" in the new logic scheme
       self.selected_token[self.editor_phase][nw] = token_string
 
-      self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)  # trimLay(1,)
+      self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
       ask = []
       if token_string in self.ontology.token_typedtoken_on_networks[nw].keys():
         nature = list(
@@ -694,7 +700,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     ask for and define schnipsel model name
     """
     self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location,
-                                                                          alternative=False, exit=None)
+                                                                          new=False, exit=None)
 
     if self.schnipsel_name in ["exit", "", None]: return
 
@@ -746,7 +752,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander.processMainEvent(pars)
 
   def injectTypedTokens(self):
-    token = self.current_token #self.selected_token[self.editor_phase][self.current_network]  # current_token
+    token = self.current_token
     list_typed_tokens = self.radio_selectors["inject"].getListOfCheckedLabelInGroup("inject")
     # print("inject typed tokens ", list_typed_tokens, "into ", self.commander.node_group, "token:", token)
 
@@ -801,7 +807,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander.redrawCurrentScene()
     self.commander.resetGroups()
 
-  def __resetTypedTokensRadio(self, radio_block):
+  @staticmethod
+  def __resetTypedTokensRadio(radio_block):
     for group in radio_block.getGroups():
       radio_block.uncheckGroup(group)
 
@@ -835,8 +842,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def on_pushDeleteNamedNetwork_pressed(self):
     self.writeStatus("deleting named network is not yet implemented")
 
-  def on_pushExit_pressed(self):
-    print(">>>> exiting")
+  # @staticmethod
+  # def on_pushExit_pressed():
+  #   print(">>>> exiting")
 
   def on_pushSaveAs_pressed(self, *args):
     """
@@ -885,7 +893,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
             }
     self.commander.processMainEvent(pars)
 
-  def on_pushExit_pressed(self, *args):
+  def on_pushExit_pressed(self):
     w = SaveFileDialog()
     w.answer.connect(self.__controlExit)
     w.exec_()
