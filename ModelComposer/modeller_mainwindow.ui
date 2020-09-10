@@ -486,24 +486,13 @@
      <widget class="QWidget" name="horizontalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>230</y>
+        <x>0</x>
+        <y>350</y>
         <width>701</width>
         <height>221</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="layoutInteractiveWidgetBottom"/>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>10</y>
-        <width>211</width>
-        <height>221</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="layoutInteractiveWidgetTop"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_3">
       <property name="geometry">
@@ -511,7 +500,7 @@
         <x>240</x>
         <y>10</y>
         <width>401</width>
-        <height>221</height>
+        <height>331</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="layoutNetworks"/>
@@ -1052,6 +1041,17 @@
         </property>
        </widget>
       </widget>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>201</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="layoutInteractiveWidgetTop"/>
      </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">

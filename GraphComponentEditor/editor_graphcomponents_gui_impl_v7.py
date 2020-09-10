@@ -80,7 +80,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.tokens_on_networks = ontology.tokens_on_networks
     tokens = ontology.tokens
     self.nodeTypes = ontology.node_types_in_networks
-    self.arcApplications = ontology.arc_types_in_leave_networks_list_coded
+    self.arcApplications = ontology.list_arcObjects_in_networks#arc_types_in_leave_networks_list_coded
     # self.typedTokens = ontology.typed_tokens_on_networks
     self.networks = ontology.leave_networks_list
 
@@ -626,7 +626,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         applications = CR.M_None
 
     self.ui.comboApplication.clear()
-    self.ui.comboApplication.addItems(applications)
+    self.ui.comboApplication.addItems(applications, True )    #todo: sorting does not seem to work sorted(..) for example
     self.selected_application = str(self.ui.comboApplication.currentText())
 
   def __makeListNetwork(self, network_type, listNetworks):

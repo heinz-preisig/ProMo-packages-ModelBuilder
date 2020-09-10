@@ -41,7 +41,7 @@ from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import M_None
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import NODES
+from Common.graphics_objects import NODES, ARCS
 from Common.graphics_objects import OBJECTS_colour_defined_separate
 from Common.graphics_objects import OBJECTS_with_application
 from Common.graphics_objects import OBJECTS_with_state
@@ -97,7 +97,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.tokens_on_networks = ontology.tokens_on_networks
     tokens = ontology.tokens
     self.nodeTypes = ontology.node_types_in_networks
-    self.arcApplications = ontology.arc_types_in_leave_networks_list_coded
+    self.arcApplications = ontology.list_arcObjects_in_networks #arc_types_in_leave_networks_list_coded
     # self.typedTokens = ontology.typed_tokens_on_networks
     self.networks = ontology.leave_networks_list
 
@@ -658,22 +658,27 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def __makeComboApplication(self):
 
-    if self.selected_root_object in NODES:
-      if self.selected_root_object in OBJECTS_with_application:
-        applications = []
-        for nw in self.networks:
-          applications.extend(self.nodeTypes[nw])
-        # applications = self.nodeTypes[self.current_network]  # application_node_types
-      else:
-        applications = [M_None]
-    else:
-      if self.selected_root_object in OBJECTS_with_application:
-        applications = []
-        for nw in self.networks:
-          applications.extend(self.arcApplications[nw])
-        # applications = self.arcApplications[self.current_network]  # application_arcs_types
-      else:
-        applications = [M_None]
+    applications = []
+    for nw in self.networks:
+      if self.selected_root_object in NODES:
+        applications.extend(self.ontology.list_nodeObjects_in_networks[nw])
+      elif self.selected_root_object in ARCS:
+        applications.extend(self.ontology.list_arcObjects_in_networks[nw])
+    #   if self.selected_root_object in OBJECTS_with_application:
+    #     applications = []
+    #     for nw in self.networks:
+    #       applications.extend(self.nodeTypes[nw])
+    #     # applications = self.nodeTypes[self.current_network]  # application_node_types
+    #   else:
+    #     applications = [M_None]
+    # else:
+    #   if self.selected_root_object in OBJECTS_with_application:
+    #     applications = []
+    #     for nw in self.networks:
+    #       applications.extend(self.arcApplications[nw])
+    #     # applications = self.arcApplications[self.current_network]  # application_arcs_types
+    #   else:
+    #     applications = [M_None]
 
     self.ui.comboApplication.clear()
     self.ui.comboApplication.addItems(set(applications))

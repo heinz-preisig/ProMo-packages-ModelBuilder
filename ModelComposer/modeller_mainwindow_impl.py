@@ -152,7 +152,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.tokens_on_networks = ontology.tokens_on_networks
     self.tokens = ontology.tokens
     self.nodeTypes = ontology.node_types_in_networks
-    self.arcApplications = ontology.arc_types_in_leave_networks_list_coded
+    self.nodeObjects = ontology.list_nodeObjects_in_networks
+    self.arcApplications = ontology.list_arcObjects_in_networks#arc_types_in_leave_networks_list_coded
     self.arcInfoDictionary = ontology.arc_info_dictionary
     self.nw_token_typedtoken_dict = ontology.token_typedtoken_on_networks
     self.typed_tokens_data = TypedTokenData(file=self.typed_token_file_spec)
@@ -216,7 +217,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.current_network = None  # needed by commander
 
     # keep for re-use once defined
-    self.selected_node_type = {nw: self.nodeTypes[nw][0] for nw in self.networks}  # per network
+    self.selected_node_type = {nw: self.nodeObjects[nw][0] for nw in self.networks}  # per network
     self.selected_token = {editor_phase: {nw: 0 for nw in self.networks} for editor_phase in EDITOR_PHASES}
     self.selected_transfer_mechanism = {nw: {token: 0 for token in self.arcInfoDictionary[nw]} for nw in self.networks}
     self.selected_arc_nature = {nw: {token: 0 for token in self.arcInfoDictionary[nw]} for nw in self.networks}
@@ -434,7 +435,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     nw = self.current_network
     if self.editor_phase == EDITOR_PHASES[0]:
       index = self.selected_node_type[nw]
-      self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeTypes[nw], self.radioReceiverNode,
+      self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects[nw], self.radioReceiverNode,
                                                                 index,
                                                                 self.ui.layoutInteractiveWidgetTop)
     else:
@@ -560,7 +561,11 @@ class MainWindowImpl(QtWidgets.QMainWindow):
           self.radio_selectors["arc_token"] = self.__makeAndAddSelector("token", s_tokens, self.radioReceiverArcToken,
                                                                         s_token,
                                                                         self.ui.layoutInteractiveWidgetBottom)
-
+        index = self.selected_node_type[nw]
+        self.__clearLayout(self.ui.layoutInteractiveWidgetTop)
+        self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects[nw], self.radioReceiverNode,
+                                                                  index,
+                                                                  self.ui.layoutInteractiveWidgetTop)
 
       self.commander.redrawCurrentScene()
 
