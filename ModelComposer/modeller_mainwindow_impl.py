@@ -123,7 +123,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # now ask for model
     self.model_name = ""
     # while self.model_name in [""]:
-    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new.png")
+    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new")
     print("debugging -- model name and new_model", self.model_name, status)
     if status == "existent" :
       new_model = False
