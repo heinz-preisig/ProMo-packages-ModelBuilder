@@ -24,7 +24,9 @@ from Common.graphics_objects import LAYERS
 from Common.graphics_objects import LOCATION_PARAMETERS
 from Common.graphics_objects import NAMES
 from Common.graphics_objects import NODES
+from Common.graphics_objects import OBJECTS_arcs_with_states
 from Common.graphics_objects import OBJECTS_changing_position
+from Common.graphics_objects import OBJECTS_nodes_with_states
 from Common.graphics_objects import OBJECTS_not_move
 from Common.graphics_objects import OBJECTS_with_application
 from Common.graphics_objects import OBJECTS_with_state
@@ -99,14 +101,17 @@ class R_Item(QtWidgets.QGraphicsItem):
         raise ComponentError(" no such class of components :%s" % self.graphics_root_object)
       r, d, a, s = \
         self.commander.main.graphics_DATA.getActiveObjectRootDecorationState(
-                phase, self.graphics_root_object,
-                decoration, application, state)  # filter
+                phase,
+                self.graphics_root_object,
+                decoration,
+                application,
+                state)  # filter
       pass
       if decoration == "network":
         obj_str = self.commander.model_container["nodes"][self.ID]["network"]
 
       elif decoration == "named_network":
-          obj_str = self.commander.model_container["nodes"][self.ID]["named_network"]
+        obj_str = self.commander.model_container["nodes"][self.ID]["named_network"]
       else:
         obj_str = str([phase, r, d, a, s])
       # print("R_Item obj string", obj_str)
@@ -627,9 +632,9 @@ class G_Item(QtWidgets.QGraphicsItem):
     ID = self.parent.ID
     # print("getGraphObjectState  object ", self.graphics_root_object, ID)
     if self.graphics_root_object in OBJECTS_with_state:
-      if self.graphics_root_object in [NAMES["node"], NAMES["intraface"], NAMES["interface"]]:
+      if self.graphics_root_object in OBJECTS_nodes_with_states:
         state = self.commander.state_nodes[ID]
-      elif self.graphics_root_object == NAMES["connection"]:
+      elif self.graphics_root_object == OBJECTS_arcs_with_states:
         state = self.commander.state_arcs[ID]
       else:
         state = M_None

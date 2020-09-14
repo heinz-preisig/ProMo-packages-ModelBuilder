@@ -1575,7 +1575,7 @@ class Commander(QtCore.QObject):
     # print("make indicators ", self.main.typedTokens[self.main.current_network])
     for token in self.model_container["nodes"][ID]["tokens"]:
       # RULE: interface tokens are not shown
-      if token in self.main.tokens:
+      if token in self.main.ontology.tokens:
 
         name = token
         # NOTE: if you get an error here then you need to add a token colour above

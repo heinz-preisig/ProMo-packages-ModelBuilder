@@ -33,6 +33,7 @@ from PyQt5 import QtWidgets
 from Common.common_resources import getOntologyName
 from Common.common_resources import putDataOrdered
 from Common.common_resources import saveBackupFile
+from Common.graphics_objects import ARCS
 from Common.graphics_objects import DECORATIONS_with_state
 from Common.graphics_objects import DEFAULT_PHASE
 from Common.graphics_objects import getGraphData
@@ -41,9 +42,8 @@ from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import M_None
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import NODES, ARCS
+from Common.graphics_objects import NODES
 from Common.graphics_objects import OBJECTS_colour_defined_separate
-from Common.graphics_objects import OBJECTS_with_application
 from Common.graphics_objects import OBJECTS_with_state
 from Common.graphics_objects import PHASES
 from Common.graphics_objects import STATE_OBJECT_COLOURED
@@ -94,10 +94,10 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     # self.networks = ontology.leave_networks_list
     #
-    self.tokens_on_networks = ontology.tokens_on_networks
-    tokens = ontology.tokens
-    self.nodeTypes = ontology.node_types_in_networks
-    self.arcApplications = ontology.list_arcObjects_in_networks #arc_types_in_leave_networks_list_coded
+    # self.tokens_on_networks = ontology.tokens_on_networks
+    # tokens = ontology.tokens
+    # self.nodeTypes = ontology.node_types_in_networks
+    # self.arcApplications = ontology.list_arcObjects_in_networks #arc_types_in_leave_networks_list_coded
     # self.typedTokens = ontology.typed_tokens_on_networks
     self.networks = ontology.leave_networks_list
 
@@ -110,8 +110,11 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.TOKENS, \
     self.DATA, \
     self.STATES_colours = getGraphData(self.networks, self.connection_network_list,
-                                       ontology.node_type_list,
-                                       ontology.arc_type_list, tokens,
+                                       # ontology.list_nodeObjects_in_networks, #
+                                       ontology.list_nodeObjects,
+                                       # ontology.list_arcObjects_in_networks,
+                                       ontology.list_arcObjects,
+                                       ontology.tokens,
                                        self.graph_resource_file_spec)
     # TODO: re-enable copy of complete phases at the beginning
     # self.DATA["equation_topology"] = self.DATA["topology"]
@@ -417,7 +420,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
           if o not in OBJECTS_with_state:
             self.DATA[p] = deepcopy(self.DATA[p0])
           else:
-            decorations = self.DATA[p0][o] #STRUCTURES_Graph_Item[o]
+            decorations = self.DATA[p0][o]  # STRUCTURES_Graph_Item[o]
             for d in decorations:
               # RULE : only root objects and a selected list of components carry states (nodes, arcs, head, tail)
               for a in self.DATA[p0][o][d]:
@@ -703,9 +706,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.listTokens.clear()
     tokens = set()
     for nw in self.networks:
-      [tokens.add(i) for i in self.tokens_on_networks[nw]]
-      # for token in self.tokens_on_networks[nw]["type"]:
-      #   tokens.add(token)
+      [tokens.add(i) for i in self.ontology.tokens_on_networks[nw]]
 
     self.ui.listTokens.addItems(sorted(tokens))
 

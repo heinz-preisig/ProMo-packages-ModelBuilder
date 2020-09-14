@@ -105,7 +105,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.ui.labelSchnipsel.hide()
 
     # first get ontology
-    ontology_name = getOntologyName(task="task_model_composer", left_icon=None) #"new.png")
+    ontology_name = getOntologyName(task="task_model_composer", left_icon=None)  # "new.png")
     self.ontology_name = copy.copy(ontology_name)
     self.ui.labelOntology.setText(ontology_name)
     self.ui.labelOntology.show()
@@ -125,7 +125,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # while self.model_name in [""]:
     self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new")
     print("debugging -- model name and new_model", self.model_name, status)
-    if status == "existent" :
+    if status == "existent":
       new_model = False
     elif status == "new":
       new_model = True
@@ -150,10 +150,10 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.networks = ontology.leave_networks_list
 
     self.tokens_on_networks = ontology.tokens_on_networks
-    self.tokens = ontology.tokens
-    self.nodeTypes = ontology.node_types_in_networks
-    self.nodeObjects = ontology.list_nodeObjects_in_networks
-    self.arcApplications = ontology.list_arcObjects_in_networks#arc_types_in_leave_networks_list_coded
+    # self.tokens = ontology.tokens
+    # self.nodeTypes = ontology.node_types_in_networks
+    self.nodeObjects_in_networks = ontology.list_nodeObjects_in_networks
+    # self.arcApplications_in_networks = ontology.list_arcObjects_in_networks  # arc_types_in_leave_networks_list_coded
     self.arcInfoDictionary = ontology.arc_info_dictionary
     self.nw_token_typedtoken_dict = ontology.token_typedtoken_on_networks
     self.typed_tokens_data = TypedTokenData(file=self.typed_token_file_spec)
@@ -163,18 +163,21 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.connection_networks.update(ontology.interconnection_network_dictionary)  # intRA
     self.connection_networks.update(ontology.intraconnection_network_dictionary)  # intER
 
-    self.NETWORK, self.TOKENS, self.graphics_DATA, self.state_colours = getGraphData(self.networks,
-                                                                                     self.connection_networks,
-                                                                                     ontology.node_type_list,
-                                                                                     ontology.arc_type_list,
-                                                                                     self.tokens,
-                                                                                     FILES[
-                                                                                       "graph_resource_file_spec"] %
-                                                                                     ontology_name)
+    self.NETWORK, \
+    self.TOKENS, \
+    self.graphics_DATA, \
+    self.state_colours = getGraphData(self.networks,
+                                      self.connection_networks,
+                                      ontology.node_type_list,
+                                      ontology.arc_type_list,
+                                      ontology.tokens,
+                                      FILES[
+                                        "graph_resource_file_spec"] %
+                                      ontology_name)
     if DEBUG["load data"]:
-      print("node types :", self.nodeTypes)
+      # print("node types :", self.nodeTypes)
       print("init - tokens:", self.tokens_on_networks)
-      print("arc types :", self.arcApplications)
+      # print("arc types :", self.arcApplications_in_networks)
       print("typed tokens :", self.typedTokens)
       print("typed tokens data :", self.typed_tokens_data)
       print("arc all_arc_applications :", ontology.arc_type_list)
@@ -217,7 +220,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.current_network = None  # needed by commander
 
     # keep for re-use once defined
-    self.selected_node_type = {nw: self.nodeObjects[nw][0] for nw in self.networks}  # per network
+    self.selected_node_type = {nw: self.nodeObjects_in_networks[nw][0] for nw in self.networks}  # per network
     self.selected_token = {editor_phase: {nw: 0 for nw in self.networks} for editor_phase in EDITOR_PHASES}
     self.selected_transfer_mechanism = {nw: {token: 0 for token in self.arcInfoDictionary[nw]} for nw in self.networks}
     self.selected_arc_nature = {nw: {token: 0 for token in self.arcInfoDictionary[nw]} for nw in self.networks}
@@ -228,7 +231,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.selected_set_constraints = set()
     self.state_inject_or_constrain_or_convert = None
     self.current_named_network = None
-    self.old_named_network_name =None
+    self.old_named_network_name = None
     self.items_to_convert = None
     self.items_to_inject = None
 
@@ -248,9 +251,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.radio_selectors = {}
 
     if not new_model:
-      # Note: the generation of the named network brushes must be done after the data were read, so it is moved into the commander
+      # Note: the generation of the named network brushes must be done after the data were read, so it is moved into
+      #  the commander
       self.insertModelFromFile(self.model_name)
-
 
     self.__setupInterface()
     self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
@@ -322,7 +325,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       sys.stdout = Stream(newText=self.logger.onUpdateStandardOutput)
     if REDIRECT_ERROR:
       sys.stderr = Stream(newText=self.logger.onUpdateErrorOutput)
-
 
     self.tabifyDockWidget(self.ui.dockWidgetMain, self.ui.dockWidgetLogger)
     self.ui.dockWidgetMain.raise_()
@@ -435,7 +437,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     nw = self.current_network
     if self.editor_phase == EDITOR_PHASES[0]:
       index = self.selected_node_type[nw]
-      self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects[nw], self.radioReceiverNode,
+      self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects_in_networks[nw],
+                                                                self.radioReceiverNode,
                                                                 index,
                                                                 self.ui.layoutInteractiveWidgetTop)
     else:
@@ -563,7 +566,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                         self.ui.layoutInteractiveWidgetBottom)
         index = self.selected_node_type[nw]
         self.__clearLayout(self.ui.layoutInteractiveWidgetTop)
-        self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects[nw], self.radioReceiverNode,
+        self.radio_selectors["nodes"] = self.__makeAndAddSelector("nodes", self.nodeObjects_in_networks[nw],
+                                                                  self.radioReceiverNode,
                                                                   index,
                                                                   self.ui.layoutInteractiveWidgetTop)
 
@@ -580,7 +584,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def radioReceiverNode(self, token_class, token, token_string, toggle):
     nw = self.current_network
     self.selected_node_type[nw] = token_string
-
 
   def radioReceiverArcToken(self, token_class, token, token_string, toggle):
     if toggle:
@@ -627,8 +630,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       self.current_token = token_string
       nw = self.current_network
       #
-      #fixme: the following dictionary is probably obsolete because of changed control structure
-      #fixme: -- which is the network is the main "changer" in the new logic scheme
+      # fixme: the following dictionary is probably obsolete because of changed control structure
+      # fixme: -- which is the network is the main "changer" in the new logic scheme
       self.selected_token[self.editor_phase][nw] = token_string
 
       self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
@@ -747,12 +750,12 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
 
     pars = {
-            "nodeID": None,
-            "action": "load from file",
-            "object": None,
-            "pos"   : None,
-            "model_name" : model_name,
-            "file"  : self.model_file
+            "nodeID"    : None,
+            "action"    : "load from file",
+            "object"    : None,
+            "pos"       : None,
+            "model_name": model_name,
+            "file"      : self.model_file
             }
     self.commander.processMainEvent(pars)
 
@@ -782,7 +785,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         self.writeStatus("no domain present")
 
   def injectConversions(self):
-    token = self.current_token #self.selected_token[self.editor_phase][self.current_network]
+    token = self.current_token  # self.selected_token[self.editor_phase][self.current_network]
     # list_conversions = deepcopy(list(self.selected_set_coversions))
     list_conversions = self.radio_selectors["convert"].getListOfCheckedLabelInGroup("convert")
     print("inject conversions ", list_conversions)
@@ -935,7 +938,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
               }
     else:
       # RULE: all arcs must be closed before the token domain can be computed
-      self.writeStatus("shifting to %s"%self.editor_phase)
+      self.writeStatus("shifting to %s" % self.editor_phase)
       if self.current_network:
         D = self.commander.model_container.computeTokenDomains(self.tokens_on_networks[self.current_network])
         print("identified token domains: ", D)
