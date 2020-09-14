@@ -89,8 +89,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # self.file_resources = DataFileResources(self.ontology_name)
     self.graph_resource_file_spec = FILES["graph_resource_file_spec"] % self.ontology_name
 
-    ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
-    self.ontology = ontology
+    self.ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
+    ontology = self.ontology
 
     # self.networks = ontology.leave_networks_list
     #
@@ -106,12 +106,14 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     connection_networks.update(ontology.intraconnection_network_dictionary)
     self.connection_network_list = sorted(connection_networks.keys())
 
+
+    node_objects = ontology.listNetworkNodeObjects+ontology.listIntraNodeObjects+ontology.listInterNodeObjects
     self.NETWORK, \
     self.TOKENS, \
     self.DATA, \
     self.STATES_colours = getGraphData(self.networks, self.connection_network_list,
                                        # ontology.list_nodeObjects_in_networks, #
-                                       ontology.list_nodeObjects,
+                                       node_objects, #ontology.listNetworkNodeObjects,
                                        # ontology.list_arcObjects_in_networks,
                                        ontology.list_arcObjects,
                                        ontology.tokens,
@@ -226,6 +228,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonNetworksComponents_pressed(self):
     print("on_radioButtonNetworksComponents_pressed")
+    self.network_type = "network"
 
     self.ui.listRootObjects.clear()
     structures = []
@@ -239,6 +242,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonIntrafacesComponents_pressed(self):
     print("on_radioButtonIntrafacesComponents_pressed")
+    self.network_type = "intraface"
     structures = INTRAFACE
     self.ui.listRootObjects.clear()
     self.__makeObjectList(structures)
@@ -247,6 +251,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_radioButtonInterfacesComponents_pressed(self):
     print("on_radioButtonInterfacesComponents_pressed")
+    self.network_type = "interface"
     structures = INTERFACE
     self.ui.listRootObjects.clear()
     self.__makeObjectList(structures)
@@ -661,27 +666,35 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def __makeComboApplication(self):
 
-    applications = []
-    for nw in self.networks:
-      if self.selected_root_object in NODES:
-        applications.extend(self.ontology.list_nodeObjects_in_networks[nw])
-      elif self.selected_root_object in ARCS:
-        applications.extend(self.ontology.list_arcObjects_in_networks[nw])
-    #   if self.selected_root_object in OBJECTS_with_application:
-    #     applications = []
-    #     for nw in self.networks:
-    #       applications.extend(self.nodeTypes[nw])
-    #     # applications = self.nodeTypes[self.current_network]  # application_node_types
-    #   else:
-    #     applications = [M_None]
-    # else:
-    #   if self.selected_root_object in OBJECTS_with_application:
-    #     applications = []
-    #     for nw in self.networks:
-    #       applications.extend(self.arcApplications[nw])
-    #     # applications = self.arcApplications[self.current_network]  # application_arcs_types
-    #   else:
-    #     applications = [M_None]
+    if self.network_type == "network":
+      applications = self.ontology.listNetworkNodeObjects
+    elif self.network_type == "interface":
+      applications = self.ontology.listInterNodeObjects
+    elif self.network_type == "intraface":
+      applications = self.ontology.listIntraNodeObjects
+    else:
+      print(">>>>>>>>>> should not come here")
+    # applications = []
+    # for nw in self.networks:
+    #   if self.selected_root_object in NODES:
+    #     applications.extend(self.ontology.list_nodeObjects_in_networks[nw])
+    #   elif self.selected_root_object in ARCS:
+    #     applications.extend(self.ontology.list_arcObjects[nw])
+    # #   if self.selected_root_object in OBJECTS_with_application:
+    # #     applications = []
+    # #     for nw in self.networks:
+    # #       applications.extend(self.nodeTypes[nw])
+    # #     # applications = self.nodeTypes[self.current_network]  # application_node_types
+    # #   else:
+    # #     applications = [M_None]
+    # # else:
+    # #   if self.selected_root_object in OBJECTS_with_application:
+    # #     applications = []
+    # #     for nw in self.networks:
+    # #       applications.extend(self.arcApplications[nw])
+    # #     # applications = self.arcApplications[self.current_network]  # application_arcs_types
+    # #   else:
+    # #     applications = [M_None]
 
     self.ui.comboApplication.clear()
     self.ui.comboApplication.addItems(set(applications))
