@@ -147,7 +147,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # attach ontology
     ontology = OntologyContainer(ontology_name)
     self.ontology = ontology
-    self.networks = ontology.leave_networks_list
+    self.networks = ontology.list_leave_networks
 
     self.tokens_on_networks = ontology.tokens_on_networks
     # self.tokens = ontology.tokens

@@ -104,7 +104,7 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
     self.application_arcs_types = ontology.arc_type_list
     self.tokens = ontology.tokens
 
-    self.networks = ontology.leave_networks_list
+    self.networks = ontology.list_leave_networks
     self.connection_networks = {}
     self.connection_networks.update(ontology.interconnection_network_dictionary)
     self.connection_networks.update(ontology.intraconnection_network_dictionary)

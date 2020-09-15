@@ -33,7 +33,6 @@ from PyQt5 import QtWidgets
 from Common.common_resources import getOntologyName
 from Common.common_resources import putDataOrdered
 from Common.common_resources import saveBackupFile
-from Common.graphics_objects import ARCS
 from Common.graphics_objects import DECORATIONS_with_state
 from Common.graphics_objects import DEFAULT_PHASE
 from Common.graphics_objects import getGraphData
@@ -42,13 +41,12 @@ from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import M_None
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import NODES
 from Common.graphics_objects import OBJECTS_colour_defined_separate
 from Common.graphics_objects import OBJECTS_with_state
 from Common.graphics_objects import PHASES
 from Common.graphics_objects import STATE_OBJECT_COLOURED
 from Common.graphics_objects import STATES
-from Common.graphics_objects import STRUCTURES_Graph_Item
+from Common.graphics_objects import STRUCTURES_Graph_Item, NODES, ARCS, KNOTS
 from Common.ontology_container import OntologyContainer
 from Common.qt_resources import PEN_STYLES
 from Common.resource_initialisation import FILES
@@ -99,22 +97,22 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # self.nodeTypes = ontology.node_types_in_networks
     # self.arcApplications = ontology.list_arcObjects_in_networks #arc_types_in_leave_networks_list_coded
     # self.typedTokens = ontology.typed_tokens_on_networks
-    self.networks = ontology.leave_networks_list
+    self.networks = ontology.list_leave_networks
 
     connection_networks = {}
     connection_networks.update(ontology.interconnection_network_dictionary)
     connection_networks.update(ontology.intraconnection_network_dictionary)
     self.connection_network_list = sorted(connection_networks.keys())
 
-
-    node_objects = ontology.listNetworkNodeObjects+ontology.listIntraNodeObjects+ontology.listInterNodeObjects
     self.NETWORK, \
     self.TOKENS, \
     self.DATA, \
-    self.STATES_colours = getGraphData(self.networks, self.connection_network_list,
-                                       # ontology.list_nodeObjects_in_networks, #
-                                       node_objects, #ontology.listNetworkNodeObjects,
-                                       # ontology.list_arcObjects_in_networks,
+    self.STATES_colours = getGraphData(ontology.list_leave_networks,
+                                       ontology.list_interconnection_networks,
+                                       ontology.list_intraconnection_networks,
+                                       ontology.list_NetworkNodeObjects,
+                                       ontology.list_IntraNodeObjects,
+                                       ontology.list_InterNodeObjects,
                                        ontology.list_arcObjects,
                                        ontology.tokens,
                                        self.graph_resource_file_spec)
@@ -127,6 +125,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.structures = None
     self.current_colour = 0, 255, 0, 10
     self.current_token = None
+
+    self.selected_state = STATE_OBJECT_COLOURED
 
     self.__makeComboEditorPhase()
     self.__makeListTokens()
@@ -183,6 +183,14 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
+  def on_comboEditorState_activated(self, index):
+    print("debugging -- comboEditorState activated")
+    self.selected_state = str(self.ui.comboEditorState.currentText())
+    component_data = self.__getComponentData()
+    self.__makeListActivity(component_data["action"])
+    self.__group_controls("selected_editor_phase")
+
+
   #    @QtCore.pyqtSignature('QListWidgetItem')
   def on_listRootObjects_itemClicked(self, item):
 
@@ -190,9 +198,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.selected_root_object = str(item.text())
     self.ui.Logger.clear()
     # self.ui.groupComponents.hide()
-    self.__group_controls("selected_root_object")
     self.ui.stackedProperties.setCurrentIndex(0)
     self.__makeListComponents()
+    self.__group_controls("selected_root_object")
 
   def on_comboApplication_activated(self, index):
     q_string = self.ui.comboApplication.currentText()
@@ -200,12 +208,15 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.selected_application = str(q_string)
     self.__processSelectedComponent()
+    self.ui.comboEditorState.setCurrentIndex(0)   # make activity lists
+    self.on_comboEditorState_activated(0)
 
   def on_listComponents_itemClicked(self, item):
 
     print("component selected", item.text())
     self.__group_controls("edit_object")
     self.selected_component = str(item.text())
+    # self.__makeComboApplication()
     self.__selectedComponent()
 
     self.initialise = False
@@ -226,7 +237,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("edit_components")
     self.current_state = STATE_OBJECT_COLOURED  # rule: only the colour of the enabled element is variable
 
-  def on_radioButtonNetworksComponents_pressed(self):
+  def on_pushButtonNetworks_pressed(self):
     print("on_radioButtonNetworksComponents_pressed")
     self.network_type = "network"
 
@@ -240,7 +251,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.__group_controls("select_components_network")
 
-  def on_radioButtonIntrafacesComponents_pressed(self):
+  def on_pushButtonIntraface_pressed(self):
     print("on_radioButtonIntrafacesComponents_pressed")
     self.network_type = "intraface"
     structures = INTRAFACE
@@ -249,7 +260,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("select_components_network")
     pass
 
-  def on_radioButtonInterfacesComponents_pressed(self):
+  def on_pushButtonInterface_pressed(self):
     print("on_radioButtonInterfacesComponents_pressed")
     self.network_type = "interface"
     structures = INTERFACE
@@ -533,6 +544,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
                                                "groupPosition",
                                                "stackedProperties",
@@ -545,13 +557,16 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupPhase",
                                                "groupActions",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
+                                               "groupObjects",
                                                ],
               "edit_object"                 : ["groupMain",
                                                "groupControls",
                                                "groupPhase",
                                                "groupActions",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
                                                ],
               "no_state"                    : ["groupMain",
@@ -560,6 +575,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
                                                "groupPosition",
                                                "stackedProperties",
@@ -572,6 +588,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
                                                "groupPosition",
                                                "stackedProperties",
@@ -600,6 +617,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                # "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               "groupObjects",
                                                # "groupNetworksComponents",
                                                # "groupShapes",
                                                # "groupPosition",
@@ -614,6 +632,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                # "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               # "groupObjects",
                                                # "groupNetworksComponents",
                                                # "groupShapes",
                                                # "groupPosition",
@@ -628,6 +647,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                                "groupPhase",
                                                # "groupNetworks",
                                                "groupComponents",
+                                               "groupObjects",
                                                "groupShapes",
                                                "groupPosition",
                                                "stackedProperties",
@@ -650,51 +670,33 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.comboEditorPhase.addItems(list(STATES.keys()))
     self.current_editor_phase = str(self.ui.comboEditorPhase.currentText())
 
-  # def __makeComboState(self):
-  #   self.ui.comboState.clear()
-  #   if self.selected_root_object in NODES:
-  #     states = STATES[self.current_editor_phase]["nodes"]
-  #   elif (self.selected_root_object in ARCS) or (self.selected_root_object in KNOTS):
-  #     states = STATES[self.current_editor_phase]["arcs"]
-  #   else:
-  #     states = None
-  #     print("__makeComboState -- no state defined")
-  #
-  #   self.ui.comboState.addItems(states)
-  #   self.selected_object_state = str(self.ui.comboState.currentText())
-  #   # self.ui.comboState.show()
+  def __makeComboState(self):
+    self.ui.comboEditorState.clear()
+    if self.selected_root_object in NODES:
+      states = STATES[self.current_editor_phase]["nodes"]
+    elif (self.selected_root_object in ARCS) or (self.selected_root_object in KNOTS):
+      states = STATES[self.current_editor_phase]["arcs"]
+    else:
+      states = None
+      print("__makeComboState -- no state defined")
+
+    self.ui.comboEditorState.addItems(states)
+    self.selected_object_state = str(self.ui.comboEditorState.currentText())
+    # self.ui.comboEditorState.show()
 
   def __makeComboApplication(self):
 
-    if self.network_type == "network":
-      applications = self.ontology.listNetworkNodeObjects
-    elif self.network_type == "interface":
-      applications = self.ontology.listInterNodeObjects
-    elif self.network_type == "intraface":
-      applications = self.ontology.listIntraNodeObjects
+    if self.selected_root_object == NAMES["connection"]:
+      applications = self.ontology.list_arcObjects
     else:
-      print(">>>>>>>>>> should not come here")
-    # applications = []
-    # for nw in self.networks:
-    #   if self.selected_root_object in NODES:
-    #     applications.extend(self.ontology.list_nodeObjects_in_networks[nw])
-    #   elif self.selected_root_object in ARCS:
-    #     applications.extend(self.ontology.list_arcObjects[nw])
-    # #   if self.selected_root_object in OBJECTS_with_application:
-    # #     applications = []
-    # #     for nw in self.networks:
-    # #       applications.extend(self.nodeTypes[nw])
-    # #     # applications = self.nodeTypes[self.current_network]  # application_node_types
-    # #   else:
-    # #     applications = [M_None]
-    # # else:
-    # #   if self.selected_root_object in OBJECTS_with_application:
-    # #     applications = []
-    # #     for nw in self.networks:
-    # #       applications.extend(self.arcApplications[nw])
-    # #     # applications = self.arcApplications[self.current_network]  # application_arcs_types
-    # #   else:
-    # #     applications = [M_None]
+      if self.network_type == "network":
+        applications = self.ontology.list_NetworkNodeObjects
+      elif self.network_type == "interface":
+        applications = self.ontology.list_InterNodeObjects
+      elif self.network_type == "intraface":
+        applications = self.ontology.list_IntraNodeObjects
+      else:
+        print(">>>>>>>>>> should not come here")
 
     self.ui.comboApplication.clear()
     self.ui.comboApplication.addItems(set(applications))
@@ -838,23 +840,15 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     else:
       phases = PHASES
 
-      if self.selected_root_object in OBJECTS_with_state:
-        if self.selected_component in DECORATIONS_with_state:
-          self.DATA.setData(what, value,
-                            PHASES[0],  # self.current_editor_phase,
-                            self.selected_root_object,
-                            self.selected_component,
-                            self.selected_application,
-                            STATE_OBJECT_COLOURED,
-                            )
-        else:
-          self.DATA.setData(what, value,
-                            PHASES[0],  # self.current_editor_phase,
-                            self.selected_root_object,
-                            self.selected_component,
-                            self.selected_application,
-                            M_None,
-                            )
+    if self.selected_root_object in OBJECTS_with_state:
+      if self.selected_component in DECORATIONS_with_state:
+        self.DATA.setData(what, value,
+                          PHASES[0],  # self.current_editor_phase,
+                          self.selected_root_object,
+                          self.selected_component,
+                          self.selected_application,
+                          STATE_OBJECT_COLOURED,
+                          )
       else:
         self.DATA.setData(what, value,
                           PHASES[0],  # self.current_editor_phase,
@@ -863,6 +857,14 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                           self.selected_application,
                           M_None,
                           )
+    else:
+      self.DATA.setData(what, value,
+                        PHASES[0],  # self.current_editor_phase,
+                        self.selected_root_object,
+                        self.selected_component,
+                        self.selected_application,
+                        M_None,
+                        )
     #
     # for phase in phases:
     #   print("debugging -- going through the phases ", phase)
@@ -913,13 +915,14 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                              self.selected_root_object,
                              self.selected_component,
                              self.selected_application,
-                             STATE_OBJECT_COLOURED  # ditto
+                             self.selected_state
+                             # STATE_OBJECT_COLOURED  # ditto
                              )
     # self.selected_object_state)
 
   def __selectedComponent(self):
 
-    # debugPrint('__selectedComponent', self.selected_component)
+    debugPrint('__selectedComponent', self.selected_component)
 
     # RULE : only the root carry the state
     if (self.selected_component in DECORATIONS_with_state) and \
@@ -927,6 +930,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       # self.__makeComboState()
       self.__makeComboApplication()
       self.__group_controls("with_state")
+      self.__makeComboState()
     else:
       self.selected_object_state = M_None
       self.selected_application = M_None

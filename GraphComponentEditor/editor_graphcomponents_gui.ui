@@ -174,23 +174,23 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QRadioButton" name="radioButtonNetworksComponents">
+       <widget class="QPushButton" name="pushButtonNetworks">
         <property name="text">
          <string>networks</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButtonInterfacesComponents">
+       <widget class="QPushButton" name="pushButtonIntraface">
         <property name="text">
-         <string>interface</string>
+         <string>intraface</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButtonIntrafacesComponents">
+       <widget class="QPushButton" name="pushButtonInterface">
         <property name="text">
-         <string>intraface</string>
+         <string>interface</string>
         </property>
        </widget>
       </item>
@@ -1360,9 +1360,9 @@
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>560</y>
+       <y>390</y>
        <width>401</width>
-       <height>351</height>
+       <height>521</height>
       </rect>
      </property>
      <property name="palette">
@@ -1817,7 +1817,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>40</y>
+        <y>210</y>
         <width>181</width>
         <height>241</height>
        </rect>
@@ -1834,7 +1834,7 @@
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>40</y>
+        <y>210</y>
         <width>171</width>
         <height>241</height>
        </rect>
@@ -1851,7 +1851,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>20</y>
+        <y>190</y>
         <width>71</width>
         <height>18</height>
        </rect>
@@ -1871,7 +1871,7 @@
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>20</y>
+        <y>190</y>
         <width>71</width>
         <height>18</height>
        </rect>
@@ -1891,7 +1891,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>290</y>
+        <y>460</y>
         <width>99</width>
         <height>27</height>
        </rect>
@@ -1900,12 +1900,78 @@
        <string>explain</string>
       </property>
      </widget>
+     <widget class="QGroupBox" name="groupPhase">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>391</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>phase</string>
+      </property>
+      <widget class="QComboBox" name="comboEditorPhase">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>20</y>
+         <width>311</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>graph editor phases -- choose</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupState">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>391</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>state</string>
+      </property>
+      <widget class="QComboBox" name="comboEditorState">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>20</y>
+         <width>311</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>graph editor phases -- choose</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupLayer">
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>140</y>
+       <y>60</y>
        <width>391</width>
        <height>321</height>
       </rect>
@@ -2106,39 +2172,6 @@
        <pointsize>8</pointsize>
       </font>
      </property>
-    </widget>
-    <widget class="QGroupBox" name="groupPhase">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>490</y>
-       <width>391</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="title">
-      <string>phase</string>
-     </property>
-     <widget class="QComboBox" name="comboEditorPhase">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>20</y>
-        <width>311</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>graph editor phases -- choose</string>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="labelOntology">
