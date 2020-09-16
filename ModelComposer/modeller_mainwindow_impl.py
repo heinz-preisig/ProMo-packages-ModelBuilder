@@ -166,11 +166,20 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.NETWORK, \
     self.TOKENS, \
     self.graphics_DATA, \
-    self.state_colours = getGraphData(self.networks,
-                                      self.connection_networks,
-                                      ontology.node_type_list,
-                                      ontology.arc_type_list,
-                                      ontology.tokens,
+    self.state_colours = getGraphData(ontology.networks,
+                 ontology.list_interconnection_networks,
+                 ontology.list_intraconnection_networks,
+                 ontology.list_NetworkNodeObjects,
+                 ontology.list_IntraNodeObjects,
+                 ontology.list_InterNodeObjects,
+                 ontology.list_arcObjects,
+                 ontology.tokens,
+    #              graph_resource_file_spec
+    # self.networks,
+    #                                   self.connection_networks,
+    #                                   ontology.node_type_list,
+    #                                   ontology.arc_type_list,
+    #                                   ontology.tokens,
                                       FILES[
                                         "graph_resource_file_spec"] %
                                       ontology_name)
