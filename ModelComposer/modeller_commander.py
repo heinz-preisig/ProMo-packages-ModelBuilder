@@ -415,7 +415,7 @@ class Commander(QtCore.QObject):
                     "explode node", "add arc", "remove arc",
                     "insert knot", "remove knot",
                     "insert model"]:
-      self.modified = True
+      self.modified = True  #TODO: handling of the modified to be completed
     self.main.markModifiedModel(self.modified)
 
     par_dic = res.copy()  # copy results into par list

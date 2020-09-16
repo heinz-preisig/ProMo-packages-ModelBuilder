@@ -114,7 +114,10 @@ class R_Item(QtWidgets.QGraphicsItem):
         obj_str = self.commander.model_container["nodes"][self.ID]["named_network"]
       else:
         obj_str = str([phase, r, d, a, s])
-      # print("R_Item obj string", obj_str)
+
+      if s == "selected":
+        print("R_Item obj string", obj_str)
+
       shape_data = self.commander.graphics_data.getData(phase, self.graphics_root_object,
                                                         decoration, application, state)
       if shape_data["movable"]:

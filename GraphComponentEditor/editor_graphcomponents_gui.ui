@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1704</width>
-    <height>953</height>
+    <height>1004</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>0</y>
+      <y>50</y>
       <width>391</width>
-      <height>911</height>
+      <height>901</height>
      </rect>
     </property>
     <property name="palette">
@@ -38,9 +38,9 @@
        <colorrole role="Window">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>237</red>
-          <green>228</green>
-          <blue>239</blue>
+          <red>167</red>
+          <green>232</green>
+          <blue>244</blue>
          </color>
         </brush>
        </colorrole>
@@ -58,9 +58,9 @@
        <colorrole role="Window">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>237</red>
-          <green>228</green>
-          <blue>239</blue>
+          <red>167</red>
+          <green>232</green>
+          <blue>244</blue>
          </color>
         </brush>
        </colorrole>
@@ -69,18 +69,18 @@
        <colorrole role="Base">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>237</red>
-          <green>228</green>
-          <blue>239</blue>
+          <red>167</red>
+          <green>232</green>
+          <blue>244</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="Window">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>237</red>
-          <green>228</green>
-          <blue>239</blue>
+          <red>167</red>
+          <green>232</green>
+          <blue>244</blue>
          </color>
         </brush>
        </colorrole>
@@ -201,10 +201,16 @@
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>0</y>
+      <y>50</y>
       <width>911</width>
-      <height>921</height>
+      <height>911</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="title">
      <string>Component editor</string>
@@ -233,9 +239,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>235</red>
-           <green>210</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -253,9 +259,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>235</red>
-           <green>210</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -264,18 +270,18 @@
         <colorrole role="Base">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>235</red>
-           <green>210</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>235</red>
-           <green>210</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -1045,6 +1051,8 @@
        <property name="font">
         <font>
          <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -1063,6 +1071,8 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="title">
@@ -1194,9 +1204,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>236</red>
-           <green>207</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -1214,9 +1224,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>236</red>
-           <green>207</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -1225,18 +1235,18 @@
         <colorrole role="Base">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>236</red>
-           <green>207</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>236</red>
-           <green>207</green>
-           <blue>239</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -1461,9 +1471,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>220</red>
-           <green>215</green>
-           <blue>239</blue>
+           <red>114</red>
+           <green>159</green>
+           <blue>207</blue>
           </color>
          </brush>
         </colorrole>
@@ -1607,9 +1617,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>220</red>
-           <green>215</green>
-           <blue>239</blue>
+           <red>114</red>
+           <green>159</green>
+           <blue>207</blue>
           </color>
          </brush>
         </colorrole>
@@ -1744,18 +1754,18 @@
         <colorrole role="Base">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>220</red>
-           <green>215</green>
-           <blue>239</blue>
+           <red>114</red>
+           <green>159</green>
+           <blue>207</blue>
           </color>
          </brush>
         </colorrole>
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>220</red>
-           <green>215</green>
-           <blue>239</blue>
+           <red>114</red>
+           <green>159</green>
+           <blue>207</blue>
           </color>
          </brush>
         </colorrole>
@@ -1807,6 +1817,12 @@
        </disabled>
       </palette>
      </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="autoFillBackground">
       <bool>true</bool>
      </property>
@@ -1817,9 +1833,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>210</y>
+        <y>180</y>
         <width>181</width>
-        <height>241</height>
+        <height>291</height>
        </rect>
       </property>
       <property name="font">
@@ -1834,9 +1850,9 @@
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>210</y>
+        <y>180</y>
         <width>171</width>
-        <height>241</height>
+        <height>291</height>
        </rect>
       </property>
       <property name="font">
@@ -1851,7 +1867,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
+        <y>160</y>
         <width>71</width>
         <height>18</height>
        </rect>
@@ -1871,7 +1887,7 @@
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>190</y>
+        <y>160</y>
         <width>71</width>
         <height>18</height>
        </rect>
@@ -1890,8 +1906,8 @@
      <widget class="QPushButton" name="pushExplainActions">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>460</y>
+        <x>160</x>
+        <y>480</y>
         <width>99</width>
         <height>27</height>
        </rect>
@@ -1991,9 +2007,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>249</red>
-           <green>245</green>
-           <blue>249</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -2011,9 +2027,9 @@
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>249</red>
-           <green>245</green>
-           <blue>249</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
@@ -2022,23 +2038,29 @@
         <colorrole role="Base">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>249</red>
-           <green>245</green>
-           <blue>249</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
         <colorrole role="Window">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>249</red>
-           <green>245</green>
-           <blue>249</blue>
+           <red>58</red>
+           <green>204</green>
+           <blue>246</blue>
           </color>
          </brush>
         </colorrole>
        </disabled>
       </palette>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="autoFillBackground">
       <bool>true</bool>
@@ -2124,6 +2146,76 @@
        <height>81</height>
       </rect>
      </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>167</red>
+           <green>232</green>
+           <blue>244</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>167</red>
+           <green>232</green>
+           <blue>244</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>167</red>
+           <green>232</green>
+           <blue>244</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>167</red>
+           <green>232</green>
+           <blue>244</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="title">
       <string>Selector</string>
      </property>
@@ -2169,7 +2261,9 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>8</pointsize>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
       </font>
      </property>
     </widget>
@@ -2179,7 +2273,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>371</width>
+      <width>1691</width>
       <height>17</height>
      </rect>
     </property>

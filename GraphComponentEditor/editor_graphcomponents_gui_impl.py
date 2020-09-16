@@ -176,16 +176,16 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("edit_states")
     self.ui.stackedColouring.setCurrentIndex(2)
 
-  def on_comboEditorPhase_activated(self, index):
-    phase = self.ui.comboEditorPhase.currentText()
+  def on_comboEditorPhase_textActivated(self, phase):
+    # phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
-  def on_comboEditorState_activated(self, index):
+  def on_comboEditorState_textActivated(self, state):
     print("debugging -- comboEditorState activated")
-    self.selected_state = str(self.ui.comboEditorState.currentText())
+    self.selected_state = str(state) #self.ui.comboEditorState.currentText()
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
@@ -202,14 +202,15 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__makeListComponents()
     self.__group_controls("selected_root_object")
 
-  def on_comboApplication_activated(self, index):
-    q_string = self.ui.comboApplication.currentText()
-    print("application selected")
+  def on_comboApplication_textActivated(self, q_string):
+    # q_string = self.ui.comboApplication.currentText()
+    print("application selected", q_string)
 
     self.selected_application = str(q_string)
     self.__processSelectedComponent()
     self.ui.comboEditorState.setCurrentIndex(0)   # make activity lists
-    self.on_comboEditorState_activated(0)
+    state = self.ui.comboEditorState.currentText()
+    self.on_comboEditorState_textActivated(state)
 
   def on_listComponents_itemClicked(self, item):
 
@@ -397,8 +398,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def on_radioText_pressed(self):
     self.__changeData("layer", "text")
 
-  def on_comboLineStyle_activated(self, index):
-    style = self.ui.comboLineStyle.currentText()
+  def on_comboLineStyle_textActivated(self, style):
+    # style = self.ui.comboLineStyle.currentText()
     self.__changeData('style', str(style))
 
   def on_comboLineWidth_valueChanged(self, w):
@@ -430,24 +431,36 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def on_pushSave_pressed(self):
     p0 = PHASES[0]
+    data0 = self.DATA[p0]
+    # RULE: superimpose state colours to all state-dependent objects
+    for o in data0:
+      for d in data0[o]:
+        for a in data0[o][d]:
+          for s in data0[o][d][a]:
+            attributes = sorted(data0[o][d][a][s].keys())
+            if s !=  STATE_OBJECT_COLOURED:
+              if s != M_None:
+                for k in attributes:
+                  if k == "colour":
+                    if s in self.STATES_colours:
+                      data0[o][d][a][s]["colour"] = deepcopy(self.STATES_colours[s])
+                      print("debugging -- changing colour of ", o,d,a,s,k)
+                  elif k == "action":
+                    pass
+                  else:
+                    data0[o][d][a][s][k] = data0[o][d][a][STATE_OBJECT_COLOURED][k]
+
     for p in PHASES:
+      datap = self.DATA[p]
       if p != p0:
-        for o in GRAPHICS_OBJECTS:
-          if o not in OBJECTS_with_state:
-            self.DATA[p] = deepcopy(self.DATA[p0])
-          else:
-            decorations = self.DATA[p0][o]  # STRUCTURES_Graph_Item[o]
-            for d in decorations:
-              # RULE : only root objects and a selected list of components carry states (nodes, arcs, head, tail)
-              for a in self.DATA[p0][o][d]:
-                if (d in DECORATIONS_with_state):
-                  for s in self.DATA[p][o][d][a]:
-                    self.DATA[p][o][d][a] = deepcopy(self.DATA[p0][o][d][a])
-                    if s != STATE_OBJECT_COLOURED:
-                      self.DATA[p][o][d][a][s]["colour"] = self.STATES_colours[s]
-                      self.DATA[PHASES[0]][o][d][a][s]["colour"] = self.STATES_colours[s]
-                else:
-                  self.DATA[p][o][d][a] = deepcopy(self.DATA[p0][o][d][a])
+        for o in datap:
+          for d in datap[o]:
+            for a in datap[o][d]:
+              for s in datap[o][d][a]:
+                for k in datap[o][d][a][s]:
+                  if k != "action":
+                    datap[o][d][a][s][k] = deepcopy(data0[o][d][a][s][k])
+
 
     saveBackupFile(self.graph_resource_file_spec)
 
