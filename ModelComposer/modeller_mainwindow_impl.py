@@ -432,7 +432,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.radio_selectors["networks"] = self.__makeAndAddSelector("networks",
                                                                  self.networks,
                                                                  self.radioReceiverNetworks,
-                                                                 len(self.networks) - 1,
+                                                                 # len(self.networks) - 1,
+                                                                 -1,  #RULE: none selected initially
                                                                  self.ui.layoutNetworks)
 
     # RULE: no rule for the equation topology as yet
@@ -443,6 +444,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.state_inject_or_constrain_or_convert = None  # reset state of the interaction tool box
     self.__clearLayout(self.ui.layoutInteractiveWidgetTop)
     self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
+
     nw = self.current_network
     if self.editor_phase == EDITOR_PHASES[0]:
       index = self.selected_node_type[nw]
@@ -540,6 +542,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   @QtCore.pyqtSlot(str)
   def on_comboEditorPhase_currentTextChanged(self, phase):
     self.writeStatus("phase :%s" % phase)
+    if self.initialising: return
     self.setEditorPhase(phase)
     pass
 

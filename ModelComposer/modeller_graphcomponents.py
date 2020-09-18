@@ -23,14 +23,14 @@ from Common.graphics_objects import IndicatorDot
 from Common.graphics_objects import LAYERS
 from Common.graphics_objects import LOCATION_PARAMETERS
 from Common.graphics_objects import NAMES
-from Common.graphics_objects import NODES
+from Common.graphics_objects import NODES, ARCS
 from Common.graphics_objects import OBJECTS_arcs_with_states
 from Common.graphics_objects import OBJECTS_changing_position
 from Common.graphics_objects import OBJECTS_nodes_with_states
 from Common.graphics_objects import OBJECTS_not_move
 from Common.graphics_objects import OBJECTS_with_application
 from Common.graphics_objects import OBJECTS_with_state
-from Common.graphics_objects import STRUCTURES_Graph_Item
+from Common.graphics_objects import STRUCTURES_Graph_Item, DECORATIONS_with_state, DECORATIONS_with_application
 from Common.qt_resources import KEYS
 from Common.qt_resources import PRESET_COLOURS
 
@@ -87,16 +87,30 @@ class R_Item(QtWidgets.QGraphicsItem):
       x = 0  # no relative offset
       y = 0
     else:
+      # if self.graphics_root_object in NODES + [NAMES["panel"]]:
+      #   state = self.commander.state_nodes[self.ID]
+      #   if self.graphics_root_object in OBJECTS_with_application:
+      #     application = self.commander.model_container["nodes"][self.ID]["type"]
+      #   else:
+      #     application = M_None
+      state = M_None
+      application = M_None
+
       if self.graphics_root_object in NODES + [NAMES["panel"]]:
-        state = self.commander.state_nodes[self.ID]
+        if self.graphics_root_object in OBJECTS_with_state:
+          if decoration in DECORATIONS_with_state:
+            state = self.commander.state_nodes[self.ID]
         if self.graphics_root_object in OBJECTS_with_application:
-          application = self.commander.model_container["nodes"][self.ID]["type"]
-        else:
-          application = M_None
+          if decoration in DECORATIONS_with_application:
+            application = self.commander.model_container.getNodeApplication(self.ID)
+
       elif self.graphics_root_object == NAMES["connection"]:
-        application = self.commander.model_container.getArcApplication(self.ID)
-        state = self.commander.state_arcs[(self.ID)]  # self.commander.state_arcs[str(self.ID)]  #  HAP: str --> int
-        # print("get shape >>> application:", application)
+        if decoration in DECORATIONS_with_state:
+          state = self.commander.state_arcs[(self.ID)]
+        if self.graphics_root_object in OBJECTS_with_application:
+          application = M_None
+          if decoration in DECORATIONS_with_application:
+            application = self.commander.model_container.getArcApplication(self.ID)
       else:
         raise ComponentError(" no such class of components :%s" % self.graphics_root_object)
       r, d, a, s = \
@@ -116,7 +130,7 @@ class R_Item(QtWidgets.QGraphicsItem):
         obj_str = str([phase, r, d, a, s])
 
       if s == "selected":
-        print("R_Item obj string", obj_str)
+        print("debugging -- R_Item obj string", obj_str)
 
       shape_data = self.commander.graphics_data.getData(phase, self.graphics_root_object,
                                                         decoration, application, state)
@@ -652,6 +666,20 @@ class G_Item(QtWidgets.QGraphicsItem):
 # shapes -----------------------------------------------------------------------
 
 def getShapeData(graphics_root_object, graph_object, parent):
+
+  # application = M_None
+  # state = M_None
+  # if graphics_root_object in OBJECTS_with_application:
+  #   if graph_object in DECORATIONS_with_application:
+  #     if graph_object in NODES:
+  #       application = parent.commander.model_container.getNodeApplication(parent.ID)
+  #     elif graph_object in ARCS:
+  #       application = parent.commander.model_container.getArcApplication(parent.ID)
+  # if graphics_root_object in OBJECTS_with_state:
+  #   if graph_object in DECORATIONS_with_state:
+  #     state = state = parent.commander.state_nodes[parent.ID]
+
+
   if graphics_root_object in NODES + [NAMES["panel"]]:  # [NAMES["node"], NAMES["panel"]]:
     application = parent.commander.model_container.getNodeApplication(parent.ID)  # ["nodes"][parent.ID]["type"]
     state = parent.commander.state_nodes[parent.ID]
@@ -668,11 +696,11 @@ def getShapeData(graphics_root_object, graph_object, parent):
     application = M_None
     state = parent.commander.state_arcs[parent.arcID]
 
-
-  else:
-    print("getShapeData -- failed", graphics_root_object)
-    application = None
-    state = None
+  #
+  # else:
+  #   print("getShapeData -- failed", graphics_root_object)
+  #   application = None
+  #   state = None
   phase = parent.commander.editor_phase
   shape_data = parent.commander.graphics_data.getData(phase, parent.graphics_root_object,
                                                       graph_object, application, state)

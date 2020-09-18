@@ -497,7 +497,14 @@ class Commander(QtCore.QObject):
     # named_network = self.main.named_network_dictionary[network]
 
     # RULE: node type for boundary is constraint to event dynamic
-    node_type = "event"
+
+    if boundary == NAMES["intraface"]:
+      application = self.main.ontology.list_IntraNodeObjects[0]
+    elif boundary == NAMES["interface"]:
+      application = self.main.ontology.list_InterNodeObjects[0]
+    else:
+      print("fatal error no such boundary: ", boundary)
+
     node_class = boundary
 
     state = STATES[self.editor_phase]["nodes"][0]
@@ -505,12 +512,12 @@ class Commander(QtCore.QObject):
                                              x, y,  # this sets the initial position
                                              self.graphics_data,
                                              self.editor_phase,
-                                             node_type,
+                                             application,
                                              state)
 
     newnodeID = self.model_container.addChild(self.current_ID_node_or_arc, decoration_positions, network,
                                               named_connection_network,
-                                              node_class, node_type)
+                                              node_class, application)
     self.state_nodes[newnodeID] = STATES[self.editor_phase]["nodes"][0]
 
     self.__redrawScene(self.current_ID_node_or_arc)
@@ -655,9 +662,12 @@ class Commander(QtCore.QObject):
     #  start an arc
     self.state_nodes[nodeID] = "selected"
     nw = self.main.current_network
-    token = copy.copy(self.main.selected_token[self.main.editor_phase][nw])
-    mechanism = copy.copy(self.main.selected_transfer_mechanism[nw][token])
-    nature = copy.copy(self.main.selected_arc_nature[nw][token])
+    # token = copy.copy(self.main.selected_token[self.main.editor_phase][nw])
+    # mechanism = copy.copy(self.main.selected_transfer_mechanism[nw][token])
+    # nature = copy.copy(self.main.selected_arc_nature[nw][token])
+    token = self.main.selected_token[self.main.editor_phase][nw]
+    mechanism = self.main.selected_transfer_mechanism[nw][token]
+    nature = self.main.selected_arc_nature[nw][token]
     self.arcSourceID = nodeID  # keep for inserting boundary
     self.selected_arc_specs = (token, mechanism, nature)
     self.current_ID_node_or_arc = self.model_container["ID_tree"].getImmediateParent(nodeID)
