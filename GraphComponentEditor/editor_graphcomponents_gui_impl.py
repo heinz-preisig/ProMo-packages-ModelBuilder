@@ -176,15 +176,16 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("edit_states")
     self.ui.stackedColouring.setCurrentIndex(2)
 
-  def on_comboEditorPhase_textActivated(self, phase):
-    # phase = self.ui.comboEditorPhase.currentText()
+  def on_comboEditorPhase_activated(self, index):
+    phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
-  def on_comboEditorState_textActivated(self, state):
+  def on_comboEditorState_activated(self, index):
     print("debugging -- comboEditorState activated")
+    state=self.ui.comboEditorState.currentText()
     self.selected_state = str(state) #self.ui.comboEditorState.currentText()
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
