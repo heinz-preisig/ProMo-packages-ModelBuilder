@@ -457,8 +457,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       s_tokens = []
       for token in tokens:
         nature = list(self.ontology.ontology_tree[nw]["structure"]["arc"][token].keys())
-        if "auto" not in nature:
-          s_tokens.append(token)
+        # if "auto" not in nature:
+        s_tokens.append(token)
 
       if s_tokens:
         index = self.selected_token[self.editor_phase][nw]
@@ -570,8 +570,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         s_tokens = []
         for token in tokens:
           nature = list(self.ontology.ontology_tree[nw]["structure"]["arc"][token].keys())
-          if "auto" not in nature:
-            s_tokens.append(token)
+          # if "auto" not in nature:
+          s_tokens.append(token)
         if s_tokens:
           self.radio_selectors["arc_token"] = self.__makeAndAddSelector("token", s_tokens, self.radioReceiverArcToken,
                                                                         s_token,
@@ -652,24 +652,24 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         nature = list(
                 self.ontology.ontology_tree[nw]["structure"]["arc"][self.selected_token[self.editor_phase][nw]].keys())
 
-        if "auto" not in nature:
-          typed_tokens = self.nw_token_typedtoken_dict[nw][token_string]
-          # OPS!
-          if typed_tokens:
-            items_to_inject = self.typed_tokens_data[typed_tokens[0]]["instances"]
-            ask.extend(["inject", "constrain"])
-            if len(items_to_inject) > 0:
-              # there is something to inject and constrain
-              self.items_to_inject = items_to_inject
-            items_to_convert = self.typed_tokens_data[typed_tokens[0]]["conversions"]
-            if len(items_to_convert) > 0:
-              self.items_to_convert = items_to_convert
-              ask.append("convert")
-              self.radio_selectors["typed token"] = \
-                self.__makeAndAddSelector("typed token", ask, self.radioReceiverTypedTokenTool, -1,
+        # if "auto" not in nature:
+        typed_tokens = self.nw_token_typedtoken_dict[nw][token_string]
+        # OPS!
+        if typed_tokens:
+          items_to_inject = self.typed_tokens_data[typed_tokens[0]]["instances"]
+          ask.extend(["inject", "constrain"])
+          if len(items_to_inject) > 0:
+            # there is something to inject and constrain
+            self.items_to_inject = items_to_inject
+          items_to_convert = self.typed_tokens_data[typed_tokens[0]]["conversions"]
+          if len(items_to_convert) > 0:
+            self.items_to_convert = items_to_convert
+            ask.append("convert")
+            self.radio_selectors["typed token"] = \
+              self.__makeAndAddSelector("typed token", ask, self.radioReceiverTypedTokenTool, -1,
                                           self.ui.layoutInteractiveWidgetBottom)
-        else:
-          self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
+        # else:
+        #   self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
 
         self.writeStatus("")
       else:

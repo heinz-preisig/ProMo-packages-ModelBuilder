@@ -367,9 +367,6 @@ class ModelContainer(dict):
       self.arcID = 0
     else:
       self.arcID = max(arcsIDList) + 1
-      # arcsIDs = []
-      # [arcsIDs.append(a) for a in arcsIDList]
-      # self.arcID = max(arcsIDs) + 1
     arcID = self.arcID  # str(self.arcID)   #HAP:  str -- int
     self["arcs"][arcID] = ArcInfo(fromNodeID, toNodeID, network, named_network, mechanism, token, nature)
     subarcsIDs = self.getArcOnNodeScene(arcID)
