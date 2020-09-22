@@ -30,8 +30,9 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui, QtWidgets
 
 import Common.common_resources as CR
-import Common.graphics_objects as GRO
 import Common.qt_resources as QR
+
+from Common.graphics_objects import getGraphData
 from Common.automata_objects import BUTTONS
 from Common.automata_objects import getAutomata
 from Common.automata_objects import GRAPH_EDITOR_STATES
@@ -104,15 +105,30 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
     self.application_arcs_types = ontology.arc_type_list
     self.tokens = ontology.tokens
 
-    self.networks = ontology.list_leave_networks
+    # self.networks = ontology.list_leave_networks
     self.connection_networks = {}
     self.connection_networks.update(ontology.interconnection_network_dictionary)
     self.connection_networks.update(ontology.intraconnection_network_dictionary)
 
-    self.NETWORKS, self.TOKENS, self.DATA = GRO.getGraphData(self.networks, self.connection_networks,
-                                                             self.application_node_types,
-                                                             self.application_arcs_types, self.tokens,
-                                                             FILES["graph_resource_file_spec"] % self.ontology_name)
+    # self.NETWORKS, self.TOKENS, self.DATA = GRO.getGraphData(self.networks, self.connection_networks,
+    #                                                          self.application_node_types,
+    #                                                          self.application_arcs_types, self.tokens,
+    #                                                          FILES["graph_resource_file_spec"] % self.ontology_name)
+
+
+    self.graph_resource_file_spec = FILES["graph_resource_file_spec"] % self.ontology_name
+    self.NETWORK, \
+    self.TOKENS, \
+    self.DATA, \
+    self.STATES_colours = getGraphData(ontology.list_leave_networks,
+                                       ontology.list_interconnection_networks,
+                                       ontology.list_intraconnection_networks,
+                                       ontology.list_NetworkNodeObjects,
+                                       ontology.list_IntraNodeObjects,
+                                       ontology.list_InterNodeObjects,
+                                       ontology.list_arcObjects,
+                                       ontology.tokens,
+                                       self.graph_resource_file_spec)
 
     self.ui.comboPhase.clear()
     self.ui.comboPhase.addItems([M_None] + PHASES)

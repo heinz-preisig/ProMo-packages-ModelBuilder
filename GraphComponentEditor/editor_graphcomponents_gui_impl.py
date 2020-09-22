@@ -84,19 +84,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.ui.labelOntology.setText(self.ontology_name)
 
-    # self.file_resources = DataFileResources(self.ontology_name)
-    self.graph_resource_file_spec = FILES["graph_resource_file_spec"] % self.ontology_name
 
     self.ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
     ontology = self.ontology
-
-    # self.networks = ontology.leave_networks_list
-    #
-    # self.tokens_on_networks = ontology.tokens_on_networks
-    # tokens = ontology.tokens
-    # self.nodeTypes = ontology.node_types_in_networks
-    # self.arcApplications = ontology.list_arcObjects_in_networks #arc_types_in_leave_networks_list_coded
-    # self.typedTokens = ontology.typed_tokens_on_networks
     self.networks = ontology.list_leave_networks
 
     connection_networks = {}
@@ -104,6 +94,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     connection_networks.update(ontology.intraconnection_network_dictionary)
     self.connection_network_list = sorted(connection_networks.keys())
 
+    self.graph_resource_file_spec = FILES["graph_resource_file_spec"] % self.ontology_name
     self.NETWORK, \
     self.TOKENS, \
     self.DATA, \
@@ -218,7 +209,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     print("component selected", item.text())
     self.__group_controls("edit_object")
     self.selected_component = str(item.text())
-    # self.__makeComboApplication()
+    # self.__makeListStates()
+    self.__makeComboState()
     self.__selectedComponent()
 
     self.initialise = False
@@ -687,15 +679,24 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def __makeComboState(self):
     self.ui.comboEditorState.clear()
     if self.selected_root_object in NODES:
-      states = STATES[self.current_editor_phase]["nodes"]
+      if self.selected_component in DECORATIONS_with_state:
+        states = STATES[self.current_editor_phase]["nodes"]
+      else:
+        states = None
     elif (self.selected_root_object in ARCS) or (self.selected_root_object in KNOTS):
-      states = STATES[self.current_editor_phase]["arcs"]
+      if self.selected_component in DECORATIONS_with_state:
+        states = STATES[self.current_editor_phase]["arcs"]
+      else:
+        states = None
     else:
       states = None
       print("__makeComboState -- no state defined")
 
-    self.ui.comboEditorState.addItems(states)
-    self.selected_object_state = str(self.ui.comboEditorState.currentText())
+    if states:
+      self.ui.comboEditorState.addItems(states)
+      self.selected_object_state = str(self.ui.comboEditorState.currentText())
+    else:
+      self.ui.comboEditorState.clear()
     # self.ui.comboEditorState.show()
 
   def __makeComboApplication(self):
@@ -850,35 +851,42 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # rule: selected application -- none
     # rule: state -- colour is the same for all editor phases, except root objects with state  STATE_OBJECT_COLOURED
     if what == "action":
-      phases = [self.current_editor_phase]
+      phase = self.current_editor_phase
+      state = M_None
+      if self.selected_root_object in OBJECTS_with_state:
+        if self.selected_component in DECORATIONS_with_state:
+          state = self.current_state
     else:
-      phases = PHASES
+      phase = PHASES[0]
+      state = M_None
+      if self.selected_root_object in OBJECTS_with_state:
+        if self.selected_component in DECORATIONS_with_state:
+          state = STATE_OBJECT_COLOURED
 
-    if self.selected_root_object in OBJECTS_with_state:
-      if self.selected_component in DECORATIONS_with_state:
-        self.DATA.setData(what, value,
-                          PHASES[0],  # self.current_editor_phase,
-                          self.selected_root_object,
-                          self.selected_component,
-                          self.selected_application,
-                          STATE_OBJECT_COLOURED,
-                          )
-      else:
-        self.DATA.setData(what, value,
-                          PHASES[0],  # self.current_editor_phase,
-                          self.selected_root_object,
-                          self.selected_component,
-                          self.selected_application,
-                          M_None,
-                          )
-    else:
-      self.DATA.setData(what, value,
-                        PHASES[0],  # self.current_editor_phase,
-                        self.selected_root_object,
-                        self.selected_component,
-                        self.selected_application,
-                        M_None,
-                        )
+
+    self.DATA.setData(what, value,
+                      phase,
+                      self.selected_root_object,
+                      self.selected_component,
+                      self.selected_application,
+                      state,
+                      )
+    #   else:
+    #     self.DATA.setData(what, value,
+    #                       phase,  # self.current_editor_phase,
+    #                       self.selected_root_object,
+    #                       self.selected_component,
+    #                       self.selected_application,
+    #                       M_None,
+    #                       )
+    # else:
+    #   self.DATA.setData(what, value,
+    #                     phase,  # self.current_editor_phase,
+    #                     self.selected_root_object,
+    #                     self.selected_component,
+    #                     self.selected_application,
+    #                     M_None,
+    #                     )
     #
     # for phase in phases:
     #   print("debugging -- going through the phases ", phase)
