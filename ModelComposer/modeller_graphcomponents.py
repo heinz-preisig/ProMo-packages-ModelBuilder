@@ -642,7 +642,10 @@ class G_Item(QtWidgets.QGraphicsItem):
     state = self.getGraphObjectState()
     cursor = self.parent.commander.getTheCursor(self.graphics_root_object,
                                                 self.decoration, self.application, state)
-    # print("setCursor :", self.parent.graphics_root_object, self.decoration)
+    if (self.graphics_root_object == "node_simple") and (self.decoration == "root"):
+      print("setCursor :", self.parent.graphics_root_object, self.decoration)
+      cursor = self.parent.commander.getTheCursor(self.graphics_root_object,
+                                                self.decoration, self.application, state)
     self.setCursor(cursor)
 
   def getGraphObjectState(self):

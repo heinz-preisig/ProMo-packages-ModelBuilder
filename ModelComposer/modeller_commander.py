@@ -439,6 +439,10 @@ class Commander(QtCore.QObject):
     x, y = pos.x(), pos.y()
 
     # if not network:
+    if not self.main.current_network:
+      return {
+            "failed"  : True
+            }
     network = self.main.current_network  # default
     named_network = self.main.current_named_network
 

@@ -33,20 +33,20 @@ from PyQt5 import QtWidgets
 from Common.common_resources import getOntologyName
 from Common.common_resources import putDataOrdered
 from Common.common_resources import saveBackupFile
+from Common.graphics_objects import ARCS
 from Common.graphics_objects import DECORATIONS_with_state
 from Common.graphics_objects import DEFAULT_PHASE
-from Common.graphics_objects import getGraphData
-from Common.graphics_objects import GRAPHICS_OBJECTS
 from Common.graphics_objects import INTERFACE
-from Common.graphics_objects import INTRAFACE
+from Common.graphics_objects import INTRAFACE,NODES
 from Common.graphics_objects import M_None
 from Common.graphics_objects import NAMES
 from Common.graphics_objects import OBJECTS_colour_defined_separate
 from Common.graphics_objects import OBJECTS_with_state
 from Common.graphics_objects import PHASES
-from Common.graphics_objects import STATE_OBJECT_COLOURED
 from Common.graphics_objects import STATES
-from Common.graphics_objects import STRUCTURES_Graph_Item, NODES, ARCS, KNOTS
+from Common.graphics_objects import STATE_OBJECT_COLOURED
+from Common.graphics_objects import STRUCTURES_Graph_Item
+from Common.graphics_objects import getGraphData
 from Common.ontology_container import OntologyContainer
 from Common.qt_resources import PEN_STYLES
 from Common.resource_initialisation import FILES
@@ -84,8 +84,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.ui.labelOntology.setText(self.ontology_name)
 
-
-    self.ontology = OntologyContainer(self.ontology_name)  # DIRECTORIES["ontology_location"] % self.ontology_name)
+    self.ontology = OntologyContainer(self.ontology_name)
     ontology = self.ontology
     self.networks = ontology.list_leave_networks
 
@@ -107,8 +106,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                                        ontology.list_arcObjects,
                                        ontology.tokens,
                                        self.graph_resource_file_spec)
-    # TODO: re-enable copy of complete phases at the beginning
-    # self.DATA["equation_topology"] = self.DATA["topology"]
 
     self.toolchoose = True
     self.newcomponent = False
@@ -127,7 +124,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.colourDialog = QtWidgets.QColorDialog()
 
     for i in range(0, 16):  # reset all custom colours first to white
-      colour = QtGui.QColor(255, 255, 255)  # .rgba()
+      colour = QtGui.QColor(255, 255, 255)
       self.colourDialog.setCustomColor(i, colour)
 
     count = 0
@@ -135,18 +132,18 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     for token in tokens:
       print(token, ' : ', count)
       r, g, b, a = self.TOKENS[token]["colour"]
-      colour = QtGui.QColor(r, g, b, a)  # .rgba()
+      colour = QtGui.QColor(r, g, b, a)
       self.colourDialog.setCustomColor(count, colour)
       count += 2  # makes it the first row
-    colour_select = QtGui.QColor(255, 255, 0)  # .rgba()
+    colour_select = QtGui.QColor(255, 255, 0)
     self.colourDialog.setCustomColor(1, colour_select)
-    colour_open = QtGui.QColor(0, 255, 255)  # .rgba()
+    colour_open = QtGui.QColor(0, 255, 255)
     self.colourDialog.setCustomColor(3, colour_open)
-    colour_uni_directional = QtGui.QColor(85, 85, 85)  # .rgba()
+    colour_uni_directional = QtGui.QColor(85, 85, 85)
     self.colourDialog.setCustomColor(5, colour_uni_directional)
-    colour_bi_directional = QtGui.QColor(170, 170, 170)  # .rgba()
+    colour_bi_directional = QtGui.QColor(170, 170, 170)
     self.colourDialog.setCustomColor(7, colour_bi_directional)
-    colour_distributed = QtGui.QColor(225, 225, 225)  # .rgba()
+    colour_distributed = QtGui.QColor(225, 225, 225)
     self.colourDialog.setCustomColor(9, colour_distributed)
 
     # allow for filling of gui widgets
@@ -167,29 +164,26 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("edit_states")
     self.ui.stackedColouring.setCurrentIndex(2)
 
-  def on_comboEditorPhase_activated(self, index):
-    phase = self.ui.comboEditorPhase.currentText()
+  def on_comboEditorPhase_textActivated(self, phase):
+    # phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
-  def on_comboEditorState_activated(self, index):
+  def on_comboEditorState_textActivated(self, state):
     print("debugging -- comboEditorState activated")
-    state=self.ui.comboEditorState.currentText()
-    self.selected_state = str(state) #self.ui.comboEditorState.currentText()
+    # state = self.ui.comboEditorState.currentText()
+    self.selected_state = str(state)
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
-
-  #    @QtCore.pyqtSignature('QListWidgetItem')
   def on_listRootObjects_itemClicked(self, item):
-
-    if DEBUG_ME: debugPrint('on_listRootObjects', item.text())
+    if DEBUG_ME:
+      debugPrint('on_listRootObjects', item.text())
     self.selected_root_object = str(item.text())
     self.ui.Logger.clear()
-    # self.ui.groupComponents.hide()
     self.ui.stackedProperties.setCurrentIndex(0)
     self.__makeListComponents()
     self.__group_controls("selected_root_object")
@@ -200,7 +194,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.selected_application = str(q_string)
     self.__processSelectedComponent()
-    self.ui.comboEditorState.setCurrentIndex(0)   # make activity lists
+    self.ui.comboEditorState.setCurrentIndex(0)  # make activity lists
     state = self.ui.comboEditorState.currentText()
     self.on_comboEditorState_textActivated(state)
 
@@ -209,7 +203,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     print("component selected", item.text())
     self.__group_controls("edit_object")
     self.selected_component = str(item.text())
-    # self.__makeListStates()
     self.__makeComboState()
     self.__selectedComponent()
 
@@ -224,7 +217,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("network_selected")
 
   def on_radioButtonComponents_pressed(self):
-    # self.ui.groupPhase.hide()
     self.ui.groupShapes.hide()
     self.ui.groupObjects.hide()
     self.ui.groupComponents.show()
@@ -431,13 +423,13 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         for a in data0[o][d]:
           for s in data0[o][d][a]:
             attributes = sorted(data0[o][d][a][s].keys())
-            if s !=  STATE_OBJECT_COLOURED:
+            if s != STATE_OBJECT_COLOURED:
               if s != M_None:
                 for k in attributes:
                   if k == "colour":
                     if s in self.STATES_colours:
                       data0[o][d][a][s]["colour"] = deepcopy(self.STATES_colours[s])
-                      print("debugging -- changing colour of ", o,d,a,s,k)
+                      print("debugging -- changing colour of ", o, d, a, s, k)
                   elif k == "action":
                     pass
                   else:
@@ -453,7 +445,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
                 for k in datap[o][d][a][s]:
                   if k != "action":
                     datap[o][d][a][s][k] = deepcopy(data0[o][d][a][s][k])
-
 
     saveBackupFile(self.graph_resource_file_spec)
 
@@ -678,18 +669,15 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
   def __makeComboState(self):
     self.ui.comboEditorState.clear()
-    if self.selected_root_object in NODES:
-      if self.selected_component in DECORATIONS_with_state:
-        states = STATES[self.current_editor_phase]["nodes"]
-      else:
-        states = None
-    elif (self.selected_root_object in ARCS) or (self.selected_root_object in KNOTS):
-      if self.selected_component in DECORATIONS_with_state:
-        states = STATES[self.current_editor_phase]["arcs"]
-      else:
-        states = None
-    else:
-      states = None
+    states = None
+    if self.selected_root_object in OBJECTS_with_state:
+      if self.selected_root_object in NODES:
+        if self.selected_component in DECORATIONS_with_state:
+          states = STATES[self.current_editor_phase]["nodes"]
+      elif self.selected_root_object in ARCS:
+        if self.selected_component in DECORATIONS_with_state:
+          states = STATES[self.current_editor_phase]["arcs"]
+    if not states:
       print("__makeComboState -- no state defined")
 
     if states:
@@ -862,7 +850,6 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       if self.selected_root_object in OBJECTS_with_state:
         if self.selected_component in DECORATIONS_with_state:
           state = STATE_OBJECT_COLOURED
-
 
     self.DATA.setData(what, value,
                       phase,

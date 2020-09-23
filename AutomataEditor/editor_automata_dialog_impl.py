@@ -82,8 +82,6 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
     # self.__setupSignals()
     self.__setupControlLists()
     self.__buttonLogics('start')
-    self.backup = False
-    self.install = False
 
     self.current_state = None
     self.current_phase = None
@@ -93,8 +91,6 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
 
     self.cursors = ModellerCursor()
 
-    self.ui.checkBoxBackup.setCheckState(QtCore.Qt.Checked)
-    self.ui.checkBoxInstall.setCheckState(QtCore.Qt.Checked)
 
     self.ontology_name = CR.getOntologyName(task="task_automata")
     # self.file_resources = DataFileResources(self.ontology_name)
@@ -192,7 +188,6 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
     self.GUI_control = {
             'start'        : ([0], range(1, n_g)),
             'save'         : ([], []),
-            'install'      : ([], []),
             'edit_automata': (range(0, n_g), []),
             }
 
@@ -333,31 +328,18 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
             'key'  : self.key_automata
             }
 
-    # automata_working_file_name = self.file_resources["automata_working_file_name"]
     automata_working_file_spec = FILES["automata_working_file_spec"] % self.ontology_name
-    if self.backup: CR.saveBackupFile(automata_working_file_spec)  # , "")  # automata_working_file_name, '.json')
+    old, new = CR.saveBackupFile(automata_working_file_spec)
+    print("saved to backup file ", new)
 
-    # CR.putData(vars, self.file_resources["automata_working_file_spec"], indent=2)
     CR.putData(vars, automata_working_file_spec, indent=2)
 
     self.__buttonLogics('save')
-    if self.install: self.__install()
 
   def on_pushLaTex_pressed(self):
     self.__writeLaTexFileTable()
 
-  #    def on_pushInstallAutomaton_pressed(self):
-  def __install(self):
-    source = FILES["automata_working_file_spec"] % self.ontology_name
-    destination = FILES["automata_file_spec"] % self.ontology_name
-    U.copyfile(source, destination)
-    self.__buttonLogics('install')
 
-  def on_checkBoxBackup_stateChanged(self, state):
-    self.backup = state == QtCore.Qt.Checked
-
-  def on_checkBoxInstall_stateChanged(self, state):
-    self.install = state == QtCore.Qt.Checked
 
   # internal methods from old version ---------------------------------------------------
 

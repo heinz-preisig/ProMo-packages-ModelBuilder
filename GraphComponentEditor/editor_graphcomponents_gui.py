@@ -1458,7 +1458,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.groupComponents.setTitle(_translate("MainWindow", "components"))
-        self.groupShapes.setTitle(_translate("MainWindow", "shapes"))
+        self.groupShapes.setTitle(_translate("MainWindow", "Components"))
         self.groupObjects.setTitle(_translate("MainWindow", "graph objects"))
         self.pushButtonNetworks.setText(_translate("MainWindow", "networks"))
         self.pushButtonIntraface.setText(_translate("MainWindow", "intraface"))

@@ -110,7 +110,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>shapes</string>
+      <string>Components</string>
      </property>
      <widget class="QListWidget" name="listComponents">
       <property name="geometry">
