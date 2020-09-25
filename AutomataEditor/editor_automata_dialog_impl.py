@@ -119,10 +119,10 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
     self.STATES_colours = getGraphData(ontology.list_leave_networks,
                                        ontology.list_interconnection_networks,
                                        ontology.list_intraconnection_networks,
-                                       ontology.list_NetworkNodeObjects,
-                                       ontology.list_IntraNodeObjects,
-                                       ontology.list_InterNodeObjects,
-                                       ontology.list_arcObjects,
+                                       ontology.list_network_node_objects,
+                                       ontology.list_intra_node_objects,
+                                       ontology.list_inter_node_objects,
+                                       ontology.list_arc_objects,
                                        ontology.tokens,
                                        self.graph_resource_file_spec)
 

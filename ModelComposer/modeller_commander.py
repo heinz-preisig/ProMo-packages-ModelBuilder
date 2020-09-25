@@ -503,9 +503,9 @@ class Commander(QtCore.QObject):
     # RULE: node type for boundary is constraint to event dynamic
 
     if boundary == NAMES["intraface"]:
-      application = self.main.ontology.list_IntraNodeObjects[0]
+      application = self.main.ontology.list_intra_node_objects[0]
     elif boundary == NAMES["interface"]:
-      application = self.main.ontology.list_InterNodeObjects[0]
+      application = self.main.ontology.list_inter_node_objects[0]
     else:
       print("fatal error no such boundary: ", boundary)
 

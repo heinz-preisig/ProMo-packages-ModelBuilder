@@ -152,7 +152,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.tokens_on_networks = ontology.tokens_on_networks
     # self.tokens = ontology.tokens
     # self.nodeTypes = ontology.node_types_in_networks
-    self.nodeObjects_in_networks = ontology.list_nodeObjects_in_networks
+    self.nodeObjects_in_networks = ontology.list_node_objects_on_networks
     # self.arcApplications_in_networks = ontology.list_arcObjects_in_networks  # arc_types_in_leave_networks_list_coded
     self.arcInfoDictionary = ontology.arc_info_dictionary
     self.nw_token_typedtoken_dict = ontology.token_typedtoken_on_networks
@@ -167,19 +167,19 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.TOKENS, \
     self.graphics_DATA, \
     self.state_colours = getGraphData(ontology.networks,
-                 ontology.list_interconnection_networks,
-                 ontology.list_intraconnection_networks,
-                 ontology.list_NetworkNodeObjects,
-                 ontology.list_IntraNodeObjects,
-                 ontology.list_InterNodeObjects,
-                 ontology.list_arcObjects,
-                 ontology.tokens,
-    #              graph_resource_file_spec
-    # self.networks,
-    #                                   self.connection_networks,
-    #                                   ontology.node_type_list,
-    #                                   ontology.arc_type_list,
-    #                                   ontology.tokens,
+                                      ontology.list_interconnection_networks,
+                                      ontology.list_intraconnection_networks,
+                                      ontology.list_network_node_objects,
+                                      ontology.list_intra_node_objects,
+                                      ontology.list_inter_node_objects,
+                                      ontology.list_arc_objects,
+                                      ontology.tokens,
+                                      #              graph_resource_file_spec
+                                      # self.networks,
+                                      #                                   self.connection_networks,
+                                      #                                   ontology.node_type_list,
+                                      #                                   ontology.arc_type_list,
+                                      #                                   ontology.tokens,
                                       FILES[
                                         "graph_resource_file_spec"] %
                                       ontology_name)

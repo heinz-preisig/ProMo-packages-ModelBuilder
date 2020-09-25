@@ -100,10 +100,10 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.STATES_colours = getGraphData(ontology.list_leave_networks,
                                        ontology.list_interconnection_networks,
                                        ontology.list_intraconnection_networks,
-                                       ontology.list_NetworkNodeObjects,
-                                       ontology.list_IntraNodeObjects,
-                                       ontology.list_InterNodeObjects,
-                                       ontology.list_arcObjects,
+                                       ontology.list_network_node_objects,
+                                       ontology.list_intra_node_objects,
+                                       ontology.list_inter_node_objects,
+                                       ontology.list_arc_objects,
                                        ontology.tokens,
                                        self.graph_resource_file_spec)
 
@@ -690,14 +690,14 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def __makeComboApplication(self):
 
     if self.selected_root_object == NAMES["connection"]:
-      applications = self.ontology.list_arcObjects
+      applications = self.ontology.list_arc_objects
     else:
       if self.network_type == "network":
-        applications = self.ontology.list_NetworkNodeObjects
+        applications = self.ontology.list_network_node_objects
       elif self.network_type == "interface":
-        applications = self.ontology.list_InterNodeObjects
+        applications = self.ontology.list_inter_node_objects
       elif self.network_type == "intraface":
-        applications = self.ontology.list_IntraNodeObjects
+        applications = self.ontology.list_intra_node_objects
       else:
         print(">>>>>>>>>> should not come here")
 
