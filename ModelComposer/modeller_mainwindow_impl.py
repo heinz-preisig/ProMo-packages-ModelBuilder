@@ -36,6 +36,7 @@ from Common.common_resources import askForModelFileGivenOntologyLocation  # askF
 from Common.common_resources import CONVERSION_SEPARATOR
 from Common.common_resources import getOntologyName
 from Common.common_resources import M_None
+from Common.resources_icons import roundButton
 from Common.graphics_objects import getGraphData
 from Common.graphics_objects import NetworkData
 from Common.ontology_container import OntologyContainer
@@ -96,7 +97,12 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.editor_phase = EDITOR_PHASES[0]
 
     # interface details
-    self.__setupSignals()
+    roundButton(self.ui.pushExit,"exit","exit without saving")
+    roundButton(self.ui.pushSave,"save","save to file")
+    roundButton(self.ui.pushSchnipsel,"schnipsel","open schnipsel dialog")
+    roundButton(self.ui.pushTakeScreenShot,"screen_shot","take a screen shot")
+    roundButton(self.ui.pushSaveAs,"save_as", "save with a new name")
+
     self.button_logic = self.__setupButtonLogics()
     # self.__setupButtonWithIcons()
     self.__buttonLogics("start")
@@ -282,8 +288,15 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.__makeMainToolPage()
     self.__buttonLogics("pushNewModel")
 
-  @staticmethod
-  def __setupButtonLogics():
+  def __setupButtonLogics(self):
+    u = self.ui
+    self.buttons = {
+            "pushExit"     : u.pushExit,
+            "pushSave"     : u.pushSave,
+            "pushSaveAs"   : u.pushSaveAs,
+            "pushSchnipsel": u.pushSchnipsel,
+            }
+
     # l_0 = {}  # "actionOntology"}
     l_1 = ["pushExit",
            "pushSaveAs",
@@ -300,20 +313,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
             "pushSaveAs"      : l_2,
             }
     return e
-
-  def __setupSignals(self):
-    #  connect signals
-    u = self.ui
-    b = {
-            "pushExit"     : u.pushExit,  # , self.pushExit],
-            "pushSave"     : u.pushSave,  # , self.pushSave],
-            "pushSaveAs"   : u.pushSaveAs,  # , self.saveAs],
-            "pushSchnipsel": u.pushSchnipsel,  # self.showSchnipselPopWindow],
-            }
-    self.buttons = {}
-    for i in b:
-      # self.connect(b[i][0], QtCore.pyqtSignal("clicked()"), b[i][1])
-      self.buttons[i] = b[i]
 
   def __setupModellerApl(self):
     """
@@ -433,7 +432,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                  self.networks,
                                                                  self.radioReceiverNetworks,
                                                                  # len(self.networks) - 1,
-                                                                 -1,  #RULE: none selected initially
+                                                                 -1,  # RULE: none selected initially
                                                                  self.ui.layoutNetworks)
 
     # RULE: no rule for the equation topology as yet
@@ -542,6 +541,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   @QtCore.pyqtSlot(str)
   def on_comboEditorPhase_currentTextChanged(self, phase):
     self.writeStatus("phase :%s" % phase)
+    if not self.current_network: return
     if self.initialising: return
     self.setEditorPhase(phase)
     pass
@@ -592,6 +592,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       colour = self.named_network_dictionary.getColour(self.current_named_network)
       box = self.ui.groupNamed_NetworkColour
       self.__showColour(box, colour)
+      self.commander.applyControlAccessRules()
+      self.commander.redrawCurrentScene()
 
   def radioReceiverNode(self, token_class, token, token_string, toggle):
     nw = self.current_network
@@ -667,7 +669,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
             ask.append("convert")
             self.radio_selectors["typed token"] = \
               self.__makeAndAddSelector("typed token", ask, self.radioReceiverTypedTokenTool, -1,
-                                          self.ui.layoutInteractiveWidgetBottom)
+                                        self.ui.layoutInteractiveWidgetBottom)
         # else:
         #   self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
 
@@ -702,16 +704,18 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         pass
 
   def radioReceiverTypedTokenInject(self, token_class, token, token_string, toggle):
-    # print("debugging -- typed token to be injected")
+    print("debugging -- typed token to be injected")
     pass
 
   def radioReceiverTypedTokenToConvert(self, token_class, token, token_string, toggle):
+    print("debugging -- typed token to be convert")
     pass
 
   def on_toolNamed_NetworkColour_pressed(self):
     # print("debugging -- tool pressed")
     where = self.ui.groupNamed_NetworkColour
     self.__selectColour(where)
+    self.commander.applyControlAccessRules()
     self.commander.redrawCurrentScene()
     return
 
@@ -870,7 +874,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     ask for model file and then map and save it
     """
-    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new.png")
+    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new")
 
     if not self.model_name:
       return

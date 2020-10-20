@@ -1795,7 +1795,7 @@ class Commander(QtCore.QObject):
           self.state_nodes[child] = "enabled"  # default is enabled
 
   def __ruleNodeAccessTypedTokensInject(self):
-    # print("token control inject rule")
+    print("debugging -- token control inject rule")
 
     #
     # RULE: only constant systems can receive tokens in a given network
@@ -1810,9 +1810,10 @@ class Commander(QtCore.QObject):
     for node in children:
       if self.state_nodes[node] != "selected":
         self.state_nodes[node] = "blocked"
-        network = self.model_container["nodes"][node]["network"]
-        if network == self.main.current_network:
-          if self.model_container["nodes"][node]["type"] == "constant":
+        network = self.main.current_network
+        named_network = self.model_container["nodes"][node]["named_network"]
+        if named_network == self.main.current_named_network: #self.main.current_network:
+          if "constant" in self.model_container["nodes"][node]["type"]:
             for token in tokens:
               if token in self.main.nw_token_typedtoken_dict[network].keys():
                 if token in self.model_container["nodes"][node]["tokens"]:
@@ -1907,8 +1908,11 @@ class Commander(QtCore.QObject):
   def applyControlAccessRules(self):
     phase = self.editor_phase
     state = self.editor_state
+    network = self.main.current_network
+    named_network = self.main.current_named_network
 
-    # print("editor state :", state)
+    print("debugging -- access rules editor phase & state :", phase, state)
+    print("debugging -- access rules editor network & named network :", network, named_network)
 
     # token_control = self.main.control_tools.index
     # typed_token_control = self.main.control_typed_tokens.index

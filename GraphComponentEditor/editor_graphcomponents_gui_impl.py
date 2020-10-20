@@ -116,6 +116,8 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.selected_state = STATE_OBJECT_COLOURED
 
+    self.selected_root_object = None
+
     self.__makeComboEditorPhase()
     self.__makeListTokens()
     self.__makeListStates()
@@ -164,14 +166,17 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__group_controls("edit_states")
     self.ui.stackedColouring.setCurrentIndex(2)
 
-  def on_comboEditorPhase_textActivated(self, phase):
+  def on_comboEditorPhase_currentTextChanged(self, phase):
+    print("debugging -- new editor phase:", str(phase))
     # phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
+    if not self.selected_root_object:
+      return
     component_data = self.__getComponentData()
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
-  def on_comboEditorState_textActivated(self, state):
+  def on_comboEditorState_currentTextChanged(self, state):
     print("debugging -- comboEditorState activated")
     # state = self.ui.comboEditorState.currentText()
     self.selected_state = str(state)

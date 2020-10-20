@@ -69,7 +69,7 @@ class NodeInfo(
       self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
 
     # RULE: typed tokens can only be injected in reservoirs
-    if node_type == NAMES["reservoir"]:
+    if NAMES["reservoir"] in node_type:
       self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
     # RULE: typed token conversion can only be injected in dynamic nodes
     # NOTE: this fixes a term in the ontology
@@ -1132,7 +1132,7 @@ class ModelContainer(dict):
     adj_matrix = self.computeTokenAdjacencyMatrix(domain, token)
     for node in domain:
       node_type = self["nodes"][node]["type"]
-      if NAMES["reservoir"] == node_type:
+      if NAMES["reservoir"] in node_type:
         if token in self["nodes"][node]["injected_typed_tokens"]:
           for typed_token in self["nodes"][node]["injected_typed_tokens"][token]:
             network = self["nodes"][node]["network"]
