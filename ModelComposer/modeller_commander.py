@@ -438,27 +438,22 @@ class Commander(QtCore.QObject):
 
     x, y = pos.x(), pos.y()
 
-    # if not network:
-    if not self.main.current_network:
-      return {
-            "failed"  : True
-            }
-    network = self.main.current_network  # default
-    named_network = self.main.current_named_network
+    if not network:
+    # if not self.main.current_network:
+    #   return {
+    #         "failed"  : True
+    #         }
+      network = self.main.current_network  # default
+      named_network = self.main.current_named_network
 
-    # named_network = self.main.named_network_dictionary[network]
 
-    # # RULE: node type for boundary is constraint to event dynamic
-    # if network in self.intraconnections_dictionary:
-    #   node_type = "event"
-    #   node_class = NAMES["intraface"]
-    # elif network in self.interconnections_dictionary:
-    #   node_type = "event"
-    #   node_class = NAMES["interface"]
-    # else:
+      node_type = self.main.selected_node_type[self.main.current_network]
+      node_class = NAMES["node"]
 
-    node_type = self.main.selected_node_type[self.main.current_network]
-    node_class = NAMES["node"]
+    else:
+      node_class = NAMES["branch"]
+      node_type = NAMES["branch"]
+      named_network = NAMES["branch"]
 
     state = STATES[self.editor_phase]["nodes"][0]
     decoration_positions = ModelGraphicsData(node_class,
@@ -592,7 +587,8 @@ class Commander(QtCore.QObject):
 
     # print("group - node group IDs:", nodeGroupIDS)
 
-    pars = self.__c02_addNode(pos)
+
+    pars = self.__c02_addNode(pos, network="composite")
     newNodeID = pars["new node"]
     self.model_container.groupNodes(newNodeID, nodeGroupIDS)
     for n in nodeGroupIDS:
