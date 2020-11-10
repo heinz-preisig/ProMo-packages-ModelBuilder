@@ -40,7 +40,7 @@ from Common.resources_icons import roundButton
 from Common.graphics_objects import getGraphData
 from Common.graphics_objects import NetworkData
 from Common.ontology_container import OntologyContainer
-from Common.qt_resources import cleanLayout
+from Common.qt_resources import clearLayout
 from Common.qt_resources import ModellerRadioButton
 from Common.radio_selector_impl import RadioSelector
 from Common.resource_initialisation import DIRECTORIES
@@ -369,7 +369,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
   def __shiftKeyAutomaton(self, phase):
     # print("debugging -- shifting key automaton")
-    cleanLayout(self.ui.formKeyAutomaton)
+    clearLayout(self.ui.formKeyAutomaton)
     count = 0
     for k in sorted(self.radio[phase]):
       radio = self.radio[phase][k]
