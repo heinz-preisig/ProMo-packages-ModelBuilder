@@ -180,9 +180,12 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     print("debugging -- comboEditorState activated")
     # state = self.ui.comboEditorState.currentText()
     self.selected_state = str(state)
-    component_data = self.__getComponentData()
-    self.__makeListActivity(component_data["action"])
-    self.__group_controls("selected_editor_phase")
+    try:  # there is an issue when loading the page
+      component_data = self.__getComponentData()
+      self.__makeListActivity(component_data["action"])
+      self.__group_controls("selected_editor_phase")
+    except:
+      pass
 
   def on_listRootObjects_itemClicked(self, item):
     if DEBUG_ME:
@@ -193,7 +196,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__makeListComponents()
     self.__group_controls("selected_root_object")
 
-  def on_comboApplication_textActivated(self, q_string):
+  def on_comboApplication_currentTextChanged(self, q_string): #currentTextChanged(self, q_string):
     # q_string = self.ui.comboApplication.currentText()
     print("application selected", q_string)
 
@@ -201,7 +204,10 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__processSelectedComponent()
     self.ui.comboEditorState.setCurrentIndex(0)  # make activity lists
     state = self.ui.comboEditorState.currentText()
-    self.on_comboEditorState_textActivated(state)
+    try:  # first call -- no informatin available
+      self.on_comboEditorState_currentTextChanged(state)
+    except:
+      pass
 
   def on_listComponents_itemClicked(self, item):
 
@@ -388,7 +394,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def on_radioText_pressed(self):
     self.__changeData("layer", "text")
 
-  def on_comboLineStyle_textActivated(self, style):
+  def on_comboLineStyle_currentTextChanged(self, style):
     # style = self.ui.comboLineStyle.currentText()
     self.__changeData('style', str(style))
 

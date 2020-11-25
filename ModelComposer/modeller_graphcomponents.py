@@ -825,7 +825,7 @@ class ShapeLine(QtWidgets.QGraphicsLineItem, G_Item):
 
     self.header_offset = QtCore.QPointF(head_height / 2, head_width / 2)
     self.tail_offset = QtCore.QPointF(tail_height / 2, tail_width / 2)
-    self.extra = 20
+    self.extra = 10
 
   def boundingRect(self):  # essential for moving arc
     return \

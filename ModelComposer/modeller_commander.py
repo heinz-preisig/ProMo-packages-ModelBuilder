@@ -742,10 +742,16 @@ class Commander(QtCore.QObject):
         mech_left = self.main.selected_transfer_mechanism[source_network][token]
         mech_right = self.main.selected_transfer_mechanism[sink_network][token]
         if mech_left != mech_right:
-          self.__resetNodeStatesAndSelectedArc()
-          self.redrawCurrentScene()
-          self.main.writeStatus("the mechanisms on both sides must be the same")
-          return {"failed": True}
+          # Rule: if they are not the same then we set the right one equal to the left
+          # self.__resetNodeStatesAndSelectedArc()
+          # self.redrawCurrentScene()
+          # self.main.writeStatus("the mechanisms on both sides must be the same")
+          # return {"failed": True}
+
+          mechanisms = sorted(self.main.arcInfoDictionary[sink_network][token].keys())
+          index = mechanisms.index(mech_left)
+          self.main.setSelectorChecked("mechanism","mechanism", index)
+          self.main.writeStatus("the mechanism on the right has be set idential to the mechanism on the left")
 
         nature_left = self.main.selected_arc_nature[source_network][token]
         nature_right = self.main.selected_arc_nature[sink_network][token]
@@ -1724,7 +1730,6 @@ class Commander(QtCore.QObject):
 
   def __ruleNodeAccessTopologyAcrossNetworks(self):
     viewed_node = self.currently_viewed_node
-    children = self.model_container["ID_tree"].getChildren(viewed_node)
 
     children = self.model_container["ID_tree"].getChildren(viewed_node)
 

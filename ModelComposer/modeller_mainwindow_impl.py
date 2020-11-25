@@ -439,6 +439,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     enabled_editor_phases.append("equation_topology")
     self.ui.comboEditorPhase.addItems(enabled_editor_phases)
 
+
   def __makeInteractionToolPage(self):
     self.state_inject_or_constrain_or_convert = None  # reset state of the interaction tool box
     self.__clearLayout(self.ui.layoutInteractiveWidgetTop)
@@ -613,6 +614,13 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       self.radio_selectors["mechanism"] = self.__makeAndAddSelector("mechanism", mechanisms,
                                                                     self.radioReceiverArcMechanism, index,
                                                                     self.ui.layoutInteractiveWidgetBottom)
+      # self.setSelectorChecked("mechanism", "mechanism", 1)
+      # self.radio_selectors["mechanism"].check("mechanism", 1)
+      print("debugging -- finding how to toggle mechanism")
+
+  def setSelectorChecked(self, selector, group, item_number):
+    self.radio_selectors[selector].check(group, item_number)
+
 
   def radioReceiverArcMechanism(self, token_class, token, mechanism, toggle):
     if toggle:
