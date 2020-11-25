@@ -767,6 +767,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     screenshot = screen.grabWindow(self.ui.graphicsView.winId())
     screenshot.save(file, "jpg")
 
+
   def insertModelFromFile(self, model_name):
     """
     takes a model from a file and inserts it into new empty model
