@@ -787,7 +787,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def injectTypedTokens(self):
     token = self.current_token
     list_typed_tokens = self.radio_selectors["inject"].getListOfCheckedLabelInGroup("inject")
-    # print("inject typed tokens ", list_typed_tokens, "into ", self.commander.node_group, "token:", token)
+    print("inject typed tokens ", list_typed_tokens, "into ", self.commander.node_group, "token:", token)
 
     self.commander.model_container.injectListInToNodes(self.commander.node_group,
                                                        token,

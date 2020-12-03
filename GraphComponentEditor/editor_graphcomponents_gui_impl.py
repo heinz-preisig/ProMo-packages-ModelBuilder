@@ -34,7 +34,7 @@ from Common.common_resources import getOntologyName
 from Common.common_resources import putDataOrdered
 from Common.common_resources import saveBackupFile
 from Common.graphics_objects import ARCS
-from Common.graphics_objects import DECORATIONS_with_state
+from Common.graphics_objects import DECORATIONS_with_state,DECORATIONS_with_application,OBJECTS_with_application
 from Common.graphics_objects import DEFAULT_PHASE
 from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE,NODES
@@ -855,6 +855,20 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       if self.selected_root_object in OBJECTS_with_state:
         if self.selected_component in DECORATIONS_with_state:
           state = self.current_state
+
+      applications = [M_None]
+      if self.selected_root_object in OBJECTS_with_application:
+        if self.selected_component in DECORATIONS_with_application:
+          applications=  self.ontology.list_network_node_objects # RULE: if the object has applications then data apply to all
+
+      for application in applications: #RULE: all "applications" have the same action
+        self.DATA.setData(what, value,
+                          phase,
+                          self.selected_root_object,
+                          self.selected_component,
+                          application, # self.selected_application,
+                          state,
+                          )
     else:
       phase = PHASES[0]
       state = M_None
@@ -862,13 +876,13 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         if self.selected_component in DECORATIONS_with_state:
           state = STATE_OBJECT_COLOURED
 
-    self.DATA.setData(what, value,
-                      phase,
-                      self.selected_root_object,
-                      self.selected_component,
-                      self.selected_application,
-                      state,
-                      )
+      self.DATA.setData(what, value,
+                        phase,
+                        self.selected_root_object,
+                        self.selected_component,
+                        self.selected_application,
+                        state,
+                        )
     #   else:
     #     self.DATA.setData(what, value,
     #                       phase,  # self.current_editor_phase,

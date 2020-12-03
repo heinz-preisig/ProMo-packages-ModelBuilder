@@ -131,7 +131,8 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
 
     active_objects_all_phases = self.DATA.getActiveObjectsRootDecorationState()
     self.mouse_automata, self.key_automata = \
-      getAutomata(FILES["automata_working_file_spec"] % self.ontology_name, active_objects_all_phases)
+      getAutomata(FILES["automata_file_spec"] % self.ontology_name, active_objects_all_phases)
+    print("debugging -- loaded automata")
 
   # @QtCore.pyqtSignature('QString')
   def on_comboPhase_activated(self, index):
@@ -328,8 +329,8 @@ class GraphEditorDialogImpl(QtWidgets.QWidget):
             'key'  : self.key_automata
             }
 
-    automata_working_file_spec = FILES["automata_working_file_spec"] % self.ontology_name
-    old, new = CR.saveBackupFile(automata_working_file_spec)
+    automata_working_file_spec = FILES["automata_file_spec"] % self.ontology_name
+    old, new, next_path = CR.saveBackupFile(automata_working_file_spec)
     print("saved to backup file ", new)
 
     CR.putData(vars, automata_working_file_spec, indent=2)

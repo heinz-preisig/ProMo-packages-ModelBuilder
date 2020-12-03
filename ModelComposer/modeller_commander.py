@@ -450,10 +450,14 @@ class Commander(QtCore.QObject):
       node_type = self.main.selected_node_type[self.main.current_network]
       node_class = NAMES["node"]
 
+      node_characteristics, app = node_type.split("|")
     else:
       node_class = NAMES["branch"]
       node_type = NAMES["branch"]
       named_network = NAMES["branch"]
+      node_characteristics = ""
+
+    features = self.applyNodeDefinitionRules(node_characteristics)
 
     state = STATES[self.editor_phase]["nodes"][0]
     decoration_positions = ModelGraphicsData(node_class,
@@ -463,9 +467,13 @@ class Commander(QtCore.QObject):
                                              node_type,
                                              state)
 
-    newnodeID = self.model_container.addChild(self.current_ID_node_or_arc, decoration_positions, network,
+    newnodeID = self.model_container.addChild(self.current_ID_node_or_arc,
+                                              decoration_positions,
+                                              network,
                                               named_network,
-                                              node_class, node_type)
+                                              node_class,
+                                              node_type,
+                                              features=features)
     self.state_nodes[newnodeID] = STATES[self.editor_phase]["nodes"][0]
 
     self.__redrawScene(self.current_ID_node_or_arc)
@@ -499,8 +507,10 @@ class Commander(QtCore.QObject):
 
     if boundary == NAMES["intraface"]:
       application = self.main.ontology.list_intra_node_objects[0]
+      features = self.applyNodeDefinitionRules("intraface")
     elif boundary == NAMES["interface"]:
       application = self.main.ontology.list_inter_node_objects[0]
+      features = self.applyNodeDefinitionRules("interface")
     else:
       print("fatal error no such boundary: ", boundary)
 
@@ -514,9 +524,13 @@ class Commander(QtCore.QObject):
                                              application,
                                              state)
 
-    newnodeID = self.model_container.addChild(self.current_ID_node_or_arc, decoration_positions, network,
+    newnodeID = self.model_container.addChild(self.current_ID_node_or_arc,
+                                              decoration_positions,
+                                              network,
                                               named_connection_network,
-                                              node_class, application)
+                                              node_class,
+                                              application,
+                                              features=features)
     self.state_nodes[newnodeID] = STATES[self.editor_phase]["nodes"][0]
 
     self.__redrawScene(self.current_ID_node_or_arc)
@@ -1574,7 +1588,8 @@ class Commander(QtCore.QObject):
 
   def __makeIndicators(self, ID):
     indicator = OrderedDict()
-    if not self.model_container["nodes"][ID]["tokens"]:
+    tokens = self.model_container.getTokensInNode(ID)
+    if not tokens:
       return indicator
 
     pos = {}
@@ -1583,7 +1598,7 @@ class Commander(QtCore.QObject):
     dx = LOCATION_PARAMETERS["token_indicators"]["dx"]
     dy = LOCATION_PARAMETERS["token_indicators"]["dy"]
 
-    for token in self.model_container["nodes"][ID]["tokens"]:
+    for token in tokens:
       pos[token] = (x_, y_)
       x_ = x_ + dx
       y_ = y_ + dy
@@ -1757,7 +1772,10 @@ class Commander(QtCore.QObject):
         intraface_node = self.model_container["nodes"][node][NAMES["network"]]
         network_left, network_right = intraface_node.split(CR.CONNECTION_NETWORK_SEPARATOR)  # NETWORK_SEPARATOR)
         # network_tokens_left = self.main.tokens_on_networks[network_left]["type"]
-        tokens = self.model_container["nodes"][node]["tokens"]
+        tokens = set()
+        left = set(self.model_container["nodes"][node]["tokens_left"].keys())
+        right = set(self.model_container["nodes"][node]["tokens_right"].keys())
+        tokens = left.union(right)
 
         # are there existing connections ?
         arc_IDs = list(self.model_container["arcs"].keys())
@@ -1905,6 +1923,37 @@ class Commander(QtCore.QObject):
     for child in children:  # set the default (initialisation, import etc.)
       self.state_nodes[child] = STATES[self.editor_phase]["nodes"][0]
     return
+
+  def applyNodeDefinitionRules(self, nodetype):
+          # if "has_tokens" in features:
+          #   self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
+          # if "has_conversion" in features:
+          #   self["conversions"] = {}  # dict hash=tokens value=list of active conversions
+          # if "intraface" in features:
+          #   self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
+          #   self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
+          #   self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
+          # if "accepts_inject_of_typed_tokens" in features:
+          #   self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
+
+    features = set()
+    for rule in list(self.main.ontology.rules.keys()):
+      if rule == "nodes_allowing_token_injection":
+        if nodetype in self.main.ontology.rules[rule]:
+          features.add("has_tokens")
+          features.add("accepts_inject_of_typed_tokens")
+      if rule == "nodes_allowing_token_conversion":
+        if nodetype in self.main.ontology.rules[rule]:
+          features.add("has_tokens")
+          features.add("nodes_allowing_token_conversion")
+      if rule == "nodes_allowing_token_transfer":
+        if nodetype in self.main.ontology.rules[rule]:
+          features.add("intraface")
+
+    return sorted(features)
+
+
+
 
   def applyControlAccessRules(self):
     phase = self.editor_phase

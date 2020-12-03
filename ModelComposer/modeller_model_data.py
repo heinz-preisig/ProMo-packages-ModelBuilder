@@ -19,8 +19,8 @@ from copy import deepcopy
 import Common.common_resources as CR
 from Common.common_resources import walkBreathFirstFnc
 from Common.common_resources import walkDepthFirstFnc
-from Common.graphics_objects import NAMES
 from Common.graphics_objects import NamedNetworkDataObjects
+from Common.graphics_objects import NAMES
 from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
 
@@ -50,8 +50,8 @@ class DataError(Exception):
 
 class NodeInfo(
         dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
-  def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None):
-    # OrderedDict.__init__(self)
+  def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None, features=[]):
+
     dict.__init__(self)
     self["name"] = name
     self["network"] = network
@@ -59,25 +59,42 @@ class NodeInfo(
     self["class"] = node_class
     self["type"] = node_type
 
-    if node_class == NAMES["intraface"]:
-      self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
-      self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
-      self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
-    if node_class == NAMES["interface"]:
-      pass
-    else:  # TODO: should the format be the same as in the arcs -- not important -- but a canonical question
+    if "has_tokens" in features:
       self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
-
-    # RULE: typed tokens can only be injected in reservoirs
-    if NAMES["reservoir"] in node_type:
-      self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
-    # RULE: typed token conversion can only be injected in dynamic nodes
-    # NOTE: this fixes a term in the ontology
-    # RULE ? : think about making the event dynamic also constraint transport like a boundary
-    # TODO : need for conversion and injected_conversion -- currently only injected_conversion used
-    elif "dynamic" in node_type:
+    if "has_conversion" in features:
       self["conversions"] = {}  # dict hash=tokens value=list of active conversions
-      self["injected_conversions"] = {}  # dict hash=tokens value=list of active conversions
+    if "intraface" in features:
+      self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
+      self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
+      self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
+    if "accepts_inject_of_typed_tokens" in features:
+      self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
+
+  def addToken(self, token):
+    self["tokens"][token] = []
+
+  def addIntrafaceTokensLeft(self, token, left_list):
+    self["tokens_left"][token] = left_list
+
+  def addIntrafaceTokensRight(self, token, right_list):
+    self["tokens_right"][token] = right_list
+
+  def addIntrafaceConstraints(self, token, constraint_list):
+    self["transfer_constraints"][token] = constraint_list
+
+  def addTypedTokens(self, token, token_list):
+    typed_tokens = set(self["tokens"][token])
+    typed_tokens.add(token_list)
+    self["tokens"][token] = list(typed_tokens)
+
+  def setTypedTokens(self, token, token_list):
+    self["tokens"][token] = token_list
+
+  def addInjectTypedTokens(self, token, inject_list):
+    self["injected_typed_tokens"][token] = inject_list
+
+  def addInjectedConversions(self, token, inject_list):
+    self["conversions"][token] = inject_list
 
 
 class ArcInfo(dict):  # OrderedDict):  # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract
@@ -151,12 +168,13 @@ class ModelContainer(dict):
     self["scenes"][nodeID]["nodes"] = {}
     self["scenes"][nodeID]["arcs"] = {}
 
-  def addChild(self, parentNodeID, decoration_positions, network, named_network, node_class, nodetype):
+  def addChild(self, parentNodeID, decoration_positions, network, named_network, node_class, nodetype, features):
 
     childNodeID = self["ID_tree"].addChild(parentNodeID)
 
     self["nodes"][childNodeID] = NodeInfo(CR.DEFAULT, network=network, named_network=named_network,
-                                          node_class=node_class, node_type=nodetype)
+                                          node_class=node_class, node_type=nodetype, features=features)
+
     self.__newScene(childNodeID)
     self["scenes"][parentNodeID]["nodes"][childNodeID] = decoration_positions
     self["nodes"][childNodeID]["network"] = network
@@ -387,23 +405,24 @@ class ModelContainer(dict):
 
     if self["nodes"][nodeID]["class"] == NAMES["intraface"]:
       self.addTypedTokensToIntraface(nodeID, token, [], network)
-    self["nodes"][nodeID]["tokens"][token] = []
+    else:
+      self["nodes"][nodeID].addToken(token)
 
   def addTypedTokensToIntraface(self, nodeID, token, typed_tokens, network):
 
     network_left, network_right = self.__getBoundaryNetworks(nodeID)
     if network == network_left:
-      self["nodes"][nodeID]["tokens_left"][token] = typed_tokens
+      self["nodes"][nodeID].addIntrafaceTokensLeft(token, typed_tokens)
     else:
-      self["nodes"][nodeID]["tokens_right"][token] = typed_tokens
+      self["nodes"][nodeID].addIntrafaceTokensRight(token, typed_tokens)
 
-  def addTypedTokenTransferConstraintsToBoundary(self, nodeID, token, typed_tokens, network):
-    #
-    # RULE: this applies to boundaries only with left & right network be identical
-    network_left, network_right = self.__getBoundaryNetworks(nodeID)
-    assert network_left == network_right
-
-    pass
+  # def addTypedTokenTransferConstraintsToBoundary(self, nodeID, token, typed_tokens, network):
+  #   #
+  #   # RULE: this applies to boundaries only with left & right network be identical
+  #   network_left, network_right = self.__getBoundaryNetworks(nodeID)
+  #   assert network_left == network_right
+  #
+  #   pass
 
   def __getBoundaryNetworks(self, nodeID):
     return self["nodes"][nodeID]["network"].split(CR.CONNECTION_NETWORK_SEPARATOR)
@@ -703,7 +722,7 @@ class ModelContainer(dict):
 
   def write(self, f):
 
-    print("debugging -- file name:",f)
+    print("debugging -- file name:", f)
 
     # TODO: DONE mapping could be done on reading instead of writing. Solves problem of intermediate writing -->
     #  makeFromFile
@@ -712,7 +731,7 @@ class ModelContainer(dict):
     a = deepcopy(self["ID_tree"])
     self["ID_tree"] = self["ID_tree"].toJson()
     CR.putData(self, f, indent=2)
-    self["ID_tree"] = a  #reset it
+    self["ID_tree"] = a  # reset it
 
     return node_map
 
@@ -728,9 +747,6 @@ class ModelContainer(dict):
       flat_data[h] = self[h]
 
     CR.putData(flat_data, f)
-
-
-
 
   def getAndFixData(self, f):
     """
@@ -977,6 +993,12 @@ class ModelContainer(dict):
   # def existArcThroughInterface(self, source_nodeID, sink_nodeID):
   #
   #   to_nodes = []
+
+  # def addTokenList
+
+  def addTypedTokens(self, node_group, token, typed_token_list):
+    for node in node_group:
+      self["nodes"][node].addTypedTokens(token, typed_token_list)
 
   def injectListInToNodes(self, node_group, token, list, where):
     # print('list: ', list, "to where ", where)
