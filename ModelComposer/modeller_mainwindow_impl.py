@@ -180,15 +180,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                       ontology.list_inter_node_objects,
                                       ontology.list_arc_objects,
                                       ontology.tokens,
-                                      #              graph_resource_file_spec
-                                      # self.networks,
-                                      #                                   self.connection_networks,
-                                      #                                   ontology.node_type_list,
-                                      #                                   ontology.arc_type_list,
-                                      #                                   ontology.tokens,
-                                      FILES[
-                                        "graph_resource_file_spec"] %
-                                      ontology_name)
+                                      FILES["graph_resource_file_spec"] % ontology_name
+                                      )
     if DEBUG["load data"]:
       # print("node types :", self.nodeTypes)
       print("init - tokens:", self.tokens_on_networks)
@@ -432,7 +425,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                  self.networks,
                                                                  self.radioReceiverNetworks,
                                                                  # len(self.networks) - 1,
-                                                                 -1,  # RULE: none selected initially
+                                                                 0,  # RULE: select by default the first one
                                                                  self.ui.layoutNetworks)
 
     # RULE: no rule for the equation topology as yet

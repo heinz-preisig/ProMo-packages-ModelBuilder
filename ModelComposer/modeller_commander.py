@@ -86,7 +86,7 @@ class Commander(QtCore.QObject):
 
     # model container - start with a root node
     self.current_ID_node_or_arc = ROOTID  # str(ROOTID)  # nodeID    #HAP: ID string to integer
-    self.model_container = ModelContainer(self.main.networks)
+    self.model_container = ModelContainer(self.main.networks, self.main.ontology)
 
     # initial commander state
     self.state_nodes = {}
@@ -477,7 +477,6 @@ class Commander(QtCore.QObject):
     self.state_nodes[newnodeID] = STATES[self.editor_phase]["nodes"][0]
 
     self.__redrawScene(self.current_ID_node_or_arc)
-    # self.dialog.addNode(newnodeID, self.current_ID_node_or_arc)
 
     return {
             "new node": newnodeID,
@@ -709,8 +708,6 @@ class Commander(QtCore.QObject):
 
     insert_intraface = False
     insert_interface = False
-    cnw = None
-    cnwi = None
     connection_network = None
 
     if self.model_container["nodes"][self.arcSourceID]["class"] not in [NAMES["intraface"], NAMES["interface"]]:
@@ -1091,7 +1088,10 @@ class Commander(QtCore.QObject):
 
     # get schnipsel name -- rule: new or used
     schnipsel_name_to_be_saved, new_model = askForModelFileGivenOntologyLocation(self.main.ontology_name,
-                                                                                 alternative=True)
+                                                                          left_icon="reject",
+                                                                          left_tooltip="reject",
+                                                                          right_icon="accept",
+                                                                          right_tooltip="accept",)
 
     container = self.model_container.extractSubtree(nodeID)
     schnipsel_file = os.path.join(self.main.model_library_location, schnipsel_name_to_be_saved)
@@ -1131,6 +1131,9 @@ class Commander(QtCore.QObject):
     self.model_container.makeFromFile(f)
     self.main.named_network_dictionary = self.model_container["named_networks"]
     self.main.makeNamedNetworkBrushes()
+
+    self.model_container.updateTokensInAllDomains()
+    self.model_container.updateTypedTokensInAllDomains()
 
     self.__redrawScene(self.current_ID_node_or_arc)
 
@@ -1296,6 +1299,7 @@ class Commander(QtCore.QObject):
     return {"failed": False}
 
   def __c31_computeTypedTokenDomains(self):
+
     print("__c31_computeTypedTokenDomains -- not yet implemented")
     return {"failed": False}
 
@@ -1639,6 +1643,7 @@ class Commander(QtCore.QObject):
 
     # print("indicator definition:", indicator)
     return indicator
+
 
   def __redrawScene(self, nodeID, debug=False):
     """

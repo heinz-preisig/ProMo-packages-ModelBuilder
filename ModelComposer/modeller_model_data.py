@@ -24,6 +24,8 @@ from Common.graphics_objects import NAMES
 from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
 
+from collections import UserDict
+
 ROOTID = 0
 
 
@@ -49,10 +51,10 @@ class DataError(Exception):
 
 
 class NodeInfo(
-        dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+        UserDict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
   def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None, features=[]):
 
-    dict.__init__(self)
+    UserDict.__init__(self)
     self["name"] = name
     self["network"] = network
     self["named_network"] = named_network
@@ -69,32 +71,6 @@ class NodeInfo(
       self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
     if "accepts_inject_of_typed_tokens" in features:
       self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
-
-  def addToken(self, token):
-    self["tokens"][token] = []
-
-  def addIntrafaceTokensLeft(self, token, left_list):
-    self["tokens_left"][token] = left_list
-
-  def addIntrafaceTokensRight(self, token, right_list):
-    self["tokens_right"][token] = right_list
-
-  def addIntrafaceConstraints(self, token, constraint_list):
-    self["transfer_constraints"][token] = constraint_list
-
-  def addTypedTokens(self, token, token_list):
-    typed_tokens = set(self["tokens"][token])
-    typed_tokens.add(token_list)
-    self["tokens"][token] = list(typed_tokens)
-
-  def setTypedTokens(self, token, token_list):
-    self["tokens"][token] = token_list
-
-  def addInjectTypedTokens(self, token, inject_list):
-    self["injected_typed_tokens"][token] = inject_list
-
-  def addInjectedConversions(self, token, inject_list):
-    self["conversions"][token] = inject_list
 
 
 class ArcInfo(dict):  # OrderedDict):  # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract
@@ -138,9 +114,10 @@ class ModelGraphicsData(dict):
 
 
 class ModelContainer(dict):
-  def __init__(self, networks):
+  def __init__(self, networks, ontology):
 
     self.networks = networks
+    self.ontology = ontology
 
     self["ID_tree"] = Tree(ROOTID)  # StrTree(str(ROOTID))    #HAP: ID string to integer
 
@@ -393,20 +370,52 @@ class ModelContainer(dict):
     for nodeID in subarcsIDs:
       self["scenes"][nodeID]["arcs"][arcID] = []
 
-    for node in [fromNodeID, toNodeID]:
-      # print("- add token ", node, token, network)
-      self.addToken(node, token, network)
+    for nodeID in [fromNodeID, toNodeID]:   # Rule: here is were tokens are added
+      if self["nodes"][nodeID]["class"] == NAMES["interface"]:
+        return
+
+      if self["nodes"][nodeID]["class"] == NAMES["intraface"]:
+        self.setTokenLeftInIntraFace(nodeID, token)
+        self.setTokenRightInIntraface(nodeID, token)
+      else:
+        self.setTokenToNode(nodeID, token)
 
     return arcID, nodes_with_arcIDs
 
-  def addToken(self, nodeID, token, network):
-    if self["nodes"][nodeID]["class"] == NAMES["interface"]:
-      return
 
-    if self["nodes"][nodeID]["class"] == NAMES["intraface"]:
-      self.addTypedTokensToIntraface(nodeID, token, [], network)
-    else:
-      self["nodes"][nodeID].addToken(token)
+
+  def setTokenToNode(self,  nodeID, token):
+    self["nodes"][nodeID]["tokens"][token] = []
+
+  def setTokenLeftInIntraFace(self, nodeID, token):
+    self["nodes"][nodeID]["tokens_left"][token] = []
+
+  def setTokenRightInIntraface(self, nodeID, token):
+    self["nodes"][nodeID]["tokens_right"][token] = []
+
+  def setTypedTokensLeftInIntraFace(self,  nodeID, token, left_list):
+    self["nodes"][nodeID]["tokens_left"][token] = left_list
+
+  def setTypedTokensRightInIntraface(self,  nodeID, token, right_list):
+    self["nodes"][nodeID]["tokens_right"][token] = right_list
+
+  def injectConstraintsToIntraface(self,  nodeID, token, constraint_list):
+    self["nodes"][nodeID]["transfer_constraints"][token] = constraint_list
+
+  def addTypedTokensToNode(self,  nodeID, token, token_list):
+    typed_tokens = set(self["nodes"][nodeID]["tokens"][token])
+    typed_tokens.add(token_list)
+    self["nodes"][nodeID]["tokens"][token] = list(typed_tokens)
+
+  def setTypedTokensInNode(self,  nodeID, token, token_list):
+    self["nodes"][nodeID]["tokens"][token] = token_list
+
+  def injectTypedTokensToNode(self,  nodeID, token, inject_list):
+    self["nodes"][nodeID]["injected_typed_tokens"][token] = inject_list
+
+  def injectedConversions(self,  nodeID, token, inject_list):
+    self["nodes"][nodeID]["conversions"][token] = inject_list
+
 
   def addTypedTokensToIntraface(self, nodeID, token, typed_tokens, network):
 
@@ -990,15 +999,6 @@ class ModelContainer(dict):
         open_arcs.add(arc)
     return open_arcs
 
-  # def existArcThroughInterface(self, source_nodeID, sink_nodeID):
-  #
-  #   to_nodes = []
-
-  # def addTokenList
-
-  def addTypedTokens(self, node_group, token, typed_token_list):
-    for node in node_group:
-      self["nodes"][node].addTypedTokens(token, typed_token_list)
 
   def injectListInToNodes(self, node_group, token, list, where):
     # print('list: ', list, "to where ", where)
@@ -1128,6 +1128,37 @@ class ModelContainer(dict):
         return self["domains"][token_name][no]
 
     return None
+
+  def updateTokensInAllDomains(self):
+    tokens = self.ontology.tokens
+    D = self.computeTokenDomains(tokens)
+    for node_ID in self["nodes"]:
+      print("debugging -- node %s"%node_ID, self["nodes"][node_ID])
+      for token in D:
+        if D[token]:
+          for domain in D[token]:
+            if node_ID in D[token][domain]:
+              if token not in self["nodes"][node_ID]:
+                self["nodes"][node_ID][token] = []
+            elif "tokens" in self["nodes"][node_ID]:
+              if token in self["nodes"][node_ID]["tokens"]:
+                del self["nodes"][node_ID]["tokens"][token]
+              else:
+                pass
+            else:
+              pass
+
+  def updateTypedTokensInAllDomains(self):
+    tokens = self.ontology.tokens
+    D = self.computeTokenDomains(tokens)
+
+    for token in tokens:
+      for token in D:
+        if D[token]:
+          for domainID in D[token]:
+            TD = self.computeTypedTokenDistribution(token, D[token][domainID])
+            print("debugging -- type token domain")
+
 
   def isOfType(self, node, type):
     return type == self["nodes"][node]["type"]
