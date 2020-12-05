@@ -24,7 +24,6 @@ from Common.graphics_objects import NAMES
 from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
 
-from collections import UserDict
 
 ROOTID = 0
 
@@ -51,10 +50,10 @@ class DataError(Exception):
 
 
 class NodeInfo(
-        UserDict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+        dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
   def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None, features=[]):
 
-    UserDict.__init__(self)
+    dict.__init__(self)
     self["name"] = name
     self["network"] = network
     self["named_network"] = named_network
