@@ -32,11 +32,10 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
 from Common.automata_objects import GRAPH_EDITOR_STATES
-from Common.common_resources import askForModelFileGivenOntologyLocation  # askForModelFile,
+from Common.common_resources import askForModelFileGivenOntologyLocation
 from Common.common_resources import CONVERSION_SEPARATOR
 from Common.common_resources import getOntologyName
 from Common.common_resources import M_None
-from Common.resources_icons import roundButton
 from Common.graphics_objects import getGraphData
 from Common.graphics_objects import NetworkData
 from Common.ontology_container import OntologyContainer
@@ -45,6 +44,7 @@ from Common.qt_resources import ModellerRadioButton
 from Common.radio_selector_impl import RadioSelector
 from Common.resource_initialisation import DIRECTORIES
 from Common.resource_initialisation import FILES
+from Common.resources_icons import roundButton
 from Common.save_file_impl import SaveFileDialog
 from Common.ui_string_dialog_impl import UI_String
 from ModelBuilder.ModelComposer.modeller_commander import Commander
@@ -97,11 +97,11 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.editor_phase = EDITOR_PHASES[0]
 
     # interface details
-    roundButton(self.ui.pushExit,"exit","exit without saving")
-    roundButton(self.ui.pushSave,"save","save to file")
-    roundButton(self.ui.pushSchnipsel,"schnipsel","open schnipsel dialog")
-    roundButton(self.ui.pushTakeScreenShot,"screen_shot","take a screen shot")
-    roundButton(self.ui.pushSaveAs,"save_as", "save with a new name")
+    roundButton(self.ui.pushExit, "exit", "exit without saving")
+    roundButton(self.ui.pushSave, "save", "save to file")
+    roundButton(self.ui.pushSchnipsel, "schnipsel", "open schnipsel dialog")
+    roundButton(self.ui.pushTakeScreenShot, "screen_shot", "take a screen shot")
+    roundButton(self.ui.pushSaveAs, "save_as", "save with a new name")
 
     self.button_logic = self.__setupButtonLogics()
     # self.__setupButtonWithIcons()
@@ -432,7 +432,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     enabled_editor_phases.append("equation_topology")
     self.ui.comboEditorPhase.addItems(enabled_editor_phases)
 
-
   def __makeInteractionToolPage(self):
     self.state_inject_or_constrain_or_convert = None  # reset state of the interaction tool box
     self.__clearLayout(self.ui.layoutInteractiveWidgetTop)
@@ -614,7 +613,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def setSelectorChecked(self, selector, group, item_number):
     self.radio_selectors[selector].check(group, item_number)
 
-
   def radioReceiverArcMechanism(self, token_class, token, mechanism, toggle):
     if toggle:
       # print("radioReceiverArcMechanism: receiver class %s, radio token %s. token_string %s" % (token_class, token,
@@ -705,10 +703,12 @@ class MainWindowImpl(QtWidgets.QMainWindow):
         pass
 
   def radioReceiverTypedTokenInject(self, token_class, token, token_string, toggle):
+    self.commander.applyControlAccessRules()
     print("debugging -- typed token to be injected")
     pass
 
   def radioReceiverTypedTokenToConvert(self, token_class, token, token_string, toggle):
+    self.commander.applyControlAccessRules()
     print("debugging -- typed token to be convert")
     pass
 
@@ -760,7 +760,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     screenshot = screen.grabWindow(self.ui.graphicsView.winId())
     screenshot.save(file, "jpg")
 
-
   def insertModelFromFile(self, model_name):
     """
     takes a model from a file and inserts it into new empty model
@@ -795,12 +794,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     pass
 
   def computeTypedTokenDistribution(self, token_name):
-    for node in self.commander.node_group:
-      domain = self.commander.model_container.isInDomain(node, token_name)
-      if domain:
-        self.commander.model_container.computeTypedTokenDistribution(token_name, domain)
-      else:
-        self.writeStatus("no domain present")
+    self.commander.model_container.updateTypedTokensInAllDomains()
 
   def injectConversions(self):
     token = self.current_token  # self.selected_token[self.editor_phase][self.current_network]
@@ -812,7 +806,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander.model_container.injectListInToNodes(self.commander.node_group,
                                                        token,
                                                        list_conversions,
-                                                       "injected_conversions")
+                                                       "conversions")
     # todo: this fails if there is no domain
     self.computeTypedTokenDistribution(token)
     self.commander.clearSelectedNodes()
@@ -958,8 +952,10 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       # RULE: all arcs must be closed before the token domain can be computed
       self.writeStatus("shifting to %s" % self.editor_phase)
       if self.current_network:
-        D = self.commander.model_container.computeTokenDomains(self.tokens_on_networks[self.current_network])
-        print("identified token domains: ", D)
+        self.commander.model_container.updateTokensInAllDomains()
+        self.commander.model_container.updateTypedTokensInAllDomains()
+        # D = self.commander.model_container.computeTokenDomains(self.tokens_on_networks[self.current_network])
+        # print("identified token domains: ", D)
 
     self.commander.editor_phase = phase
     self.commander.setDefaultEditorState()

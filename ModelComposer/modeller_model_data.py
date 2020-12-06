@@ -17,13 +17,13 @@ from copy import copy
 from copy import deepcopy
 
 import Common.common_resources as CR
+from Common.common_resources import NODE_COMPONENT_SEPARATOR
 from Common.common_resources import walkBreathFirstFnc
 from Common.common_resources import walkDepthFirstFnc
 from Common.graphics_objects import NamedNetworkDataObjects
 from Common.graphics_objects import NAMES
 from Common.graphics_objects import STRUCTURES_Graph_Item
 from Common.treeid import Tree
-
 
 ROOTID = 0
 
@@ -369,11 +369,12 @@ class ModelContainer(dict):
     for nodeID in subarcsIDs:
       self["scenes"][nodeID]["arcs"][arcID] = []
 
-    for nodeID in [fromNodeID, toNodeID]:   # Rule: here is were tokens are added
+    for nodeID in [fromNodeID, toNodeID]:  # Rule: here is were tokens are added
       if self["nodes"][nodeID]["class"] == NAMES["interface"]:
         return
 
       if self["nodes"][nodeID]["class"] == NAMES["intraface"]:
+        self.setTokenToNode(nodeID, token)
         self.setTokenLeftInIntraFace(nodeID, token)
         self.setTokenRightInIntraface(nodeID, token)
       else:
@@ -381,9 +382,7 @@ class ModelContainer(dict):
 
     return arcID, nodes_with_arcIDs
 
-
-
-  def setTokenToNode(self,  nodeID, token):
+  def setTokenToNode(self, nodeID, token):
     self["nodes"][nodeID]["tokens"][token] = []
 
   def setTokenLeftInIntraFace(self, nodeID, token):
@@ -392,29 +391,28 @@ class ModelContainer(dict):
   def setTokenRightInIntraface(self, nodeID, token):
     self["nodes"][nodeID]["tokens_right"][token] = []
 
-  def setTypedTokensLeftInIntraFace(self,  nodeID, token, left_list):
+  def setTypedTokensLeftInIntraFace(self, nodeID, token, left_list):
     self["nodes"][nodeID]["tokens_left"][token] = left_list
 
-  def setTypedTokensRightInIntraface(self,  nodeID, token, right_list):
+  def setTypedTokensRightInIntraface(self, nodeID, token, right_list):
     self["nodes"][nodeID]["tokens_right"][token] = right_list
 
-  def injectConstraintsToIntraface(self,  nodeID, token, constraint_list):
+  def injectConstraintsToIntraface(self, nodeID, token, constraint_list):
     self["nodes"][nodeID]["transfer_constraints"][token] = constraint_list
 
-  def addTypedTokensToNode(self,  nodeID, token, token_list):
+  def addTypedTokensToNode(self, nodeID, token, token_list):
     typed_tokens = set(self["nodes"][nodeID]["tokens"][token])
     typed_tokens.add(token_list)
     self["nodes"][nodeID]["tokens"][token] = list(typed_tokens)
 
-  def setTypedTokensInNode(self,  nodeID, token, token_list):
+  def setTypedTokensInNode(self, nodeID, token, token_list):
     self["nodes"][nodeID]["tokens"][token] = token_list
 
-  def injectTypedTokensToNode(self,  nodeID, token, inject_list):
+  def injectTypedTokensToNode(self, nodeID, token, inject_list):
     self["nodes"][nodeID]["injected_typed_tokens"][token] = inject_list
 
-  def injectedConversions(self,  nodeID, token, inject_list):
+  def injectedConversions(self, nodeID, token, inject_list):
     self["nodes"][nodeID]["conversions"][token] = inject_list
-
 
   def addTypedTokensToIntraface(self, nodeID, token, typed_tokens, network):
 
@@ -998,12 +996,13 @@ class ModelContainer(dict):
         open_arcs.add(arc)
     return open_arcs
 
-
   def injectListInToNodes(self, node_group, token, list, where):
     # print('list: ', list, "to where ", where)
     for node in node_group:
       # print('node directory for node %s' % node, self["nodes"][node].keys())
       # print("inject tokens ", node_group, token, list, self["nodes"][node])
+      # component, app = self["nodes"][node]["type"].split(NODE_COMPONENT_SEPARATOR)
+      # if component in self.ontology.rules["nodes_allowing_token_injection"]:
       self["nodes"][node][where][token] = list
 
   def putTypedTokens(self, node_group, token, list_typed_tokens):
@@ -1132,7 +1131,7 @@ class ModelContainer(dict):
     tokens = self.ontology.tokens
     D = self.computeTokenDomains(tokens)
     for node_ID in self["nodes"]:
-      print("debugging -- node %s"%node_ID, self["nodes"][node_ID])
+      print("debugging -- node %s" % node_ID, self["nodes"][node_ID])
       for token in D:
         if D[token]:
           for domain in D[token]:
@@ -1157,7 +1156,6 @@ class ModelContainer(dict):
           for domainID in D[token]:
             TD = self.computeTypedTokenDistribution(token, D[token][domainID])
             print("debugging -- type token domain")
-
 
   def isOfType(self, node, type):
     return type == self["nodes"][node]["type"]
@@ -1196,40 +1194,7 @@ class ModelContainer(dict):
         for arc in arcs:
           token = self["arcs"][arc]["token"]
           source = self["arcs"][arc]["source"]
-          # sink = self["arcs"][arc]["sink"]
-          # if self["nodes"][source]["class"] == NAMES["node"]:
-          #   node_ = source
-          # else:
-          #   if self["nodes"][sink]["type"] == NAMES["node"]:
-          #     node_ = sink
-          #   else:
-          #     raise DataError(">>>> cannot find a simple node")
-          #     sys.exit()
-          # typed_tokens = copy(self["nodes"][node_]["tokens"][token])  # !!! copy
-          # self["arcs"][arc]["typed_tokens"] = typed_tokens
-          # self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][token])
           self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][token])
-
-    # for arc in arcs_in_domain:              # Happens after reaction injections
-    #   self["arcs"][arc]["typed_tokens"] = []                      # First clean
-    #   # self["arcs"][arc].cleanTypedTokens()                        # First clean
-    #   source = str(self['arcs'][arc]['source'])
-    #   sink = str(self['arcs'][arc]['sink'])
-    #   if self["nodes"][source]["type"] == NAMES["intraface"]:
-    #     typed_tokens_source = set(self["nodes"][source]["tokens_left"][token])
-    #   else:
-    #     typed_tokens_source = set(self["nodes"][source]["tokens"][token])
-    #   if self["nodes"][sink]["type"] == NAMES["intraface"]:
-    #     typed_tokens_sink = set(self["nodes"][sink]["tokens_right"][token])
-    #   else:
-    #     typed_tokens_sink = set(self["nodes"][sink]["tokens"][token])
-    #   # Updating the arcs with typed tokens
-    #   self["arcs"][arc]["typed_tokens"] = sorted(list(typed_tokens_source
-    #                                                   | typed_tokens_sink))
-    #   # DOES NOT WORK WITH CURRENT IMPLEMENTATION:
-    #   # self["arcs"][arc].addTypedTokens(sorted(list(typed_tokens_source
-    #   #                                                 | typed_tokens_sink))
-    #   # TODO: Check sequence of typed tokens
 
   def colourBranch(self, network, node, token, typed_token, adj_matrix, conversions):
     node_data = self["nodes"][node]
@@ -1248,9 +1213,14 @@ class ModelContainer(dict):
     # continue if typed token is not present or stop iteration
     if typed_token not in typed_tokens:
       typed_tokens.append(typed_token)
-      if "dynamic" in node_data["type"]:
-        if token in node_data["injected_conversions"]:  # in the sequence it may not yet be defined, patience
-          for conversion in node_data["injected_conversions"][token]:
+      node_type = node_data["type"]
+      if NODE_COMPONENT_SEPARATOR in node_type:
+        node_component, app = node_type.split(NODE_COMPONENT_SEPARATOR)
+      else:
+        node_component = node_type
+      if node_component in self.ontology.rules["nodes_allowing_token_conversion"]:
+        if token in node_data["conversions"]:  # in the sequence it may not yet be defined, patience
+          for conversion in node_data["conversions"][token]:
             E, P = conversion.split(CR.CONVERSION_SEPARATOR)
             Elist = eval(E)
             Plist = eval(P)

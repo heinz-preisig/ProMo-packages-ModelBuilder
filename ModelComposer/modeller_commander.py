@@ -33,6 +33,7 @@ import ModelBuilder.ModelComposer.resources             as R
 from Common.automata_objects import GRAPH_EDITOR_STATES
 # from Common.automata_objects import STATES               # TODO: What's this?
 from Common.common_resources import askForModelFileGivenOntologyLocation
+from Common.common_resources import NODE_COMPONENT_SEPARATOR
 from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import LOCATION_PARAMETERS
@@ -415,7 +416,7 @@ class Commander(QtCore.QObject):
                     "explode node", "add arc", "remove arc",
                     "insert knot", "remove knot",
                     "insert model"]:
-      self.modified = True  #TODO: handling of the modified to be completed
+      self.modified = True  # TODO: handling of the modified to be completed
     self.main.markModifiedModel(self.modified)
 
     par_dic = res.copy()  # copy results into par list
@@ -439,18 +440,17 @@ class Commander(QtCore.QObject):
     x, y = pos.x(), pos.y()
 
     if not network:
-    # if not self.main.current_network:
-    #   return {
-    #         "failed"  : True
-    #         }
+      # if not self.main.current_network:
+      #   return {
+      #         "failed"  : True
+      #         }
       network = self.main.current_network  # default
       named_network = self.main.current_named_network
-
 
       node_type = self.main.selected_node_type[self.main.current_network]
       node_class = NAMES["node"]
 
-      node_characteristics, app = node_type.split("|")
+      node_characteristics, app = node_type.split(NODE_COMPONENT_SEPARATOR)
     else:
       node_class = NAMES["branch"]
       node_type = NAMES["branch"]
@@ -599,7 +599,6 @@ class Commander(QtCore.QObject):
       arcGroupIDs.append(a.ID)
 
     # print("group - node group IDs:", nodeGroupIDS)
-
 
     pars = self.__c02_addNode(pos, network="composite")
     newNodeID = pars["new node"]
@@ -761,7 +760,7 @@ class Commander(QtCore.QObject):
 
           mechanisms = sorted(self.main.arcInfoDictionary[sink_network][token].keys())
           index = mechanisms.index(mech_left)
-          self.main.setSelectorChecked("mechanism","mechanism", index)
+          self.main.setSelectorChecked("mechanism", "mechanism", index)
           self.main.writeStatus("the mechanism on the right has be set idential to the mechanism on the left")
 
         nature_left = self.main.selected_arc_nature[source_network][token]
@@ -1088,10 +1087,10 @@ class Commander(QtCore.QObject):
 
     # get schnipsel name -- rule: new or used
     schnipsel_name_to_be_saved, new_model = askForModelFileGivenOntologyLocation(self.main.ontology_name,
-                                                                          left_icon="reject",
-                                                                          left_tooltip="reject",
-                                                                          right_icon="accept",
-                                                                          right_tooltip="accept",)
+                                                                                 left_icon="reject",
+                                                                                 left_tooltip="reject",
+                                                                                 right_icon="accept",
+                                                                                 right_tooltip="accept", )
 
     container = self.model_container.extractSubtree(nodeID)
     schnipsel_file = os.path.join(self.main.model_library_location, schnipsel_name_to_be_saved)
@@ -1217,10 +1216,10 @@ class Commander(QtCore.QObject):
     #
     # print("debugging -- library model name: ", self.library_model_name)
     # print("debugging -- model container   : ", self.model_container)
-    ff= os.path.basename(f)
+    ff = os.path.basename(f)
     name, ext = os.path.splitext(ff)
     dir = os.path.dirname(f)
-    f_flat = os.path.join(dir, "%s_flat%s"%(name, ext))
+    f_flat = os.path.join(dir, "%s_flat%s" % (name, ext))
 
     node_map = self.model_container.write(f)
     self.model_container.makeAndWriteFlatTopology(f_flat)
@@ -1319,8 +1318,6 @@ class Commander(QtCore.QObject):
     self.__setupScene(nodeID)
     self.__setupView(nodeID)
     self.__putEnvironment(nodeID)
-
-
 
   def __changeName(self, name):  # connected to c16_editName
     nodeID = self.current_ID_node_or_arc
@@ -1644,7 +1641,6 @@ class Commander(QtCore.QObject):
     # print("indicator definition:", indicator)
     return indicator
 
-
   def __redrawScene(self, nodeID, debug=False):
     """
     redraw a scene
@@ -1836,7 +1832,7 @@ class Commander(QtCore.QObject):
         self.state_nodes[node] = "blocked"
         network = self.main.current_network
         named_network = self.model_container["nodes"][node]["named_network"]
-        if named_network == self.main.current_named_network: #self.main.current_network:
+        if named_network == self.main.current_named_network:  # self.main.current_network:
           if "constant" in self.model_container["nodes"][node]["type"]:
             for token in tokens:
               if token in self.main.nw_token_typedtoken_dict[network].keys():
@@ -1856,14 +1852,17 @@ class Commander(QtCore.QObject):
         self.state_nodes[child] = "blocked"  # default is blocked
 
     for node in children:
-      if self.state_nodes[node] != "selected":
-        self.state_nodes[node] = "blocked"
-        network = self.model_container["nodes"][node]["network"]
-        if network == self.main.current_network:
-          if NAMES["node"] == self.model_container["nodes"][node]["class"]:
-            if "constant" != self.model_container["nodes"][node]["type"]:
-              self.state_nodes[node] = "enabled"
-    pass
+      node_data = self.model_container["nodes"][node]
+      node_type = node_data["type"]
+      if NODE_COMPONENT_SEPARATOR in node_type:
+        node_component, app = node_type.split(NODE_COMPONENT_SEPARATOR)
+      else:
+        node_component = node_type
+
+      network = self.model_container["nodes"][node]["network"]
+      if network == self.main.current_network:
+        if node_component in self.main.ontology.rules["nodes_allowing_token_conversion"]:
+          self.state_nodes[node] = "enabled"
 
   def __ruleNodeAccessTypedTokensConstrain(self):
     #
@@ -1907,9 +1906,7 @@ class Commander(QtCore.QObject):
 
     for node in children:
       if self.state_nodes[node] == fromwhat:
-        self.state_nodes[node] = STATES[self.main.current_network]["nodes"][0] #"enabled"
-
-
+        self.state_nodes[node] = STATES[self.main.current_network]["nodes"][0]  # "enabled"
 
   def resetGroups(self):
     self.node_group = set()
@@ -1930,16 +1927,16 @@ class Commander(QtCore.QObject):
     return
 
   def applyNodeDefinitionRules(self, nodetype):
-          # if "has_tokens" in features:
-          #   self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
-          # if "has_conversion" in features:
-          #   self["conversions"] = {}  # dict hash=tokens value=list of active conversions
-          # if "intraface" in features:
-          #   self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
-          #   self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
-          #   self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
-          # if "accepts_inject_of_typed_tokens" in features:
-          #   self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
+    # if "has_tokens" in features:
+    #   self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
+    # if "has_conversion" in features:
+    #   self["conversions"] = {}  # dict hash=tokens value=list of active conversions
+    # if "intraface" in features:
+    #   self["tokens_right"] = {}  # dict hash=tokens value=list of typed tokens
+    #   self["tokens_left"] = {}  # dict hash=tokens value=list of typed tokens
+    #   self["transfer_constraints"] = {}  # dict hash=tokens value=list of typed tokens
+    # if "accepts_inject_of_typed_tokens" in features:
+    #   self["injected_typed_tokens"] = {}  # dict hash=tokens value=list of typed tokens
 
     features = set()
     for rule in list(self.main.ontology.rules.keys()):
@@ -1950,15 +1947,13 @@ class Commander(QtCore.QObject):
       if rule == "nodes_allowing_token_conversion":
         if nodetype in self.main.ontology.rules[rule]:
           features.add("has_tokens")
-          features.add("nodes_allowing_token_conversion")
+          features.add("has_conversion")
       if rule == "nodes_allowing_token_transfer":
         if nodetype in self.main.ontology.rules[rule]:
+          features.add("has_tokens")
           features.add("intraface")
 
     return sorted(features)
-
-
-
 
   def applyControlAccessRules(self):
     phase = self.editor_phase
