@@ -1828,16 +1828,17 @@ class Commander(QtCore.QObject):
       if child not in self.state_nodes:
         self.state_nodes[child] = "blocked"  # default is blocked
     for node in children:
-      if self.state_nodes[node] != "selected":
-        self.state_nodes[node] = "blocked"
-        network = self.main.current_network
-        named_network = self.model_container["nodes"][node]["named_network"]
-        if named_network == self.main.current_named_network:  # self.main.current_network:
-          if "constant" in self.model_container["nodes"][node]["type"]:
-            for token in tokens:
-              if token in self.main.nw_token_typedtoken_dict[network].keys():
-                if token in self.model_container["nodes"][node]["tokens"]:
-                  self.state_nodes[node] = "enabled"
+      self.__enableNodeOnRule(node, "nodes_allowing_token_injection")
+      # if self.state_nodes[node] != "selected":
+      #   self.state_nodes[node] = "blocked"
+      #   network = self.main.current_network
+      #   named_network = self.model_container["nodes"][node]["named_network"]
+      #   if named_network == self.main.current_named_network:  # self.main.current_network:
+      #     if "constant" in self.model_container["nodes"][node]["type"]:
+      #       for token in tokens:
+      #         if token in self.main.nw_token_typedtoken_dict[network].keys():
+      #           if token in self.model_container["nodes"][node]["tokens"]:
+      #             self.state_nodes[node] = "enabled"
 
     # self.setDefaultEditorState()
 
@@ -1847,22 +1848,25 @@ class Commander(QtCore.QObject):
 
     children = self.model_container["ID_tree"].getChildren(self.currently_viewed_node)
 
-    for child in children:  # set the default (initialisation, import etc.)
-      if child not in self.state_nodes:
-        self.state_nodes[child] = "blocked"  # default is blocked
+    # for child in children:  # set the default (initialisation, import etc.)
+    #   if child not in self.state_nodes:
+    #     self.state_nodes[child] = "blocked"  # default is blocked
 
     for node in children:
+      self.__enableNodeOnRule(node,"nodes_allowing_token_conversion")
+
+  def __enableNodeOnRule(self, node, rule):
+    self.state_nodes[node] = "blocked"    # default is blocked
+    network = self.model_container["nodes"][node]["network"]
+    if network == self.main.current_network:
       node_data = self.model_container["nodes"][node]
       node_type = node_data["type"]
       if NODE_COMPONENT_SEPARATOR in node_type:
         node_component, app = node_type.split(NODE_COMPONENT_SEPARATOR)
       else:
         node_component = node_type
-
-      network = self.model_container["nodes"][node]["network"]
-      if network == self.main.current_network:
-        if node_component in self.main.ontology.rules["nodes_allowing_token_conversion"]:
-          self.state_nodes[node] = "enabled"
+      if node_component in self.main.ontology.rules[rule]:
+        self.state_nodes[node] = "enabled"
 
   def __ruleNodeAccessTypedTokensConstrain(self):
     #
