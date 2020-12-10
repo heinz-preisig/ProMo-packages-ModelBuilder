@@ -1378,24 +1378,31 @@ class Commander(QtCore.QObject):
     if graphics_root_object in [NAMES["node"], NAMES["reservoir"]]:
       # add tool tip
       data = self.model_container["nodes"][ID]
-      s = TOOLTIP_TEMPLATES["nodes"] % (
-              data["network"],
-              data["named_network"],
-              data["type"],
-              data["tokens"])
-      if "injected_conversions" in data:
-        s.join("<br>%s" % data["injected_conversions"])
+      s = "<nobr> <b> node: <b> </nobr><br/>"
+      for d in data:
+        s += "<nobr> %s -- %s </nobr><br/>"%(d, data[d])
+      # s = TOOLTIP_TEMPLATES["nodes"] % (
+      #         data["network"],
+      #         data["named_network"],
+      #         data["type"],
+      #         data["tokens"])
+      # if "conversions" in data:
+      #   s.join("<br>%s" % data["conversions"])
+      print("debugging -- tool tip:", s)
       node.setToolTip(s)
 
     if graphics_root_object == NAMES["intraface"]:
       # add tool tip
       data = self.model_container["nodes"][ID]
-      s = TOOLTIP_TEMPLATES["intraface"] % (data["network"],
-                                            data["named_network"],
-                                            data["type"],
-                                            data["tokens_left"],
-                                            data["tokens_right"]
-                                            )
+      s = "<nobr> <b> intraface: <b> </nobr><br/>"
+      for d in data:
+        s += "<nobr> %s -- %s </nobr><br/>"%(d, data[d])
+      # s = TOOLTIP_TEMPLATES["intraface"] % (data["network"],
+      #                                       data["named_network"],
+      #                                       data["type"],
+      #                                       data["tokens_left"],
+      #                                       data["tokens_right"]
+      #                                       )
 
       node.setToolTip(s)
 
@@ -1416,13 +1423,17 @@ class Commander(QtCore.QObject):
                    self)
 
     data = self.model_container["arcs"][arcID]
-    s = TOOLTIP_TEMPLATES["arc"] % (data["network"],
-                                    data["named_network"],
-                                    data["mechanism"],
-                                    data["nature"],
-                                    data["token"],
-                                    data["typed_tokens"],
-                                    )
+    s = "<nobr> <b> arc: <b> </nobr><br/>"
+    for d in data:
+      s += "<nobr> %s -- %s </nobr><br/>" % (d, data[d])
+
+    # s = TOOLTIP_TEMPLATES["arc"] % (data["network"],
+    #                                 data["named_network"],
+    #                                 data["mechanism"],
+    #                                 data["nature"],
+    #                                 data["token"],
+    #                                 data["typed_tokens"],
+    #                                 )
     arc.setToolTip(s)
 
     self.scene.addItem(arc)
@@ -1875,23 +1886,20 @@ class Commander(QtCore.QObject):
 
     children = self.model_container["ID_tree"].getChildren(self.currently_viewed_node)
 
-    for child in children:  # set the default (initialisation, import etc.)
-      if child not in self.state_nodes:
-        self.state_nodes[child] = "blocked"  # default is blocked
+    # for child in children:  # set the default (initialisation, import etc.)
+    #   if child not in self.state_nodes:
+    #     self.state_nodes[child] = "blocked"  # default is blocked
 
     for node in children:
       if self.state_nodes[node] != "selected":
-        # if node in [4, '4']:
-        #   print("got to 4")
-
         self.state_nodes[node] = "blocked"
         if NAMES["intraface"] == self.model_container["nodes"][node]["class"]:  # TODO:  token is the key -- must only
           #  be one
 
-          if self.model_container["nodes"][node]["tokens_left"].keys() == \
-                  self.model_container["nodes"][node]["tokens_right"].keys():
-            if self.main.selected_token[self.main.editor_phase][self.main.current_network] in \
-                    self.model_container["nodes"][node]["tokens_left"].keys():
+          if (self.model_container["nodes"][node]["tokens_left"].keys() == \
+                  self.model_container["nodes"][node]["tokens_right"].keys()) or \
+            (self.main.selected_token[self.main.editor_phase][self.main.current_network] in \
+                    self.model_container["nodes"][node]["tokens_left"].keys()):
               self.state_nodes[node] = "enabled"
     pass
 

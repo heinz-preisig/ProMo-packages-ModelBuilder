@@ -41,6 +41,7 @@ def debugPrint(source, what):
 
 MOUSE_PRESS_DELAY_MOVE = 75
 ORIGIN = QtCore.QPointF(0, 0)
+GRID = 10
 
 
 class ComponentError(Exception):
@@ -190,23 +191,6 @@ class R_Item(QtWidgets.QGraphicsItem):
     self.scene.removeItem(item)
     del item
 
-  # def getPositionAndStructure(self):
-  #   h_x = 0
-  #   h_y = 0
-  #   x, y = self.pos().x() + h_x, self.pos().y() + h_y
-  #   structure = {}
-  #   for i in self.items:
-  #     xi, yi = self.items[i].pos().x(), self.items[i].pos().y()
-  #     o_type = self.items[i].o_type
-  #     if o_type == 'ellipse':
-  #       rect = self.items[i].rect()
-  #       msg_box = rect.width()
-  #       h = rect.height()
-  #       xi = xi + msg_box / 2
-  #       yi = yi + h / 2
-  #     structure[i] = [o_type, (xi, yi)]
-  #   return [(x, y), structure]
-
   def modifyComponentAppearance(self, dec_ID, method_params):
     """
     in: decorationID, (method, params)
@@ -334,14 +318,6 @@ class G_Item(QtWidgets.QGraphicsItem):
     self.moved_decoration = False
     self.rubber = None
 
-    #
-    # # NOTE this is not elegant
-    # # key automaton interface needs to have a current_item, which is set in
-    # # environment
-    # if self.commander.main.initialising:
-    #   # self.commander.initialising = False   #this is now set in main......
-    #   # self.commander.current_item = self
-    #   pass
 
     self.rubber_active = False
     self.mark_grouped = False
@@ -378,17 +354,8 @@ class G_Item(QtWidgets.QGraphicsItem):
     self.setMyCursor()
 
     self.mousePressDelayTimerMove = QtCore.QTimer()  # timer to control delay
-    # QtWidgets.QWidget.connect(self.mousePressDelayTimerMove,
-    #                       # QtCore.SIGNAL("timeout()"),
-    #                       QtCore.pyqtSignal("timeout()"),
-    #                       self.__mousePressDelayTimerMoveEvent)
-    # QtCore.QTimer.singleShot(100, self.__mousePressDelayTimerMoveEvent())
 
     self.mousePressDelayTimerMove.timeout.connect(self.__mousePressDelayTimerMoveEvent)
-
-  # def prepare(self, locPoint):
-  #   # self.locPoint = locPoint
-  #   self.prepareGeometryChange()
 
   def mousePressEvent(self, event):
     self.moved_root = False
@@ -442,10 +409,11 @@ class G_Item(QtWidgets.QGraphicsItem):
         #         ((self.parentItem not in node_group) and (self.parentItem() not in knot_group)):
         # TODO: seems this never happens -- should it ? == did see it once for 0 ???
         # print("posintion: ", dir(self.parent))
-        # x = self.parentItem().x()
-        # y = self.parentItem().y()
-        x = 5 * round(float(self.parentItem().x()) / 5)
-        y = 5 * round(float(self.parentItem().y()) / 5)
+        x = self.parentItem().x()
+        y = self.parentItem().y()
+        # grid = 10
+        # x = grid * round(float(self.parentItem().x()) / grid)
+        # y = grid * round(float(self.parentItem().y()) / grid)
 
         print("moving node: {} to position ({},{}) ".format(self.parent.ID, x, y))
         if self.graphics_root_object == NAMES["elbow"]:
@@ -575,8 +543,13 @@ class G_Item(QtWidgets.QGraphicsItem):
     else:
       if self.decoration in OBJECTS_not_move:
         return
-      x = event.pos().x()
-      y = event.pos().y()
+      if self.decoration == "root":
+        x = self.__gridding(event.pos().x())
+        y = self.__gridding(event.pos().y())
+      else:
+        x = event.pos().x()
+        y = event.pos().y()
+
       dx = event.lastPos().x() - x
       dy = event.lastPos().y() - y
 
@@ -611,8 +584,9 @@ class G_Item(QtWidgets.QGraphicsItem):
           # print("moving knot :", k, dx, dy)
           k.moveBy(-dx, -dy)
 
-  # def __mainObject(self, root_object, graph_object):
-  #   return root_object.items[graph_object]
+  def __gridding(self,z):
+    g_z = GRID * round(z/GRID)
+    return g_z
 
   def hoverEnterEvent(self, event):
     # print('hoverEnterEvent - mouse enter event', self.graphics_root_object, self.decoration)

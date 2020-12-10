@@ -1182,7 +1182,8 @@ class ModelContainer(dict):
     adj_matrix = self.computeTokenAdjacencyMatrix(domain, token)
     for node in domain:
       node_type = self["nodes"][node]["type"]
-      if NAMES["reservoir"] in node_type:
+      test = self.__isCoveredByRule(node_type, "nodes_allowing_token_injection")
+      if test: #NAMES["reservoir"] in node_type:
         if token in self["nodes"][node]["injected_typed_tokens"]:
           for typed_token in self["nodes"][node]["injected_typed_tokens"][token]:
             network = self["nodes"][node]["network"]
@@ -1214,11 +1215,8 @@ class ModelContainer(dict):
     if typed_token not in typed_tokens:
       typed_tokens.append(typed_token)
       node_type = node_data["type"]
-      if NODE_COMPONENT_SEPARATOR in node_type:
-        node_component, app = node_type.split(NODE_COMPONENT_SEPARATOR)
-      else:
-        node_component = node_type
-      if node_component in self.ontology.rules["nodes_allowing_token_conversion"]:
+      test = self.__isCoveredByRule(node_type, "nodes_allowing_token_conversion")
+      if test:
         if token in node_data["conversions"]:  # in the sequence it may not yet be defined, patience
           for conversion in node_data["conversions"][token]:
             E, P = conversion.split(CR.CONVERSION_SEPARATOR)
@@ -1248,3 +1246,11 @@ class ModelContainer(dict):
           else:
             next_network = network
             self.colourBranch(next_network, node_alt, token, typed_token, adj_matrix, conversions)
+
+  def __isCoveredByRule(self, node_type, rule):
+    if NODE_COMPONENT_SEPARATOR in node_type:
+      node_component, app = node_type.split(NODE_COMPONENT_SEPARATOR)
+    else:
+      node_component = node_type
+    test = (node_component in self.ontology.rules[rule])
+    return test

@@ -760,6 +760,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     screenshot = screen.grabWindow(self.ui.graphicsView.winId())
     screenshot.save(file, "jpg")
 
+    self.writeStatus("saving screenshot to file %s.jpg" % file)
+
   def insertModelFromFile(self, model_name):
     """
     takes a model from a file and inserts it into new empty model
@@ -785,6 +787,11 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                        token,
                                                        list_typed_tokens,
                                                        "injected_typed_tokens")
+    # RULE: injected tokens are also entered into the tokens
+    self.commander.model_container.injectListInToNodes(self.commander.node_group,
+                                                       token,
+                                                       list_typed_tokens,
+                                                       "tokens")
     self.computeTypedTokenDistribution(token)
     self.commander.clearSelectedNodes()
     self.commander.redrawCurrentScene()
