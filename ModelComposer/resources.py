@@ -16,9 +16,9 @@ defines all major resources
  Object ID :  <structure ID>.<decoration ID>&<application-type>:<state>
 
  delimiters:
-     O_delimiter = '.'
-     T_delimiter = '&'  within the application type we split with |
-     S_delimiter = ':'
+     O_delimiter = "."
+     T_delimiter = "&"  within the application type we split with |
+     S_delimiter = ":"
 
   application_type is now also a composite:     
      node : <nodetype>|<token>|conversion
@@ -63,31 +63,32 @@ from Common.resource_initialisation import DIRECTORIES
 
 # NOTE: this defines the available actions
 ACTIONS = {}
-ACTIONS["topology"] = ['zoom in',
-                       'add node',
-                       'delete node',
-                       'group nodes',
-                       'explode node',
-                       'begin arc',
-                       'add arc',
-                       'remove arc',
-                       're-direct arc',
-                       'change arc',
-                       'insert knot',
-                       'remove knot',
-                       'make a copy',
-                       'insert model',
-                       'reset',
-                       'name node',
-                       'select node',
+ACTIONS["topology"] = ["zoom in",
+                       "add node",
+                       "delete node",
+                       "group nodes",
+                       "explode node",
+                       "begin arc",
+                       "add arc",
+                       "remove arc",
+                       "re-direct arc",
+                       "change arc",
+                       "insert knot",
+                       "remove knot",
+                       "make a copy",
+                       "insert model",
+                       "reset",
+                       "name node",
+                       "select node",
                        ]
-ACTIONS["token_topology"] = ['zoom in',
-                             'inject',
-                             'compute'
+ACTIONS["token_topology"] = ["zoom in",
+                             "inject",
+                             "compute"
                              ]
-ACTIONS["equation_topology"] = ['add_equation_object',
-                                'remove_equation_object',
-                                'edit_representation']
+ACTIONS["equation_topology"] = ["select node",
+                                "add_equation_object",
+                                "remove_equation_object",
+                                "edit_representation"]
 
 
 # Cursors ----------------------------------------------------------------------
@@ -97,15 +98,15 @@ class ModellerCursor(dict):
 
   def __init__(self):
     hotpoints = {
-            'TL': (0, 0),
-            'TC': (16, 0),
-            'TR': (32, 0),
-            'LC': (0, 16),
-            'CC': (16, 16),
-            'RC': (16, 32),
-            'BL': (0, 32),
-            'BC': (16, 32),
-            'BR': (32, 32),
+            "TL": (0, 0),
+            "TC": (16, 0),
+            "TR": (32, 0),
+            "LC": (0, 16),
+            "CC": (16, 16),
+            "RC": (16, 32),
+            "BL": (0, 32),
+            "BC": (16, 32),
+            "BR": (32, 32),
             }
 
     c_loc = DIRECTORIES["cursor_location"]
@@ -115,7 +116,7 @@ class ModellerCursor(dict):
       pos = f[0:2]
       if pos in list(hotpoints.keys()):
         if DEFAULT_EXTENSION_CURSOR in f:
-          myfile = c_loc + '/' + f
+          myfile = c_loc + "/" + f
           ID = f[0:f.index(DEFAULT_EXTENSION_CURSOR)]
           pm = Q_Gui.QPixmap(myfile)
           #                    pm.setMask(pm.createHeuristicMask())
@@ -124,12 +125,12 @@ class ModellerCursor(dict):
           # print( "set up cursor '%s'"%ID)
 
           # default cursors -------------------------------------------------------------
-    self['forbidden'] = self['CC_forbidden']
-    self['undefined'] = self['CC_undefined']
-    self['grab'] = self['CC_grab-tongs01']
-    self['move'] = self['CC_move']
-    self[M_None] = self['CC_logo']
-    self['group_select'] = self['CC_select']
+    self["forbidden"] = self["CC_forbidden"]
+    self["undefined"] = self["CC_undefined"]
+    self["grab"] = self["CC_grab-tongs01"]
+    self["move"] = self["CC_move"]
+    self[M_None] = self["CC_logo"]
+    self["group_select"] = self["CC_select"]
 
   def getCursor(self, select):
     if select not in list(self.keys()):
@@ -148,5 +149,5 @@ class ModellerCursor(dict):
 
 # #testing
 #
-if __name__ == '__main__':
+if __name__ == "__main__":
   pass

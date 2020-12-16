@@ -4,7 +4,7 @@ from os import mkdir
 from os import path
 
 from PyQt5 import QtCore
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 from Common.common_resources import askForCasefileGivenLocation as afc
 from Common.common_resources import askForModelFileGivenOntologyLocation as afm
@@ -24,16 +24,16 @@ from ModelBuilder.z_Initialise_system_editor.master_project import Initializatio
 # FOLDERS = ['variables', 'model_json', 'equations']
 
 
-class Ui_Initialise_system(QtGui.QMainWindow):
+class Ui_Initialise_system(QtWidgets.QMainWindow):
   def __init__(self):
-    QtGui.QMainWindow.__init__(self)
+    QtWidgets.QMainWindow.__init__(self)
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
     self.ontology_name = getOntologyName()
     self.ontology = OntologyContainer(self.ontology_name)
     self.ontology_location = self.ontology.onto_path
     models_file = DIRECTORIES["model_library_location"]%self.ontology_name
-    self.mod_name = afm(models_file, alternative=False)[0]
+    self.mod_name = afm(models_file)[0]
 
     message = '<b>Set up</b> <br />Ontology: {}<br />Model: {}'
     display = message.format(self.ontology_name, self.mod_name)
@@ -84,13 +84,13 @@ class Ui_Initialise_system(QtGui.QMainWindow):
     for i in range(len(states)):
       states_combos = itertools.combinations(states, i + 1)
       for state_alt in states_combos:
-        str_rep = ', '.join(state_alt)
+        str_rep = ', '.join(str(state_alt))
         combos.append(str(str_rep))
 
     self.ui.select_starting_variables.clear()
     self.ui.select_starting_variables.addItems(combos)
 
-  @QtCore.pyqtSignature('QString')
+  @QtCore.pyqtSlot(str)
   def on_select_starting_variables_activated(self, vars):
     vars_alts = vars.split(', ')
 
@@ -143,11 +143,11 @@ class Ui_Initialise_system(QtGui.QMainWindow):
     return
 
 
-class Table_widget(QtGui.QWidget):
+class Table_widget(QtWidgets.QWidget):
   completed = QtCore.pyqtSignal(str)
 
   def __init__(self, initialise_system, mother):
-    QtGui.QWidget.__init__(self)
+    QtWidgets.QWidget.__init__(self)
     self.mother = mother
     self.ui = Ui_table_initilizer()
     self.system = initialise_system
@@ -231,7 +231,7 @@ class Table_widget(QtGui.QWidget):
     self.selector_dict[str]['piece'] = 'global_variable'
     self.selector_list.append(str)
 
-  @QtCore.pyqtSignature('QString')
+  # @QtCore.pyqtSignature('QString')
   def on_object_selecter_box_activated(self, input_str):
 
     self.fill_table(input_str)

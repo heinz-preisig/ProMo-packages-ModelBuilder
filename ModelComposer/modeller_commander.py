@@ -1279,8 +1279,18 @@ class Commander(QtCore.QObject):
     :param nodeID: node ID as string
     :return:
     """
-    self.selected_intraface_node = nodeID
-    self.state_nodes[nodeID] = "selected"
+    print("debugging -- selecting node")
+    node_type = self.model_container["nodes"][nodeID]["class"]
+    if node_type in [NAMES["node"]]:
+      self.node_group.add(nodeID)
+      self.state_nodes[nodeID] = "selected"
+    if node_type in [NAMES["intraface"]]:
+      self.selected_intraface_node = nodeID
+      self.node_group.add(nodeID)
+      self.state_nodes[nodeID] = "selected"
+    if node_type in [NAMES["panel"]]:
+      self.__resetNodeStatesAndSelectedArc()
+
     ancestors = self.model_container["ID_tree"].getAncestors(nodeID)
     self.__redrawScene(ancestors[0])
 

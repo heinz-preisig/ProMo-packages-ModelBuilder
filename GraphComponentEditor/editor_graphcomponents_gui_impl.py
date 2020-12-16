@@ -856,19 +856,33 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
         if self.selected_component in DECORATIONS_with_state:
           state = self.current_state
 
+      if self.selected_root_object in [NAMES["intraface"], NAMES["interface"]] : #Rule: inter and intraface
+        self.DATA.setData(what,
+                          value,
+                          phase,
+                          self.selected_root_object,
+                          self.selected_component,
+                          self.selected_application,
+                          state)
+        return
+
       applications = [M_None]
       if self.selected_root_object in OBJECTS_with_application:
         if self.selected_component in DECORATIONS_with_application:
           applications=  self.ontology.list_network_node_objects # RULE: if the object has applications then data apply to all
 
+
+
       for application in applications: #RULE: all "applications" have the same action
-        self.DATA.setData(what, value,
+        self.DATA.setData(what,
+                          value,
                           phase,
                           self.selected_root_object,
                           self.selected_component,
                           application, # self.selected_application,
                           state,
                           )
+
     else:
       phase = PHASES[0]
       state = M_None

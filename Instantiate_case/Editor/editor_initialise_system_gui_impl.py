@@ -4,7 +4,7 @@ from os import mkdir
 from os import path
 
 from PyQt5 import QtCore
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 from Common.common_resources import askForCasefileGivenLocation as afc
 from Common.common_resources import askForModelFileGivenOntologyLocation as afm
@@ -16,13 +16,13 @@ from Common.resource_initialisation import DIRECTORIES
 # from Common.resource_initialisation import FILE_NAMES
 from Common.resource_initialisation import FILES
 from ModelBuilder.Instantiate_case.Editor.editor_initialise_system_gui import Ui_MainWindow
-from ModelBuilder.Instantiate_case import Ui_table_initilizer
+from ModelBuilder.z_Initialise_system_editor.Editor.object_initializer_gui import Ui_table_initilizer
 from ModelBuilder.Instantiate_case.main import Instantiate_Case
 
 
-class Ui_Initialise_system(QtGui.QMainWindow):
+class Ui_Initialise_system(QtWidgets.QMainWindow):
   def __init__(self):
-    QtGui.QMainWindow.__init__(self)
+    QtWidgets.QMainWindow.__init__(self)
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
     self.ontology_name = getOntologyName()
@@ -147,19 +147,19 @@ class Ui_Initialise_system(QtGui.QMainWindow):
   # def generate_groups(self, named_network):
   #   for node in self.model_
 
-  @QtCore.pyqtSignature('QString')
+  # @QtCore.pyqtSignature('QString')
   def on_select_named_network_activated(self, named_network):
     self.named_network = named_network
     self.fill_groups_alternatives(named_network)
 
 
-  @QtCore.pyqtSignature('QString')
+  # @QtCore.pyqtSignature('QString')
   def on_select_group_activated(self, group):
     self.group = group
     if group in ['single_nodes', 'single_arcs']:
       self.fill_singles(group)
 
-  @QtCore.pyqtSignature('QString')
+  # @QtCore.pyqtSignature('QString')
   def on_select_single_activated(self, single):
     self.single = single
 
@@ -183,11 +183,11 @@ class Ui_Initialise_system(QtGui.QMainWindow):
     return
 
 
-class Table_widget(QtGui.QWidget):
+class Table_widget(QtWidgets.QWidget):
   completed = QtCore.pyqtSignal(str)
 
   def __init__(self, initialise_system, mother, selections):
-    QtGui.QWidget.__init__(self)
+    QtGui.QWidgets.__init__(self)
     self.mother = mother
     self.selections = selections
     self.system = initialise_system

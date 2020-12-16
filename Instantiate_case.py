@@ -8,7 +8,7 @@
 import os
 import sys
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 from ModelBuilder.Instantiate_case.Editor.editor_initialise_system_gui_impl import Ui_Initialise_system
 
@@ -28,7 +28,7 @@ if __name__ == '__main__':
   #   mf = ModelFactory(ontology, mod_name, language, model_loc)
   #   mf.produce_code()
   # else:
-  a = QtGui.QApplication(sys.argv)
+  a = QtWidgets.QApplication(sys.argv)
   a.setWindowIcon(QtGui.QIcon("./Common/icons/otter.png"))
   w = Ui_Initialise_system()
   w.setWindowTitle('Initialise case')

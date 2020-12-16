@@ -869,9 +869,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   def on_pushDeleteNamedNetwork_pressed(self):
     self.writeStatus("deleting named network is not yet implemented")
 
-  # @staticmethod
-  # def on_pushExit_pressed():
-  #   print(">>>> exiting")
+  def on_pushSchnipsel_pressed(self):
+    self.showSchnipselPopWindow()
+
 
   def on_pushSaveAs_pressed(self, *args):
     """
