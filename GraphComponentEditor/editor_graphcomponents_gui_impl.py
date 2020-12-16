@@ -170,22 +170,31 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     print("debugging -- new editor phase:", str(phase))
     # phase = self.ui.comboEditorPhase.currentText()
     self.current_editor_phase = str(phase)
-    if not self.selected_root_object:
-      return
+    self.__makeComboState()
+    # if not self.selected_root_object:
+    #   return
     component_data = self.__getComponentData()
+    if not component_data:
+      print("debugging -- could not get component data")
+      return
     self.__makeListActivity(component_data["action"])
     self.__group_controls("selected_editor_phase")
 
   def on_comboEditorState_currentTextChanged(self, state):
-    print("debugging -- comboEditorState activated")
+    print("debugging -- comboEditorState activated", state)
     # state = self.ui.comboEditorState.currentText()
-    self.selected_state = str(state)
-    try:  # there is an issue when loading the page
-      component_data = self.__getComponentData()
-      self.__makeListActivity(component_data["action"])
-      self.__group_controls("selected_editor_phase")
-    except:
-      pass
+    self.selected_state = state
+    # if state == "":
+    #   return?
+    # try:  # there is an issue when loading the page
+    component_data = self.__getComponentData()
+    if not component_data :
+      print("debugging -- could not get component data")
+      return
+    self.__makeListActivity(component_data["action"])
+    self.__group_controls("selected_editor_phase")
+    # except:
+    #   pass
 
   def on_listRootObjects_itemClicked(self, item):
     if DEBUG_ME:
@@ -200,7 +209,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     # q_string = self.ui.comboApplication.currentText()
     print("application selected", q_string)
 
-    self.selected_application = str(q_string)
+    self.selected_application = q_string
+    if q_string == "":
+      return
     self.__processSelectedComponent()
     self.ui.comboEditorState.setCurrentIndex(0)  # make activity lists
     state = self.ui.comboEditorState.currentText()
@@ -214,6 +225,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     print("component selected", item.text())
     self.__group_controls("edit_object")
     self.selected_component = str(item.text())
+    self.__makeComboApplication()
     self.__makeComboState()
     self.__selectedComponent()
 
@@ -232,6 +244,10 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.ui.groupObjects.hide()
     self.ui.groupComponents.show()
     self.__group_controls("edit_components")
+    if self.ontology.list_interconnection_networks == []:
+      self.ui.pushButtonInterface.hide()
+    if self.ontology.list_intraconnection_networks == []:
+      self.ui.pushButtonIntraface.hide()
     self.current_state = STATE_OBJECT_COLOURED  # rule: only the colour of the enabled element is variable
 
   def on_pushButtonNetworks_pressed(self):
@@ -693,7 +709,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     if states:
       self.ui.comboEditorState.addItems(states)
-      self.selected_object_state = str(self.ui.comboEditorState.currentText())
+      # self.selected_object_state = str(self.ui.comboEditorState.currentText())
     else:
       self.ui.comboEditorState.clear()
     # self.ui.comboEditorState.show()
@@ -714,7 +730,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.ui.comboApplication.clear()
     self.ui.comboApplication.addItems(set(applications))
-    self.selected_application = str(self.ui.comboApplication.currentText())
+    # self.selected_application = self.ui.comboApplication.currentText()
 
   def __makeListNetwork(self, network_type, listNetworks):
     listNetworks.clear()
@@ -854,7 +870,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
       state = M_None
       if self.selected_root_object in OBJECTS_with_state:
         if self.selected_component in DECORATIONS_with_state:
-          state = self.current_state
+          state = self.selected_state #current_state
 
       if self.selected_root_object in [NAMES["intraface"], NAMES["interface"]] : #Rule: inter and intraface
         self.DATA.setData(what,
@@ -959,13 +975,20 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
     self.__printComponentData()
 
   def __getComponentData(self):
-    return self.DATA.getData(DEFAULT_PHASE,  # self.current_editor_phase,
-                             self.selected_root_object,
-                             self.selected_component,
-                             self.selected_application,
-                             self.selected_state
-                             # STATE_OBJECT_COLOURED  # ditto
-                             )
+    self.current_editor_phase = self.ui.comboEditorPhase.currentText()
+    self.current_application = self.ui.comboApplication.currentText()
+    self.selected_state = self.ui.comboEditorState.currentText()
+    try:
+      data = self.DATA.getData(self.current_editor_phase, #DEFAULT_PHASE
+                               self.selected_root_object,
+                               self.selected_component,
+                               self.selected_application,
+                               self.selected_state
+                               # STATE_OBJECT_COLOURED  # ditto
+                               )
+    except:
+      data = None
+    return data
     # self.selected_object_state)
 
   def __selectedComponent(self):
@@ -991,6 +1014,9 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
   def __processSelectedComponent(self):
 
     component_data = self.__getComponentData()
+    if not component_data:
+      print("debugging -- could not get component data when processing data")
+      return
     self.__printComponentData()
     self.__makeListActivity(component_data["action"])
     x = component_data["position_x"]
