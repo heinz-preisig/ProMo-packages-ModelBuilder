@@ -129,7 +129,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # now ask for model
     self.model_name = ""
     # while self.model_name in [""]:
-    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new")
+    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location)
+
     print("debugging -- model name and new_model", self.model_name, status)
     if status == "existent":
       new_model = False
@@ -566,6 +567,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
           # if "auto" not in nature:
           s_tokens.append(token)
         if s_tokens:
+          self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
           self.radio_selectors["arc_token"] = self.__makeAndAddSelector("token", s_tokens, self.radioReceiverArcToken,
                                                                         s_token,
                                                                         self.ui.layoutInteractiveWidgetBottom)
@@ -724,8 +726,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     ask for and define schnipsel model name
     """
-    self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location,
-                                                                          new=False, exit=None)
+    self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location)
 
     if self.schnipsel_name in ["exit", "", None]: return
 
@@ -877,7 +878,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     ask for model file and then map and save it
     """
-    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location, left_icon="new")
+    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location)
 
     if not self.model_name:
       return

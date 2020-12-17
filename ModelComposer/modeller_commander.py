@@ -1281,18 +1281,23 @@ class Commander(QtCore.QObject):
     """
     print("debugging -- selecting node")
     node_type = self.model_container["nodes"][nodeID]["class"]
-    if node_type in [NAMES["node"]]:
-      self.node_group.add(nodeID)
-      self.state_nodes[nodeID] = "selected"
-    if node_type in [NAMES["intraface"]]:
-      self.selected_intraface_node = nodeID
-      self.node_group.add(nodeID)
-      self.state_nodes[nodeID] = "selected"
-    if node_type in [NAMES["panel"]]:
-      self.__resetNodeStatesAndSelectedArc()
+    if node_type in [NAMES["node"], NAMES["intraface"]]:
+      ancestors = self.model_container["ID_tree"].getAncestors(nodeID)
+      parentID = ancestors[0]
+      if self.state_nodes[nodeID] == "selected":
+        self.node_group.remove(nodeID)
+        self.state_nodes[nodeID] = "enabled"
+      else:
+        self.node_group.add(nodeID)
+        self.state_nodes[nodeID] = "selected"
+      if node_type in [NAMES["intraface"]]:
+        self.selected_intraface_node = nodeID  #TODO: check if needed | actie
+      self.__redrawScene(parentID)
 
-    ancestors = self.model_container["ID_tree"].getAncestors(nodeID)
-    self.__redrawScene(ancestors[0])
+    if node_type in [NAMES["branch"]]:
+      self.__resetNodeStatesAndSelectedArc()
+      self.__redrawScene(nodeID)
+
 
     return {"failed": False}
 
