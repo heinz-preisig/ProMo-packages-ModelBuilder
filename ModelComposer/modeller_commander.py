@@ -1125,8 +1125,7 @@ class Commander(QtCore.QObject):
       self.main.writeStatus("no model defined")
       return
 
-    f = model_file  # + RI.EXTENSION_GRAPH_DATA
-    # print(model_file)
+    f = model_file
     self.model_container.makeFromFile(f)
     self.main.named_network_dictionary = self.model_container["named_networks"]
     self.main.makeNamedNetworkBrushes()

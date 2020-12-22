@@ -256,14 +256,12 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       self.named_network_dictionary = self.commander.model_container["named_networks"]
       # painting tools part 2
       self.makeNamedNetworkBrushes()
-
-    self.radio_selectors = {}
-
-    if not new_model:
+    else:
       # Note: the generation of the named network brushes must be done after the data were read, so it is moved into
       #  the commander
       self.insertModelFromFile(self.model_name)
 
+    self.radio_selectors = {}
     self.__setupInterface()
     self.commander.setPanelAsCurrentItem()  # this sets the initial item to the panel
 
