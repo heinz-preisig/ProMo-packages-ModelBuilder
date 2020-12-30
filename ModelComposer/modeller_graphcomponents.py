@@ -455,23 +455,24 @@ class G_Item(QtWidgets.QGraphicsItem):
     added_new = False  # used to delete group
     nodes = [NAMES["node"], NAMES["interface"], NAMES["intraface"], NAMES["branch"]]
     offset = self.view.offset
+    x_o = offset.x()
+    y_o = offset.y()
     a = self._scene.items()
     for i in a:
       t = i.graphics_root_object
       # print(" rubber root ? :",i )
       if (t in nodes) or (t == NAMES["elbow"]) or (t == NAMES["connection"]):
-        x_o = offset.x()
-        y_o = offset.y()
         x_r = self.rubber.x() + x_o
         y_r = self.rubber.y() + y_o
         w = self.rubber.rect().width()
         h = self.rubber.rect().height()
-        # rect = QtCore.QRectF(x_r, y_r, msg_box, h)
+        rect = QtCore.QRectF(x_r, y_r, w, h)
 
-        i_x = i.pos().x()
-        i_y = i.pos().y()
+        # i_x = i.pos().x()
+        # i_y = i.pos().y()
 
-        if (x_r < i_x < x_r + w) and (y_r < i_y < y_r + h):  # rect.contains(i.pos()):
+        # if (x_r < i_x < x_r + w) and (y_r < i_y < y_r + h):  # rect.contains(i.pos()):
+        if rect.contains(i.pos()):
           StrO = str(i.__class__)
           t = StrO.split('.')[-1]  # get last bit
           tt = t.split("'")[0]  # remove '>
