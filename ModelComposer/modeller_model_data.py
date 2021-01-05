@@ -636,9 +636,10 @@ class ModelContainer(dict):
     external_arcs = []
     internal_arcs = []
 
-    nodeIDs = self["ID_tree"].walkBreadthFirst(nodeID)
-    nodeIDs = []  # convert to integers
-    [nodeIDs.append(i) for i in nodeIDs]
+    # nodeIDs = self["ID_tree"].walkBreadthFirst(nodeID)
+    nodeIDs = walkBreathFirstFnc(self["ID_tree"], nodeID)
+    # nodeIDs = []  # convert to integers
+    # [nodeIDs.append(i) for i in nodeIDs]
 
     arcs = self["arcs"]
     for arc in arcs:
@@ -653,19 +654,24 @@ class ModelContainer(dict):
 
   def extractSubtree(self, nodeID):
 
-    container = ModelContainer()
+    container = ModelContainer(self.networks, self.ontology)
+    container["named_networks"] = deepcopy(self["named_networks"])
 
     # TODO: external arcs may be connected to dummy inputs/outputs or the relative root ???
 
     external_arcs, internal_arcs = self.getInternalandExternalArcs(nodeID)
 
-    tree, node_map = self["ID_tree"].getSubTree(nodeID)
+    # tree, node_map = self["ID_tree"].getSubTree(nodeID)
+
+    tree, node_map = self["ID_tree"].getMappedSubtree(nodeID)
+    # container["ID_tree"].imposeIDTree(tree)
 
     no_arcIDs = len(internal_arcs)
     arcID_map = dict([(internal_arcs[i], (i)) for i in range(no_arcIDs)])  # dict([(internal_arcs[i], str(i)) for i
     # in range(no_arcIDs)]) #HAP: str --> int
 
     container["ID_tree"] = tree
+    # node_map = self.mapMe()
 
     for node in node_map:
       c_node = node_map[node]
@@ -694,7 +700,7 @@ class ModelContainer(dict):
       container["arcs"][c_arc]["source"] = source
       container["arcs"][c_arc]["sink"] = sink
 
-    container.printMe()
+    # container.printMe()
 
     return container
 

@@ -34,6 +34,7 @@ from Common.automata_objects import GRAPH_EDITOR_STATES
 # from Common.automata_objects import STATES               # TODO: What's this?
 from Common.common_resources import askForModelFileGivenOntologyLocation
 from Common.common_resources import NODE_COMPONENT_SEPARATOR
+from Common.resource_initialisation import FILES
 from Common.graphics_objects import INTERFACE
 from Common.graphics_objects import INTRAFACE
 from Common.graphics_objects import LOCATION_PARAMETERS
@@ -398,7 +399,7 @@ class Commander(QtCore.QObject):
     elif action == "shift editor phase":
       res = self.__c26_shiftEditorPhase(pars["phase"])
     elif action == "select node":
-      res = self.__c27_selectIntrafaceNode(pars["nodeID"])
+      res = self.__c27_selectNode(pars["nodeID"])
     elif action == "inject":
       res = self.__c28_injectTypedTokensOrConversions(pars["nodeID"])
     elif action == "compute token distribution":
@@ -1093,8 +1094,13 @@ class Commander(QtCore.QObject):
                                                                                  right_tooltip="accept", )
 
     container = self.model_container.extractSubtree(nodeID)
-    schnipsel_file = os.path.join(self.main.model_library_location, schnipsel_name_to_be_saved)
-    f = schnipsel_file + RI.EXTENSION_GRAPH_DATA
+
+    schnipsel_file = FILES["model_file"] % (self.main.ontology_name, schnipsel_name_to_be_saved)
+    model_directory = os.path.dirname(schnipsel_file)
+    if not os.path.exists(model_directory):
+      os.makedirs(model_directory)
+    # schnipsel_file = os.path.join(self.main.model_library_location, schnipsel_name_to_be_saved)
+    f = schnipsel_file
     container.write(f)
     self.main.writeStatus("saved schnipsel to %s" % schnipsel_name_to_be_saved)
     self.schnipsel_file = schnipsel_file
@@ -1272,7 +1278,7 @@ class Commander(QtCore.QObject):
             "library file": self.library_model_name
             }
 
-  def __c27_selectIntrafaceNode(self, nodeID):
+  def __c27_selectNode(self, nodeID):
     """
     selects and unselects
     :param nodeID: node ID as string
