@@ -871,14 +871,14 @@ class ModelContainer(dict):
     for the_hash in self:
       if the_hash == "ID_tree":
         self["ID_tree"].addMappedTree(tree, parentID)
-      elif the_hash == "named_networks":
-        for nw in self["named_networks"]:
-          s = set(self["named_networks"][nw])
-          ds = set(data["named_networks"][nw])
-          us = s.union(ds)
-          ls = list(us)
-          print("named networks ", nw, "--", s, ds, ls)
-          self["named_networks"][nw] = ls
+      # elif the_hash == "named_networks":
+      #   for nw in self["named_networks"]:
+      #     s = set(self["named_networks"][nw])
+      #     ds = set(data["named_networks"][nw])
+      #     us = s.union(ds)
+      #     ls = list(us)
+      #     print("named networks ", nw, "--", s, ds, ls)
+      #     self["named_networks"][nw] = ls
       else:
         self[the_hash].update(odata[the_hash])
 

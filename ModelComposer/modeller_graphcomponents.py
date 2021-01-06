@@ -645,19 +645,6 @@ class G_Item(QtWidgets.QGraphicsItem):
 
 def getShapeData(graphics_root_object, graph_object, parent):
 
-  # application = M_None
-  # state = M_None
-  # if graphics_root_object in OBJECTS_with_application:
-  #   if graph_object in DECORATIONS_with_application:
-  #     if graph_object in NODES:
-  #       application = parent.commander.model_container.getNodeApplication(parent.ID)
-  #     elif graph_object in ARCS:
-  #       application = parent.commander.model_container.getArcApplication(parent.ID)
-  # if graphics_root_object in OBJECTS_with_state:
-  #   if graph_object in DECORATIONS_with_state:
-  #     state = state = parent.commander.state_nodes[parent.ID]
-
-
   if graphics_root_object in NODES + [NAMES["panel"]]:  # [NAMES["node"], NAMES["panel"]]:
     application = parent.commander.model_container.getNodeApplication(parent.ID)  # ["nodes"][parent.ID]["type"]
     state = parent.commander.state_nodes[parent.ID]
@@ -665,20 +652,11 @@ def getShapeData(graphics_root_object, graph_object, parent):
     application = parent.commander.model_container.getArcApplication(parent.ID)
     # print("get shape >>> application:", application)
     state = parent.commander.state_arcs[parent.ID]
-  # elif graphics_root_object == NAMES["head"]:
-  #   print("getShapeData head")
-  # elif graphics_root_object == NAMES["tail"]:
-  #   print("getShapeData tail")
   elif graphics_root_object == NAMES["elbow"]:
     # print("getShapeData knot")
     application = M_None
     state = parent.commander.state_arcs[parent.arcID]
 
-  #
-  # else:
-  #   print("getShapeData -- failed", graphics_root_object)
-  #   application = None
-  #   state = None
   phase = parent.commander.editor_phase
   shape_data = parent.commander.graphics_data.getData(phase, parent.graphics_root_object,
                                                       graph_object, application, state)

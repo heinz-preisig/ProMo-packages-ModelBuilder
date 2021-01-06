@@ -1203,9 +1203,7 @@ class Commander(QtCore.QObject):
 
     self.__c23_saveData(model, f)
 
-    # f_ = f + RI.EXTENSION_GRAPH_DATA
-    # print("__c22_mapAndSaveModel", "__map and save model in commander to file :", f_)
-    # node_map = self.model_container.write(f_)
+    # print("__c22_mapAndSaveModel", "__map and save model in commander to file :", f)
 
     return {"failed": False}  # res_dic
 
