@@ -211,6 +211,7 @@ class EditorGraphComponentsDialogImpl(QtWidgets.QMainWindow):
 
     self.selected_application = q_string
     if q_string == "":
+      self.selected_application = "-"
       return
     self.__processSelectedComponent()
     self.ui.comboEditorState.setCurrentIndex(0)  # make activity lists
