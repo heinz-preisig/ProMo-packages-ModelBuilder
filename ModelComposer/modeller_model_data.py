@@ -758,6 +758,14 @@ class ModelContainer(dict):
     for h in ["arcs", "named_networks"]:
       flat_data[h] = self[h]
 
+    D, TD, I_tokens, I_typed_tokens,typed_tokens = self.updateTypedTokensInAllDomains()
+
+    flat_data["token_domains"] = D
+    flat_data["typed_token_domains"] = TD
+    flat_data["token_incidence_matrix"] = I_tokens
+    flat_data["typed_token_incidence_matrix"] = I_typed_tokens
+    flat_data["typed_token_lists"] = typed_tokens
+
     CR.putData(flat_data, f)
 
   def getAndFixData(self, f):
@@ -1003,7 +1011,7 @@ class ModelContainer(dict):
     return open_arcs
 
   def injectListInToNodes(self, node_group, token, list, where):
-    # print('list: ', list, "to where ", where)
+    print('list: ', list, "to where ", where)
     for node in node_group:
       # print('node directory for node %s' % node, self["nodes"][node].keys())
       # print("inject tokens ", node_group, token, list, self["nodes"][node])
@@ -1060,6 +1068,32 @@ class ModelContainer(dict):
           I[node] = []
         I[node].append(arc)
     return I
+
+  #========================
+
+  def getArcsWithTypedToken(self, token, typed_token):
+
+    arcs_with_typed_token = []
+    arcs = self.getArcsWithToken(self["arcs"], token)
+    for a in arcs:
+      arc_token_data =  self["arcs"][a]["token"]
+      if arc_token_data == token:
+        if typed_token in self["arcs"][a]["typed_tokens"]:
+          arcs_with_typed_token.append(a)
+    return arcs_with_typed_token
+
+  def computeTypedTokenIncidenceMatrix(self, token, typed_token):
+    arcs_with_typed_token = self.getArcsWithTypedToken(token, typed_token)
+    I = {}
+    for arc in arcs_with_typed_token:
+      source_node = self["arcs"][arc]["source"]
+      sink_node = self["arcs"][arc]["sink"]
+      for node in [source_node, sink_node]:
+        if node not in list(I.keys()):
+          I[node] = []
+        I[node].append(arc)
+    return I
+  #========================
 
   def computeTokenAdjacencyMatrix(self, domain, token):
     arcs_with_token = self.getArcsWithToken(self["arcs"], token)
@@ -1124,14 +1158,14 @@ class ModelContainer(dict):
     self["domains"] = D
     return D
 
-  def isInDomain(self, node, token_name):
-    # print("debugging -- landing point")
-    for no in self["domains"][token_name]:
-      if node in self["domains"][token_name][no]:
-        # Note: node must only be in one domain for a given token !
-        return self["domains"][token_name][no]
-
-    return None
+  # def isInDomain(self, node, token_name):
+  #   # print("debugging -- landing point")
+  #   for no in self["domains"][token_name]:
+  #     if node in self["domains"][token_name][no]:
+  #       # Note: node must only be in one domain for a given token !
+  #       return self["domains"][token_name][no]
+  #
+  #   return None
 
   def updateTokensInAllDomains(self):
     tokens = self.ontology.tokens
@@ -1156,12 +1190,27 @@ class ModelContainer(dict):
     tokens = self.ontology.tokens
     D = self.computeTokenDomains(tokens)
 
-    for token in tokens:
-      for token in D:
-        if D[token]:
-          for domainID in D[token]:
-            TD = self.computeTypedTokenDistribution(token, D[token][domainID])
-            print("debugging -- type token domain")
+    TD = {}
+    I_tokens = {}
+    I_typed_tokens = {}
+    typed_tokens = {}
+    for token in D:
+      if D[token]:
+        TD[token] = {}
+        I_tokens = {}
+        I_typed_tokens[token] = {}
+        typed_tokens[token] = {}
+        for domainID in D[token]:
+          TD[token][domainID], typed_tokens[token][domainID] = self.computeTypedTokenDistribution(token, D[token][domainID])
+          if domainID not in I_tokens:
+            I_tokens[domainID] = {}
+          I_tokens[domainID][token]= self.computeTokenIncidenceMatrix(self["arcs"], token)
+          I_typed_tokens[token][domainID] = {}
+          print("debugging -- type token domain")
+          for tt in typed_tokens[token][domainID]:
+            I_typed_tokens[token][domainID][tt] = self.computeTypedTokenIncidenceMatrix(token, tt)
+
+    return D, TD, I_tokens, I_typed_tokens, typed_tokens
 
   def isOfType(self, node, type):
     return type == self["nodes"][node]["type"]
@@ -1175,42 +1224,149 @@ class ModelContainer(dict):
       node_class = self["nodes"][node]["class"]
       # print(" >>>>>>>>>>>>  clearing node ", node, node_class)
       # clean up first
+      self["nodes"][node]["tokens"][token] = []
       if NAMES["intraface"] == node_class:
         self["nodes"][node]["tokens_left"][token] = []
         self["nodes"][node]["tokens_right"][token] = []
-      else:
-        self["nodes"][node]["tokens"][token] = []
+
       connected_arcs = self.getArcsConnectedToNode(node)
       for arc in connected_arcs:
         if self["arcs"][arc]["token"] == token:  # Not resetting token
           arcs_in_domain.add(arc)
 
-    adj_matrix = self.computeTokenAdjacencyMatrix(domain, token)
+    adj_matrix = self.computeTokenAdjacencyMatrix(domain, token) # look here
     for node in domain:
       node_type = self["nodes"][node]["type"]
       test = self.__isCoveredByRule(node_type, "nodes_allowing_token_injection")
       if test: #NAMES["reservoir"] in node_type:
         if token in self["nodes"][node]["injected_typed_tokens"]:
           for typed_token in self["nodes"][node]["injected_typed_tokens"][token]:
-            network = self["nodes"][node]["network"]
-            self.colourBranch(network, node, token, typed_token, adj_matrix, conversions)
+            named_network = self["nodes"][node]["named_network"]
+            self.colourBranch(named_network, node, token, typed_token, adj_matrix, conversions)
+    #
+    # for node in domain:
+    #   arcs_out, arcs_in = self.getArcsInAndOutOfNode(node)
+    #   if self["nodes"][node]["class"] == NAMES["node"]:
+    #     for arc in arcs_in:
+    #       arc_data = self["arcs"][arc]
+    #       source = arc_data["source"]
+    #       for s in self["nodes"][source]["tokens"][token]:
+    #         if s not in arc_data["typed_tokens"]:
+    #           arc_data["typed_tokens"].append(s)
+    #       arc_data["typed_tokens"] = sorted(arc_data["typed_tokens"])
+    #   elif self["nodes"][node]["class"] == NAMES["intraface"]:
+    #     for arc in arcs_out:
+    #       arc_data = self["arcs"][arc]
+    #       arc_data["typed_tokens"] = []
+    #       for s in self["nodes"][node]["tokens_right"][token]:
+    #         if s not in arc_data["typed_tokens"]:
+    #           arc_data["typed_tokens"].append(s)
+    #       print("debugging -- halting place")
+    #     for arc in arcs_in:
+    #       arc_data = self["arcs"][arc]
+    #       arc_data["typed_tokens"] = []
+    #       for s in self["nodes"][node]["tokens_left"][token]:
+    #         if s not in arc_data["typed_tokens"]:
+    #           arc_data["typed_tokens"].append(s)
+    #       print("debugging -- halting place")
 
-    for node in domain:
-      if self["nodes"][node]["class"] == NAMES["node"]:
-        arcs = self.getArcsConnectedToNode(node)
-        for arc in arcs:
-          token = self["arcs"][arc]["token"]
-          source = self["arcs"][arc]["source"]
-          self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][token])
+        #
+        # for arc in (arcs_in + arcs_out):
+        #   t = self["arcs"][arc]["token"]
+        #   source = self["arcs"][arc]["source"]
+        #   if self["nodes"][node]["class"] != NAMES["intraface"]:
+        #     arc_data = self["arcs"][arc]["typed_tokens"][t]
+        #     arc_data = []
+        #     for s in self["nodes"][source]["tokens"][t]:
+        #       arc_data.append(s) #= copy(self["nodes"][source]["tokens"][t])
+        #     for s in self["nodes"][sink]["tokens"][t]:
+        #       arc_data.append(s)
+        #   else:
+        #     if t not in self["nodes"][node]["transfer_constraints"][token]:
+        #       self["arcs"][arc]["typed_tokens"] = copy(self["nodes"][source]["tokens"][t])
+        #     else:
+        #       if t in self["arcs"][arc]["typed_tokens"] :
+        #         self["arcs"][arc]["typed_tokens"].remove(t)      # TODO:  check
 
-  def colourBranch(self, network, node, token, typed_token, adj_matrix, conversions):
+
+      node_data = self["nodes"][node]
+      boundary = NAMES["intraface"] == node_data["class"]
+      if boundary:
+        node_data_left = node_data["tokens_left"]
+        node_data_right = node_data["tokens_right"]
+        tokens_left = sorted(node_data_left.keys())
+        tokens_right = sorted(node_data_right.keys())
+        if tokens_left != tokens_right:
+          raise
+        typed_token_sets = set()
+        for t in tokens_right:
+          for s in node_data_left[t]:
+            typed_token_sets.add(s)
+          for s in node_data_right[t]:
+            typed_token_sets.add(s)
+          node_data_left[t] = sorted(node_data_left[t])
+          node_data_right[t] = sorted(node_data_right[t])
+
+          node_data["tokens"][t] = sorted(typed_token_sets)
+
+    # handle typed tokens
+
+    item_typed_token_domain = {}
+    typed_tokens = set()
+    if token in self.ontology.typed_token_refining_token:
+      for node in domain:
+        arcs_out, arcs_in = self.getArcsInAndOutOfNode(node)
+        if self["nodes"][node]["class"] == NAMES["node"]:
+          for arc in arcs_in:
+            if arc in arcs_in_domain:
+              arc_data = self["arcs"][arc]
+              arc_data["typed_tokens"] = []
+              source = arc_data["source"]
+              for s in self["nodes"][source]["tokens"][token]:
+                if s not in arc_data["typed_tokens"]:
+                  arc_data["typed_tokens"].append(s)
+              arc_data["typed_tokens"] = sorted(arc_data["typed_tokens"])
+        elif self["nodes"][node]["class"] == NAMES["intraface"]:
+          for arc in arcs_out:
+            if arc in arcs_in_domain:
+              arc_data = self["arcs"][arc]
+              arc_data["typed_tokens"] = []
+              for s in self["nodes"][node]["tokens_right"][token]:
+                if s not in arc_data["typed_tokens"]:
+                  arc_data["typed_tokens"].append(s)
+              print("debugging -- halting place")
+          for arc in arcs_in:
+            if arc in arcs_in_domain:
+              arc_data = self["arcs"][arc]
+              arc_data["typed_tokens"] = []
+              for s in self["nodes"][node]["tokens_left"][token]:
+                if s not in arc_data["typed_tokens"]:
+                  arc_data["typed_tokens"].append(s)
+              print("debugging -- halting place")
+
+    # typed token domains
+      tt = self.ontology.typed_token_refining_token[token]  # RULE: tokens have only one typed token
+      item_typed_token_domain[tt] = {}
+      for node in domain:
+        if self["nodes"][node]["tokens"][token]:
+          for s in self["nodes"][node]["tokens"][token]:
+            if s not in item_typed_token_domain[tt]:
+              item_typed_token_domain[tt][s] = []
+              typed_tokens.add(s)
+            item_typed_token_domain[tt][s].append(node)
+
+
+    return item_typed_token_domain, sorted(typed_tokens)
+
+  def colourBranch(self, named_network, node, token, typed_token, adj_matrix, conversions):
     node_data = self["nodes"][node]
     # boundaries have two sides
     boundary = NAMES["intraface"] == node_data["class"]
     if boundary:
-      left_network, right_network = node_data["network"].split(CR.CONNECTION_NETWORK_SEPARATOR)
-      left = left_network == network
-      right = right_network == network
+      left_network, right_network = node_data["named_network"].split(CR.CONNECTION_NETWORK_SEPARATOR)
+      left = left_network == named_network
+      right = right_network == named_network
+      typed_tokens = []
       if left:
         typed_tokens = node_data["tokens_left"][token]
       elif right:
@@ -1219,7 +1375,11 @@ class ModelContainer(dict):
       typed_tokens = self["nodes"][node]["tokens"][token]
     # continue if typed token is not present or stop iteration
     if typed_token not in typed_tokens:
-      typed_tokens.append(typed_token)
+      if not boundary:
+        typed_tokens.append(typed_token)   #todo: do not add for boundary
+      else:
+        if typed_token not in node_data["transfer_constraints"]:
+          typed_tokens.append(typed_token)
       node_type = node_data["type"]
       test = self.__isCoveredByRule(node_type, "nodes_allowing_token_conversion")
       if test:
@@ -1233,12 +1393,15 @@ class ModelContainer(dict):
             if Es_set.issubset(typed_token_set):  # reaction takes place
               conversions[node].add(conversion)
               for ss in Plist:
-                self.colourBranch(network, node, token, ss, adj_matrix, conversions)
+                self.colourBranch(named_network, node, token, ss, adj_matrix, conversions)
       if node in adj_matrix:
         for node_alt in adj_matrix[node]:
           if boundary:
             # TODO: one could add the token here as it may be empty before one comes here or as currently when
             # defining the boundary
+            left_network, right_network = node_data["named_network"].split(CR.CONNECTION_NETWORK_SEPARATOR)
+            left = left_network == named_network
+            right = right_network == named_network
             if typed_token not in node_data["transfer_constraints"][token]:
               if left:
                 next_network = right_network
@@ -1250,7 +1413,7 @@ class ModelContainer(dict):
               pass  # do not continue -- no transfer of this typed token
 
           else:
-            next_network = network
+            next_network = named_network
             self.colourBranch(next_network, node_alt, token, typed_token, adj_matrix, conversions)
 
   def __isCoveredByRule(self, node_type, rule):

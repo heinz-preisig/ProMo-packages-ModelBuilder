@@ -129,7 +129,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     # now ask for model
     self.model_name = ""
     # while self.model_name in [""]:
-    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location)
+    self.model_name, status = askForModelFileGivenOntologyLocation(self.model_library_location, alternative=True)
 
     print("debugging -- model name and new_model", self.model_name, status)
     if status == "existent":
@@ -143,8 +143,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
     # model file and schnipsel file without extension
     self.__display_model_name(self.model_name)
-    self.model_file = os.path.join(self.model_library_location,
-                                   self.model_name)  # NOTE: extension is added when writing
+    # self.model_file = os.path.join(self.model_library_location,
+    #                                self.model_name)  # NOTE: extension is added when writing
     self.model_location = DIRECTORIES["model_location"] % (ontology_name, self.model_name)
     self.model_file = FILES["model_file"] % (ontology_name, self.model_name)
     # print(self.model_file)
@@ -724,7 +724,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     ask for and define schnipsel model name
     """
-    self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location)
+    self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location, alternative=True)
 
     if self.schnipsel_name in ["exit", "", None]: return
 
@@ -820,7 +820,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander.resetGroups()
 
   def injectTypedTokenTransferConstraints(self):
-    token = self.selected_token[self.editor_phase][self.current_network]
+    token = self.current_token #self.selected_token[self.editor_phase][self.current_network]
     list_typed_tokens = self.radio_selectors["constrain"].getListOfCheckedLabelInGroup("constrain")
     self.radio_selectors["constrain"].uncheckGroup("constrain")
 
@@ -876,7 +876,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     ask for model file and then map and save it
     """
-    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location)
+    self.model_name, new_name = askForModelFileGivenOntologyLocation(self.model_library_location, alternative=True)
 
     if not self.model_name:
       return

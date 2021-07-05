@@ -31,7 +31,7 @@ class Instantiate_Eqs(object):
     self.eq_dict = getData(self.equation_file)
     self.mod_dict = getData(self.model_file)
     self.vars_dict = getData(self.variable_file)
-    mod_name = self.ui.mod_name
+    mod_name = self.ui.model_name
     case_name = self.ui.case_name
     self.calc_seq_file = FILES['calculation_sequence'] % (self.onto_name,
                                                           mod_name,

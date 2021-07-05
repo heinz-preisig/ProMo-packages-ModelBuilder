@@ -58,13 +58,13 @@ class Instantiate_Case(object):
           self.typedtoken_token[ttk] = tk
 
     self.nodes_file = FILES['init_nodes'] % (self.onto_name,
-                                             self.ui.mod_name,
+                                             self.ui.model_name,
                                              self.ui.case_name)
     self.arcs_file = FILES['init_arcs'] % (self.onto_name,
-                                           self.ui.mod_name,
+                                           self.ui.model_name,
                                            self.ui.case_name)
     self.globals_file = FILES['init_globals'] % (self.onto_name,
-                                                 self.ui.mod_name,
+                                                 self.ui.model_name,
                                                  self.ui.case_name)
     self.name_to_label_dict = self.make_name_to_label_dict()
 

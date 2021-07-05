@@ -1091,7 +1091,8 @@ class Commander(QtCore.QObject):
                                                                                  left_icon="reject",
                                                                                  left_tooltip="reject",
                                                                                  right_icon="accept",
-                                                                                 right_tooltip="accept", )
+                                                                                 right_tooltip="accept",
+                                                                                 alternative=True)
 
     container = self.model_container.extractSubtree(nodeID)
 
@@ -1406,7 +1407,7 @@ class Commander(QtCore.QObject):
       #         data["tokens"])
       # if "conversions" in data:
       #   s.join("<br>%s" % data["conversions"])
-      print("debugging -- tool tip:", s)
+      # print("debugging -- tool tip:", s)
       node.setToolTip(s)
 
     if graphics_root_object == NAMES["intraface"]:
