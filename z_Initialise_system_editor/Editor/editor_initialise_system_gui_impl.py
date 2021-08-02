@@ -31,7 +31,7 @@ class Ui_Initialise_system(QtWidgets.QMainWindow):
     self.ui.setupUi(self)
     self.ontology_name = getOntologyName()
     self.ontology = OntologyContainer(self.ontology_name)
-    self.ontology_location = self.ontology.onto_path
+    self.ontology_location = self.ontology.ontology_location
     models_file = DIRECTORIES["model_library_location"]%self.ontology_name
     self.mod_name = afm(models_file)[0]
 

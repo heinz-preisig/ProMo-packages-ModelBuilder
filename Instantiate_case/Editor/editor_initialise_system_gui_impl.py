@@ -28,7 +28,7 @@ class Ui_Initialise_system(QtWidgets.QMainWindow):
     self.ontology_name = getOntologyName()
     # self.ontology_name = 'Flash_11'
     self.ontology = OntologyContainer(self.ontology_name)
-    self.ontology_location = self.ontology.onto_path
+    self.ontology_location = self.ontology.ontology_location
     models_file = DIRECTORIES["model_library_location"] % self.ontology_name
     self.mod_name = afm(models_file, alternative=False)[0]
     # self.mod_name = 'Flash_00'
