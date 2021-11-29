@@ -457,6 +457,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                        index,
                                                                        self.ui.layoutInteractiveWidgetTop)
 
+  def __makeComboNodeSubClass(self):
+    print("debugging -- make combo node subclass")
+
   def __clearLayout(self, layout):
     while layout.count():
       child = layout.takeAt(0)
@@ -575,6 +578,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                   self.radioReceiverNode,
                                                                   index,
                                                                   self.ui.layoutInteractiveWidgetTop)
+        self.__makeComboNodeSubClass()
 
       self.commander.redrawCurrentScene()
 

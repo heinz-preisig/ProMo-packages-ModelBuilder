@@ -1969,10 +1969,20 @@
         <x>10</x>
         <y>10</y>
         <width>201</width>
-        <height>331</height>
+        <height>301</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="layoutInteractiveWidgetTop"/>
+     </widget>
+     <widget class="QComboBox" name="comboNodeSubClass">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>310</y>
+        <width>201</width>
+        <height>25</height>
+       </rect>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">
