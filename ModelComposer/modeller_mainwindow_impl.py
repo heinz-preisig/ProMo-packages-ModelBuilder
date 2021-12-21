@@ -580,6 +580,9 @@ class MainWindowImpl(QtWidgets.QMainWindow):
                                                                   self.ui.layoutInteractiveWidgetTop)
         self.__makeComboNodeSubClass()
 
+      elif self.editor_phase == "token_topology":
+        self.__makeInteractionToolPage()
+
       self.commander.redrawCurrentScene()
 
   def radioReceiverNamedNetworks(self, token_class, token, token_string, toggle):
@@ -654,8 +657,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       self.__clearLayout(self.ui.layoutInteractiveWidgetBottom)
       ask = []
       if token_string in self.ontology.token_typedtoken_on_networks[nw].keys():
-        nature = list(
-                self.ontology.ontology_tree[nw]["structure"]["arc"][self.selected_token[self.editor_phase][nw]].keys())
+        # nature = list(
+        #         self.ontology.ontology_tree[nw]["structure"]["arc"][self.selected_token[self.editor_phase][nw]].keys())
 
         # if "auto" not in nature:
         typed_tokens = self.nw_token_typedtoken_dict[nw][token_string]

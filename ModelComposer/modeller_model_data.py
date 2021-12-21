@@ -48,9 +48,8 @@ class DataError(Exception):
 
 # ==================================
 
-
-class NodeInfo(
-        dict):  # (OrderedDict): # NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+# NOTE: changed to dictionary -- OrderedDict failed to be copied (extract subtree)
+class NodeInfo(dict):  # (OrderedDict): #
   def __init__(self, name, network=None, named_network=None, node_class=CR.M_None, node_type=CR.M_None, features=[]):
 
     dict.__init__(self)
@@ -60,6 +59,7 @@ class NodeInfo(
     self["class"] = node_class
     self["type"] = node_type
 
+# RULE: feature controls what the node may contain tokens, conversion, left/right tokens, transfer constraints, injection
     if "has_tokens" in features:
       self["tokens"] = {}  # dict hash=tokens value=list of typed tokens
     if "has_conversion" in features:

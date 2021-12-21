@@ -1859,6 +1859,13 @@ class Commander(QtCore.QObject):
         self.state_nodes[child] = "blocked"  # default is blocked
     for node in children:
       self.__enableNodeOnRule(node, "nodes_allowing_token_injection")
+      node_tokens = list(self.model_container["nodes"][node]["tokens"].keys())
+      if self.main.selected_token[self.editor_phase][self.main.current_network] in node_tokens:
+        self.state_nodes[node] = "enabled"
+      else:
+        self.state_nodes[node] = "blocked"
+
+        pass
       # if self.state_nodes[node] != "selected":
       #   self.state_nodes[node] = "blocked"
       #   network = self.main.current_network
