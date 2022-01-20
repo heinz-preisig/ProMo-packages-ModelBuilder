@@ -24,6 +24,7 @@ from PyQt5 import QtWidgets
 from ModelBuilder.ModelComposer.modeller_logger import Ui_LoggerForm
 
 
+
 class Logger(QtWidgets.QWidget):
 
   def __init__(self, model_container, parent):

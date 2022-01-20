@@ -32,15 +32,16 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
 from Common.automata_objects import GRAPH_EDITOR_STATES
-from Common.common_resources import askForModelFileGivenOntologyLocation
 from Common.common_resources import CONVERSION_SEPARATOR
-from Common.common_resources import getOntologyName
 from Common.common_resources import M_None
-from Common.graphics_objects import getGraphData
+from Common.common_resources import Stream
+from Common.common_resources import askForModelFileGivenOntologyLocation
+from Common.common_resources import getOntologyName
 from Common.graphics_objects import NetworkData
+from Common.graphics_objects import getGraphData
 from Common.ontology_container import OntologyContainer
-from Common.qt_resources import clearLayout
 from Common.qt_resources import ModellerRadioButton
+from Common.qt_resources import clearLayout
 from Common.radio_selector_impl import RadioSelector
 from Common.resource_initialisation import DIRECTORIES
 from Common.resource_initialisation import FILES
@@ -61,7 +62,7 @@ EDITOR_PHASES = list(GRAPH_EDITOR_STATES.keys())
 
 DEBUG = {"load data": False}
 
-REDIRECT_ERROR = False
+REDIRECT_ERROR = True
 REDIRECT_STDOUT = False
 
 
@@ -69,15 +70,15 @@ def debugPrint(source, what):
   print(source, ": ", what)
 
 
-class Stream(QtCore.QObject):
-  newText = QtCore.pyqtSignal(str)
-
-  def write(self, text):
-    self.newText.emit(str(text))
-    self.flush()
-
-  def flush(self):
-    pass
+# class Stream(QtCore.QObject):
+#   newText = QtCore.pyqtSignal(str)
+#
+#   def write(self, text):
+#     self.newText.emit(str(text))
+#     self.flush()
+#
+#   def flush(self):
+#     pass
 
 
 class ErrorMessage:
@@ -368,7 +369,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
       self.ui.formKeyAutomaton.setWidget(count, QtWidgets.QFormLayout.LabelRole, radio)
       count += 1
 
-    if self.initialising: self.commander.setDefaultEditorState()  # NOTE: only place being used -- caused a lot of
+    if self.initialising:
+      self.commander.setDefaultEditorState()  # NOTE: only place being used -- caused a lot of
     # problems when using it rules
 
   def __mapAndSave(self):
@@ -536,8 +538,10 @@ class MainWindowImpl(QtWidgets.QMainWindow):
   @QtCore.pyqtSlot(str)
   def on_comboEditorPhase_currentTextChanged(self, phase):
     self.writeStatus("phase :%s" % phase)
-    if not self.current_network: return
-    if self.initialising: return
+    if not self.current_network:
+      return
+    if self.initialising:
+      return
     self.setEditorPhase(phase)
     pass
 
@@ -733,7 +737,8 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     """
     self.schnipsel_name, new_model = askForModelFileGivenOntologyLocation(self.model_library_location, alternative=True)
 
-    if self.schnipsel_name in ["exit", "", None]: return
+    if self.schnipsel_name in ["exit", "", None]:
+      return
 
     self.ui.labelSchnipsel.setText(self.schnipsel_name)
     self.ui.labelSchnipsel.show()
@@ -827,7 +832,7 @@ class MainWindowImpl(QtWidgets.QMainWindow):
     self.commander.resetGroups()
 
   def injectTypedTokenTransferConstraints(self):
-    token = self.current_token #self.selected_token[self.editor_phase][self.current_network]
+    token = self.current_token  # self.selected_token[self.editor_phase][self.current_network]
     list_typed_tokens = self.radio_selectors["constrain"].getListOfCheckedLabelInGroup("constrain")
     self.radio_selectors["constrain"].uncheckGroup("constrain")
 
@@ -877,7 +882,6 @@ class MainWindowImpl(QtWidgets.QMainWindow):
 
   def on_pushSchnipsel_pressed(self):
     self.showSchnipselPopWindow()
-
 
   def on_pushSaveAs_pressed(self, *args):
     """
