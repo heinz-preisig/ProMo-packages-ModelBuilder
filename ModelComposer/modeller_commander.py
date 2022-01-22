@@ -773,7 +773,8 @@ class Commander(QtCore.QObject):
           self.__c15_reset()
           self.main.writeStatus("the nature of the transfer on both sides must be the same")
           return {"failed": True}
-
+      if insert_interface:
+        status  = self.__c41_makeInterface()
       # seems all is ok so go ahead and put the intraface
 
       parent_nodeID_source = self.model_container["ID_tree"].getImmediateParent(self.arcSourceID)
@@ -1321,6 +1322,11 @@ class Commander(QtCore.QObject):
     print("__c31_computeTypedTokenDomains -- not yet implemented")
     return {"failed": False}
 
+  def __c41_makeInterface(self):
+    print("__c41_makeInterface -- not yet implemented")
+    self.variables = self.main.ontology.variables()
+
+  # ===================================================================
   def __setName(self, node, name):
     if name == CR.DEFAULT:
       name = str(node.ID)
